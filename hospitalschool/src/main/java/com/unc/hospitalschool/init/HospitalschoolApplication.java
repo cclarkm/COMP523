@@ -1,4 +1,4 @@
-package com.unc.hospitalschool;
+package com.unc.hospitalschool.init;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
