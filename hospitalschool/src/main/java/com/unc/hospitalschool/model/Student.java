@@ -6,8 +6,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.data.annotation.Id;
+import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
