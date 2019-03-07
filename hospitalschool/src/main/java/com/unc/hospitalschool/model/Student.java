@@ -3,6 +3,8 @@ package com.unc.hospitalschool.model;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.Id;
@@ -29,31 +31,36 @@ public class Student {
 	@JsonFormat(pattern = "yyyy-MM-dd") // could change - its currently different on access
 	private String dob;
 
-	@Column(nullable = false)
-//	@Enumerated(EnumType.STRING)
+	@ManyToOne
+	@JoinColumn(name = "gender")
 	private Gender gender;
 
-	@Column(nullable = false)
-//	@Enumerated(EnumType.STRING)
+	@ManyToOne
+	@JoinColumn(name = "raceEth")
 	private RaceEth raceEth;
-//	private int raceEth;
 
 //	@Column (nullable = true)
 //	private String service;
 
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "serviceArea")
 	private ServiceArea serviceArea;
 
-	@Column(nullable = false)
+	
+	@ManyToOne
+	@JoinColumn(name = "school")
 	private School school;
 
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "district")
 	private District district;
 
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "county")
 	private County county;
 
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "grade")
 	private Grade grade;
 
 	@Column(nullable = false)
@@ -65,13 +72,16 @@ public class Student {
 	@Column(nullable = true)
 	private String label;
 
-	@Column(nullable = true)
+	@ManyToOne
+	@JoinColumn(name = "psLabel")
 	private PSLabel psLabel;
 
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "currTeacher")
 	private Teacher currTeacher;
 
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "secondTeacher")
 	private Teacher secondTeacher;
 
 	@Column(nullable = false)
