@@ -7,31 +7,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name = "raceEth")
-public class RaceEth {
+@Table(name = "label")
+public class PSLabel {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "rid", nullable = false)
-	private Long rid;
+	@Column(name = "lid", nullable = false)
+	private Long lid;
 	
-	@Column(name = "raceEth", nullable = false)
-	private String raceEth;
+	@Column(name = "label", nullable = false)
+	private String label;
 	
 	@Column(name = "code", nullable = false)
 	private String code;
 	
-	protected RaceEth() {}
+	protected PSLabel() {}
 	
-	public RaceEth(String raceEth, String code) {
-		this.raceEth = raceEth;
+	public PSLabel(String label, String code) {
+		this.label = label;
 		this.code = code;
 	}
 	
 	@Override
 	public String toString() {
-		return "Code: " + code + ", race/ethnicity: " + raceEth;
+		return "Code: " + code + ", label: " + label;
 	}
 }

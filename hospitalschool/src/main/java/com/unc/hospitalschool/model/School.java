@@ -4,30 +4,29 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.data.annotation.Id;
-
 @Entity
-@Table(name = "servceArea")
-public class ServiceArea {
+@Table(name = "school")
+public class School {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column (name = "sid", nullable = false)
+	@Column(name = "sid", nullable = false)
 	private Long sid;
 	
-	@Column (name = "field1", nullable = false)
-	private String field1;
+	@Column(name = "schoolName", nullable = false)
+	private String schoolName;
 	
-	protected ServiceArea() {}
+	protected School() {}
 	
-	public ServiceArea(String field1) {
-		this.field1 = field1;
+	public School(String schoolName) {
+		this.schoolName = schoolName;
 	}
 	
 	@Override
 	public String toString() {
-		return "ServiceArea: " + field1;
+		return "School: " + schoolName;
 	}
 }
