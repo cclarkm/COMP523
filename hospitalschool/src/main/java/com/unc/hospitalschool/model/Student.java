@@ -21,7 +21,7 @@ public class Student {
 
 	@Id
 	@Column(nullable = false)
-	private int sid;
+	private Long sid;
 
 	@Column(nullable = false)
 	private String lastName;
@@ -95,7 +95,7 @@ public class Student {
 	@Column(nullable = true)
 	private String newYrMessage;
 
-	public Student(int sid, String lastName, String firstName, String dob, Gender gender, RaceEth raceEth,
+	public Student(Long sid, String lastName, String firstName, String dob, Gender gender, RaceEth raceEth,
 			ServiceArea serviceArea, School school, District district, County county, Grade grade, String studentNotes,
 			String permissionDate, String label, PSLabel psLabel, Teacher currTeacher, Teacher secondTeacher,
 			boolean clinic, boolean hispanic, boolean petTherapy, String newYrMessage) {
@@ -129,7 +129,7 @@ public class Student {
 	
 	public Map<String, String> toJson(){
 		HashMap<String, String> map = new HashMap<>();
-		map.put("id", Integer.toString(sid));
+		map.put("id", Long.toString(sid));
 		map.put("firstName", firstName);
 		map.put("lastName", lastName);
 		map.put("dob", dob);
