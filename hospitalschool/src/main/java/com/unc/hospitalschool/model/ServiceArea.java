@@ -33,4 +33,8 @@ public class ServiceArea {
 	public String toString() {
 		return "ServiceArea: " + field1;
 	}
+	
+	public String getServiceArea() {
+		return field1;
+	}
 }

@@ -31,5 +31,9 @@ public class County {
 	public String toString() {
 		return "County: " + county;
 	}
+	
+	public String getCounty() {
+		return this.county;
+	}
 
 }

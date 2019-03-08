@@ -10,6 +10,9 @@ import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.Column;
 
 @Entity
@@ -123,6 +126,33 @@ public class Student {
 		
 	}
 
+	
+	public Map<String, String> toJson(){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("id", Integer.toString(sid));
+		map.put("firstName", firstName);
+		map.put("lastName", lastName);
+		map.put("dob", dob);
+		map.put("raceEthnicity", raceEth.getRaceEth());
+		map.put("serviceArea", serviceArea.getServiceArea());
+		map.put("school", school.getSchool());
+		map.put("district", district.getSchoolDistrict());
+		map.put("county", county.getCounty());
+		map.put("grade", grade.getGrade());
+		map.put("studentNotes", studentNotes);
+		map.put("permissionDate", permissionDate);
+		map.put("label", label);
+		map.put("psLabelCode", psLabel.getCode());
+		map.put("psLabelLabel", psLabel.getLabel());
+		map.put("currentTeacher", currTeacher.getFirstName() + " " + currTeacher.getLastName());
+		map.put("secondTeacher", secondTeacher.getFirstName() + " " + secondTeacher.getLastName());
+		map.put("clinic", Boolean.toString(clinic));
+		map.put("hispanic", Boolean.toString(hispanic));
+		map.put("petTherapy",  Boolean.toString(petTherapy));
+		map.put("newYrMessage", newYrMessage);
+		return map;
+		
+	}
 	@Override
 	public String toString() {
 		return "Student [sid=" + sid + ", lastName=" + lastName + ", firstName=" + firstName + ", dob=" + dob

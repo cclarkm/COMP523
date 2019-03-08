@@ -36,4 +36,8 @@ public class RaceEth {
 	public String toString() {
 		return "Code: " + code + ", race/ethnicity: " + raceEth;
 	}
+	
+	public String getRaceEth() {
+		return raceEth;
+	}
 }

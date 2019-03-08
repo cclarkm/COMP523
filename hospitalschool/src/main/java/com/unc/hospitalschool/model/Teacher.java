@@ -35,4 +35,12 @@ public class Teacher {
 	public String toString() {
 		return "Teacher: " + firstName + " " + lastName;
 	}
+	
+	public String getFirstName() {
+		return firstName;
+	}
+	
+	public String getLastName() {
+		return lastName;
+	}
 }

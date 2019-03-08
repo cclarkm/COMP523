@@ -31,4 +31,8 @@ public class School {
 	public String toString() {
 		return "School: " + schoolName;
 	}
+	
+	public String getSchool() {
+		return schoolName;
+	}
 }

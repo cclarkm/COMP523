@@ -31,4 +31,8 @@ public class District {
 	public String toString() {
 		return "District: " + schoolDistrict;
 	}
+	
+	public String getSchoolDistrict() {
+		return schoolDistrict;
+	}
 }

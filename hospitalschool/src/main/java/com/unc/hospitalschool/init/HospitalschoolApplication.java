@@ -21,34 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ComponentScan(basePackages= {"com.unc.hospitalschool"})
 @EntityScan(basePackages= {"com.unc.hospitalschool.model"})
 @EnableJpaRepositories(basePackages= {"com.unc.hospitalschool.dao"})
-public class HospitalschoolApplication implements CommandLineRunner{
+public class HospitalschoolApplication{
 
 	private static Logger logger = LoggerFactory.getLogger("LOGGER");
-	
-	@Autowired
-	private StudentDao studentDao;
-	
-	@Autowired
-	private SchoolDao schoolDao;
-	
-	@Autowired
-	private TestDao testDao;
+
 	
 	public static void main(String[] args) {
-		logger.info("STARTING APPLICATION");
 		ApplicationContext applicationContext = SpringApplication.run(HospitalschoolApplication.class,  args);
 		
-		//studentDao.findAll();
-		//SpringApplication.run(HospitalschoolApplication.class, args);
-		logger.info("ENDING APPLICATION");
-		
-	}
-	
-	public void run(String...args) throws Exception{
-		logger.info("RUNNING NOW ======================");
-		logger.info(studentDao.findAll().toString());
-		logger.info(Integer.toString(studentDao.findAll().size()));
-		logger.info("DONE ==============================");
 	}
 
 

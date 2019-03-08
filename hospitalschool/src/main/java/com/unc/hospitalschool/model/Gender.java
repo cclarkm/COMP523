@@ -32,5 +32,9 @@ public class Gender {
 		return "Gender: " + gender;
 	}
 	
+	public String getGender() {
+		return gender;
+	}
+	
 	
 }

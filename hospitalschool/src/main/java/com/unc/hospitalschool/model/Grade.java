@@ -31,4 +31,8 @@ public class Grade {
 	public String toString() {
 		return "Grade: " + grade;
 	}
+	
+	public String getGrade() {
+		return grade;
+	}
 }
