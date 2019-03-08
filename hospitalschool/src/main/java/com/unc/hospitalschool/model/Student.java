@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Column;
 
 @Entity
-@Table(name = "students")
+@Table(name = "student")
 public class Student {
 
 	@Id
@@ -37,9 +37,6 @@ public class Student {
 	@ManyToOne
 	@JoinColumn(name = "raceEth")
 	private RaceEth raceEth;
-
-//	@Column (nullable = true)
-//	private String service;
 
 	@ManyToOne
 	@JoinColumn(name = "serviceArea")
@@ -95,9 +92,6 @@ public class Student {
 	@Column(nullable = true)
 	private String newYrMessage;
 
-//	@Column (nullable = false)
-//	private int countDates;
-
 	public Student(int sid, String lastName, String firstName, String dob, Gender gender, RaceEth raceEth,
 			ServiceArea serviceArea, School school, District district, County county, Grade grade, String studentNotes,
 			String permissionDate, String label, PSLabel psLabel, Teacher currTeacher, Teacher secondTeacher,
@@ -127,5 +121,15 @@ public class Student {
 	
 	public Student() {
 		
+	}
+
+	@Override
+	public String toString() {
+		return "Student [sid=" + sid + ", lastName=" + lastName + ", firstName=" + firstName + ", dob=" + dob
+				+ ", gender=" + gender + ", raceEth=" + raceEth + ", serviceArea=" + serviceArea + ", school=" + school
+				+ ", district=" + district + ", county=" + county + ", grade=" + grade + ", studentNotes="
+				+ studentNotes + ", permissionDate=" + permissionDate + ", label=" + label + ", psLabel=" + psLabel
+				+ ", currTeacher=" + currTeacher + ", secondTeacher=" + secondTeacher + ", clinic=" + clinic
+				+ ", hispanic=" + hispanic + ", petTherapy=" + petTherapy + ", newYrMessage=" + newYrMessage + "]";
 	}
 }

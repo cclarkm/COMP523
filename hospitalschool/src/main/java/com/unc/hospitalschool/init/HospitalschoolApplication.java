@@ -46,8 +46,8 @@ public class HospitalschoolApplication implements CommandLineRunner{
 	
 	public void run(String...args) throws Exception{
 		logger.info("RUNNING NOW ======================");
-		logger.info(testDao.findAll().toString());
-		logger.info(Integer.toString(testDao.findAll().size()));
+		logger.info(studentDao.findAll().toString());
+		logger.info(Integer.toString(studentDao.findAll().size()));
 		logger.info("DONE ==============================");
 	}
 
