@@ -15,5 +15,6 @@ public interface StudentDao extends CrudRepository<Student, Long>{
 	List<Student> findByFirstName(String firstname);
 	List<Student> findByLastName(String lastname);
 	Student findByFirstNameAndLastName(String firstname, String lastname);
+	Student save(Student student);
 
 }
