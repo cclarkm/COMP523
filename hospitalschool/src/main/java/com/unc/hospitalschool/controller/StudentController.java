@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.unc.hospitalschool.dao.SchoolDao;
-import com.unc.hospitalschool.dao.StudentDao;
-import com.unc.hospitalschool.model.Student;
+import com.unc.hospitalschool.dao.*;
+import com.unc.hospitalschool.model.*;
 
 @RestController
 @RequestMapping("/student")
@@ -29,7 +28,27 @@ public class StudentController {
 	
 	@Autowired
 	private StudentDao studentDao;
+	@Autowired
+	private GradeDao gradeDao;
+	@Autowired
+	private CountyDao countyDao;
+	@Autowired
+	private DistrictDao districtDao;
+	@Autowired
+	private GenderDao genderDao;
+	@Autowired
+	private PSLabelDao psLabelDao;
+	@Autowired
+	private RaceEthDao raceEthDao;
+	@Autowired
+	private SchoolDao schoolDao;
+	@Autowired
+	private ServiceAreaDao serviceAreaDao;
+	@Autowired
+	private TeacherDao teacherDao;
 	
+	
+	//get request doesn't display gender - not sure if intentional or not
 	@GetMapping(value = "/")
 	@ResponseBody
 	public Map<String, Object> getAllStudents() {
@@ -89,24 +108,24 @@ public class StudentController {
 	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
 	public Student newStudent(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());		
-		Long id = Long.parseLong(body.get("sid"));
+		Integer id = Integer.parseInt(body.get("id"));
 		String lName = body.get("lastName");
 		String fName = body.get("firstName");
 		String dob = body.get("dob");
-		//if these are all int values in db, make sure to convert from string to int before findById
-		Gender gender = GenderDao.findById(body.get("gender"));
-		RaceEth raceEth = RaceEthDao.findById(body.get("raceEthnicity"));
-		ServiceArea servArea = ServiceAreaDao.findbyId(body.get("serviceArea"));
-		School school = SchoolDao.findById(body.get("school"));
-		District district = DistrictDao.findById(body.get("district"));
-		County county = CountyDao.findById(body.get("county"));
-		Grade grade = GradeDao.findById(body.get("grade"));
-		StudentNotes studentNotes = StudentNotesDao.findById(body.get("studentNotes"));
-		PermissionDate permissionDate = PermissionDateDao.findById(body.get("permissionDate"));
+
+		Gender gender = genderDao.findById(Integer.parseInt(body.get("gender")));
+		RaceEth raceEth = raceEthDao.findByRid(Integer.parseInt(body.get("raceEthnicity")));
+		ServiceArea servArea = serviceAreaDao.findBySid(Integer.parseInt(body.get("serviceArea")));
+		School school = schoolDao.findBySid(Integer.parseInt(body.get("school")));
+		District district = districtDao.findByDid(Integer.parseInt(body.get("district")));
+		County county = countyDao.findByCid(Integer.parseInt(body.get("county")));
+		Grade grade = gradeDao.findByGid(Integer.parseInt(body.get("grade")));
+		String studentNotes = body.get("studentNotes");
+		String permissionDate = body.get("permissionDate");
 		String label = body.get("label");
-		PSLabel psLabel = PSLabelDao.findById(body.get("psLabel"));
-		Teacher currTeach = TeacherDao.findById(body.get("currentTeacher"));
-		Teacher secondTeacher = TeacherDao.findById(body.get("secondTeacher"));
+		PSLabel psLabel = psLabelDao.findByLid(Integer.parseInt(body.get("psLabel")));
+		Teacher currTeach = teacherDao.findByTid(Integer.parseInt(body.get("currentTeacher")));
+		Teacher secondTeacher = teacherDao.findByTid(Integer.parseInt(body.get("secondTeacher")));
 		boolean clinic = Boolean.parseBoolean(body.get("clinic"));
 		boolean hispanic = Boolean.parseBoolean(body.get("hispanic"));
 		boolean petTherapy = Boolean.parseBoolean(body.get("petTherapy"));
@@ -115,7 +134,7 @@ public class StudentController {
 		return studentDao.save(new Student(id, lName, fName, dob, gender, raceEth, servArea,
 											school, district, county, grade, studentNotes,
 											permissionDate, label, psLabel, currTeach,
-											secondTeacher, clinic, petTherapy, newYrMessage));
+											secondTeacher, clinic, hispanic, petTherapy, newYrMessage));
 		
 		
 		//reference to teacherDao with id - retrieve teacher entity

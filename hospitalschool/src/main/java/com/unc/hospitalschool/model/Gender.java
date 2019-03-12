@@ -16,7 +16,7 @@ public class Gender {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "gid", nullable = false)
-	private Long id;
+	private int id;
 	
 	@Column(name = "gender", nullable = false)
 	private String gender;

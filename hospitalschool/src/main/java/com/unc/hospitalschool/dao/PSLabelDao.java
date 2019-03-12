@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.unc.hospitalschool.model.School;
+import com.unc.hospitalschool.model.PSLabel;
 
 @Repository
-public interface SchoolDao extends CrudRepository<School, Long>{
-	
-	School findBySid(int sid);
-	List<School> findAll();
+public interface PSLabelDao extends CrudRepository<PSLabel, Long>{
 
+	PSLabel findByLid(int lid);
+	List<PSLabel> findAll();
+	
 }

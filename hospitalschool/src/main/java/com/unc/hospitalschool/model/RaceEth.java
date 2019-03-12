@@ -17,7 +17,7 @@ public class RaceEth {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "rid", nullable = false)
-	private Long rid;
+	private int rid;
 	
 	@Column(name = "raceEth", nullable = false)
 	private String raceEth;

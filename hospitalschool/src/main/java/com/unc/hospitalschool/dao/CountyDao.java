@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.unc.hospitalschool.model.School;
+import com.unc.hospitalschool.model.County;
 
 @Repository
-public interface SchoolDao extends CrudRepository<School, Long>{
+public interface CountyDao extends CrudRepository<County, Long>{
 	
-	School findBySid(int sid);
-	List<School> findAll();
-
+	County findByCid(int cid);
+	List<County> findAll();
+	
 }

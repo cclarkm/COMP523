@@ -5,12 +5,11 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.unc.hospitalschool.model.School;
+import com.unc.hospitalschool.model.Gender;
 
 @Repository
-public interface SchoolDao extends CrudRepository<School, Long>{
+public interface GenderDao extends CrudRepository<Gender, Long>{
 	
-	School findBySid(int sid);
-	List<School> findAll();
-
+	Gender findById(int id);
+	List<Gender> findAll();
 }

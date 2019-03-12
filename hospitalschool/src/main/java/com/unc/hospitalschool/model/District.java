@@ -16,7 +16,7 @@ public class District {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "did", nullable = false)
-	private Long did;
+	private int did;
 	
 	@Column(name = "schoolDistrict", nullable = false)
 	private String schoolDistrict;

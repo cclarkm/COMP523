@@ -25,7 +25,7 @@ public class Student {
 	@Id
 	@Column(nullable = false, name="sid")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long sid;
+	private int sid;
 
 	@Column(nullable = false)
 	@JsonProperty(value = "lastName")
@@ -120,7 +120,7 @@ public class Student {
 	@JsonProperty(value = "newYrMessage")
 	private String newYrMessage;
 
-	public Student(Long sid, String lastName, String firstName, String dob, Gender gender, RaceEth raceEth,
+	public Student(int sid, String lastName, String firstName, String dob, Gender gender, RaceEth raceEth,
 			ServiceArea serviceArea, School school, District district, County county, Grade grade, String studentNotes,
 			String permissionDate, String label, PSLabel psLabel, Teacher currTeacher, Teacher secondTeacher,
 			boolean clinic, boolean hispanic, boolean petTherapy, String newYrMessage) {

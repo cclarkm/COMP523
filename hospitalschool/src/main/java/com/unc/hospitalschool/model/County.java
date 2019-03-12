@@ -16,7 +16,7 @@ public class County {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "cid", nullable = false)
-	private Long cid;
+	private int cid;
 	
 	@Column(name = "county", nullable = false)
 	private String county;

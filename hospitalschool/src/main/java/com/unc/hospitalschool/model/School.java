@@ -16,7 +16,7 @@ public class School {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "sid", nullable = false)
-	private Long sid;
+	private int sid;
 	
 	@Column(name = "schoolName", nullable = false)
 	private String schoolName;

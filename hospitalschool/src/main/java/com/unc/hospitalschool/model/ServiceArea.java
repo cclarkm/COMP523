@@ -18,7 +18,7 @@ public class ServiceArea {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column (name = "sid", nullable = false)
-	private Long sid;
+	private int sid;
 	
 	@Column (name = "field1", nullable = false)
 	private String field1;

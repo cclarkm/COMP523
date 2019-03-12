@@ -16,7 +16,7 @@ public class PSLabel {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "lid", nullable = false)
-	private Long lid;
+	private int lid;
 	
 	@Column(name = "label", nullable = false)
 	private String label;

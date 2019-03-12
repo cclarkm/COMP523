@@ -16,7 +16,7 @@ public class Teacher {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "tid", nullable = false)
-	private Long tid;
+	private int tid;
 	
 	@Column(name = "lastName", nullable = false)
 	private String lastName;
