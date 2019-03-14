@@ -148,8 +148,7 @@ public class StudentController {
 //		return studentDao.save(new Student());
 	}
 	
-//	//update
-//	//i think this may work
+	//update
 	@PutMapping(value="/update/sid={sid}") //also need to pass in whatever is being changed; could be muliple things
 	public Student postBySid(@RequestBody Map<String, String> body, @PathVariable int sid) {
 		Student student = studentDao.findBySid(sid);
