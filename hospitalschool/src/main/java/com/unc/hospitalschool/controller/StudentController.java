@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -98,9 +99,14 @@ public class StudentController {
 		return studentDao.findByFirstNameAndLastName(fname, lname).toJson();
 	}
 	
-	@DeleteMapping(value="/sid={sid}")
-	public void deleteBySid(@PathVariable Long sid) {
+	@DeleteMapping(value="/delete/sid={sid}")
+	public void deleteBySid(@PathVariable int sid) {
+		Student studentOptional = studentDao.findBySid(sid);
+		if (studentOptional == null) {
+			logger.error("Unable to delete - student with sid: " + sid + " not found");
+		} else {
 		studentDao.deleteById(sid);
+		}
 	}
 	
 	
@@ -144,12 +150,83 @@ public class StudentController {
 	
 //	//update
 //	//i think this may work
-//	@PostMapping(value="/sid= {sid}") //also need to pass in whatever is being changed; could be muliple things
-//	public Student postBySid(@RequestBody Student student, @PathVariable Long sid) {
-//		return studentDao.findById(sid)
-//				.map(student -> {
-//					student
-//				})
-//	}
-		
+	@PutMapping(value="/update/sid={sid}") //also need to pass in whatever is being changed; could be muliple things
+	public Student postBySid(@RequestBody Map<String, String> body, @PathVariable int sid) {
+		Student student = studentDao.findBySid(sid);
+		if (student == null) {
+			logger.error("Unable to update - student with sid: " + sid + " not found");
+			return null; //return an error here
+		}
+		//can use switch statement - less space but slower (maybe?)
+		//can use booleans - more space but faster?
+		for (String x: body.keySet()) {
+			switch(x) {
+			case "lastName":
+				student.setLastName(body.get(x));
+				break;
+			case "firstName":
+				student.setFirstName(body.get(x));
+				break;
+			case "dob":
+				student.setDob(body.get(x));
+				break;
+			case "gender":
+				student.setGender(genderDao.findById(Integer.parseInt(body.get("gender"))));
+				break;
+			case "raceEthnicity":
+				student.setRaceEth(raceEthDao.findByRid(Integer.parseInt(body.get("raceEthnicity"))));
+				break;
+			case "serviceArea":
+				student.setServiceArea(serviceAreaDao.findBySid(Integer.parseInt(body.get("serviceArea"))));
+				break;
+			case "school":
+				student.setSchool(schoolDao.findBySid(Integer.parseInt(body.get("school"))));
+				break;
+			case "district":
+				student.setDistrict(districtDao.findByDid(Integer.parseInt(body.get("district"))));
+				break;
+			case "county":
+				student.setCounty(countyDao.findByCid(Integer.parseInt(body.get("county"))));
+				break;
+			case "grade":
+				student.setGrade(gradeDao.findByGid(Integer.parseInt(body.get("grade"))));
+				break;
+			case "studentNotes":
+				student.setStudentNotes(body.get("studentNotes"));
+				break;
+			case "permissionDate":
+				student.setPermissionDate(body.get("permissionDate"));
+				break;
+			case "label":
+				student.setLabel(body.get("label"));
+				break;
+			case "psLabel":
+				student.setPsLabel(psLabelDao.findByLid(Integer.parseInt(body.get("psLabel"))));
+				break;
+			case "currentTeacher":
+				student.setCurrTeacher(teacherDao.findByTid(Integer.parseInt(body.get("currentTeacher"))));
+				break;
+			case "secondTeacher":
+				student.setSecondTeacher(teacherDao.findByTid(Integer.parseInt(body.get("secondTeacher"))));
+				break;
+			case "clinic":
+				student.setClinic(Boolean.parseBoolean(body.get("clinic")));
+				break;
+			case "hispanic":
+				student.setHispanic(Boolean.parseBoolean(body.get("hispanic")));
+				break;
+			case "petTherapy":
+				student.setPetTherapy(Boolean.parseBoolean(body.get("petTherapy")));
+				break;
+			case "newYrMessage":
+				student.setNewYrMessage(body.get("newYrMessage"));
+				break;
+			default:
+				//a field that shouldn't have been sent; return an error or something?
+				//can either not update anything or update all the valid stuff and not the error
+				logger.error("Cannot update " + x + " because the field does not exist on STUDENT");
+			}
+		}
+		return studentDao.save(student);
+	}
 }

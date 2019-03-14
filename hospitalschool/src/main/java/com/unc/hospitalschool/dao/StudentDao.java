@@ -9,12 +9,13 @@ import org.springframework.stereotype.Repository;
 import com.unc.hospitalschool.model.Student;
 
 @Repository
-public interface StudentDao extends CrudRepository<Student, Long>{
+public interface StudentDao extends CrudRepository<Student, Integer>{
 
 	List<Student> findAll();
 	List<Student> findByFirstName(String firstname);
 	List<Student> findByLastName(String lastname);
 	Student findByFirstNameAndLastName(String firstname, String lastname);
+	Student findBySid(int sid);
 	Student save(Student student);
 
 }

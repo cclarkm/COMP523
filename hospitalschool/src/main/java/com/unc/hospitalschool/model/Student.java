@@ -178,6 +178,87 @@ public class Student {
 		return map;
 		
 	}
+	
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
+	public void setRaceEth(RaceEth raceEth) {
+		this.raceEth = raceEth;
+	}
+
+	public void setServiceArea(ServiceArea serviceArea) {
+		this.serviceArea = serviceArea;
+	}
+
+	public void setSchool(School school) {
+		this.school = school;
+	}
+
+	public void setDistrict(District district) {
+		this.district = district;
+	}
+
+	public void setCounty(County county) {
+		this.county = county;
+	}
+
+	public void setGrade(Grade grade) {
+		this.grade = grade;
+	}
+
+	public void setStudentNotes(String studentNotes) {
+		this.studentNotes = studentNotes;
+	}
+
+	public void setPermissionDate(String permissionDate) {
+		this.permissionDate = permissionDate;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public void setPsLabel(PSLabel psLabel) {
+		this.psLabel = psLabel;
+	}
+
+	public void setCurrTeacher(Teacher currTeacher) {
+		this.currTeacher = currTeacher;
+	}
+
+	public void setSecondTeacher(Teacher secondTeacher) {
+		this.secondTeacher = secondTeacher;
+	}
+
+	public void setClinic(boolean clinic) {
+		this.clinic = clinic;
+	}
+
+	public void setHispanic(boolean hispanic) {
+		this.hispanic = hispanic;
+	}
+
+	public void setPetTherapy(boolean petTherapy) {
+		this.petTherapy = petTherapy;
+	}
+
+	public void setNewYrMessage(String newYrMessage) {
+		this.newYrMessage = newYrMessage;
+	}
+
 	@Override
 	public String toString() {
 		return "Student [sid=" + sid + ", lastName=" + lastName + ", firstName=" + firstName + ", dob=" + dob
