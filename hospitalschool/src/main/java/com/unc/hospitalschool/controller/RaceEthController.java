@@ -22,7 +22,7 @@ import com.unc.hospitalschool.dao.*;
 import com.unc.hospitalschool.model.*;
 
 @RestController
-@RequestMapping("/raceeth")
+@RequestMapping("/raceEth")
 public class RaceEthController {
 
 	private static Logger logger = LoggerFactory.getLogger("LOGGER");

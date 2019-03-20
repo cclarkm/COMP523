@@ -64,8 +64,56 @@ public class VisitInformationController {
 		LogType logType = logTypeDao.findByLid(Integer.parseInt(body.get("logType")));
 		boolean clinic = Boolean.parseBoolean(body.get("clinic"));
 		return visitInformationDao.save(new VisitInformation(student, dov, notes, teacher, logType, clinic));
-
 	}
+	
+	@GetMapping(value="/sid={sid}")
+	public Map<String, Object> getLogsByStudent(@PathVariable int sid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		
+		for (VisitInformation visit: visitInformationDao.findByStudentOrderByDovDesc(sid)) {
+			jsons.add(visit.toJson());
+		}
+		map.put("visits", jsons);
+		return map;
+	}
+	
+	@GetMapping(value="/sid={sid}?tid={tid}")
+	public Map<String, Object> getLogsByStudentAndTeacher(@PathVariable int sid, @PathVariable int tid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		
+		for (VisitInformation visit: visitInformationDao.findByStudentAndTeacherOrderByDovDesc(sid, tid)) {
+			jsons.add(visit.toJson());
+		}
+		map.put("visits", jsons);
+		return map;
+	}
+	
+	@GetMapping(value="/sid={sid}?lid={lid}")
+	public Map<String, Object> getLogsByStudentAndType(@PathVariable int sid, @PathVariable int lid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		
+		for (VisitInformation visit: visitInformationDao.findByStudentAndLogTypeOrderByDovDesc(sid, lid)) {
+			jsons.add(visit.toJson());
+		}
+		map.put("visits", jsons);
+		return map;
+	}
+	
+	@GetMapping(value="/sid={sid}?tid={tid}?lid={lid}")
+	public Map<String, Object> getLogsByStudentAndTeacherAndType(@PathVariable int sid, @PathVariable int tid, @PathVariable int lid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		
+		for (VisitInformation visit: visitInformationDao.findByStudentAndTeacherAndLogTypeOrderByDovDesc(sid, tid, lid)) {
+			jsons.add(visit.toJson());
+		}
+		map.put("visits", jsons);
+		return map;
+	}
+	
 	
 	
 }
