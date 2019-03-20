@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class LogType {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "lid", nullable = false)
 	private int lid;
 	

@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class ServiceArea {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column (name = "sid", nullable = false)
 	private int sid;
 	

@@ -15,7 +15,7 @@ import javax.persistence.Table;
 public class RaceEth {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "rid", nullable = false)
 	private int rid;
 	

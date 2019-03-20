@@ -120,11 +120,10 @@ public class Student {
 	@JsonProperty(value = "newYrMessage")
 	private String newYrMessage;
 
-	public Student(int sid, String lastName, String firstName, String dob, Gender gender, RaceEth raceEth,
+	public Student(String lastName, String firstName, String dob, Gender gender, RaceEth raceEth,
 			ServiceArea serviceArea, School school, District district, County county, Grade grade, String studentNotes,
 			String permissionDate, String label, PSLabel psLabel, Teacher currTeacher, Teacher secondTeacher,
 			boolean clinic, boolean hispanic, boolean petTherapy, String newYrMessage) {
-		this.sid = sid;
 		this.lastName = lastName;
 		this.firstName = firstName;
 		this.dob = dob;
@@ -158,6 +157,7 @@ public class Student {
 		map.put("firstName", firstName);
 		map.put("lastName", lastName);
 		map.put("dob", dob);
+		map.put("gender", gender.getGender());
 		map.put("raceEthnicity", raceEth.getRaceEth());
 		map.put("serviceArea", serviceArea.getServiceArea());
 		map.put("school", school.getSchool());

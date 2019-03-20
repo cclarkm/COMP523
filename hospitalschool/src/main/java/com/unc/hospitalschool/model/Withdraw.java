@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class Withdraw {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "wid", nullable = false)
 	private int wid;
 	

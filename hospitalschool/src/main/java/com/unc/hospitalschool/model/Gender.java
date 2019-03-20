@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class Gender {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "gid", nullable = false)
 	private int id;
 	

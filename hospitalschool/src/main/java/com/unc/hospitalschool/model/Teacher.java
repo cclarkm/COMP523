@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class Teacher {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "tid", nullable = false)
 	private int tid;
 	

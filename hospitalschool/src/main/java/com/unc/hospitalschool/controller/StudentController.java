@@ -105,7 +105,7 @@ public class StudentController {
 		if (studentOptional == null) {
 			logger.error("Unable to delete - student with sid: " + sid + " not found");
 		} else {
-		studentDao.deleteById(sid);
+			studentDao.deleteById(sid);
 		}
 	}
 	
@@ -114,7 +114,6 @@ public class StudentController {
 	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
 	public Student newStudent(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());		
-		Integer id = Integer.parseInt(body.get("id"));
 		String lName = body.get("lastName");
 		String fName = body.get("firstName");
 		String dob = body.get("dob");
@@ -137,15 +136,10 @@ public class StudentController {
 		boolean petTherapy = Boolean.parseBoolean(body.get("petTherapy"));
 		String newYrMessage = body.get("newYrMessage");
 		
-		return studentDao.save(new Student(id, lName, fName, dob, gender, raceEth, servArea,
+		return studentDao.save(new Student(lName, fName, dob, gender, raceEth, servArea,
 											school, district, county, grade, studentNotes,
 											permissionDate, label, psLabel, currTeach,
 											secondTeacher, clinic, hispanic, petTherapy, newYrMessage));
-		
-		
-		//reference to teacherDao with id - retrieve teacher entity
-		//student.set(currenTeacher) = what is returned
-//		return studentDao.save(new Student());
 	}
 	
 	//update

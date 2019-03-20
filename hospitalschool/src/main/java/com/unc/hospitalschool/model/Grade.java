@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class Grade {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "gid", nullable = false)
 	private int gid;
 	

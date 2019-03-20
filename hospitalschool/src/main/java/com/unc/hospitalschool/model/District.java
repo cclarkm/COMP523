@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class District {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "did", nullable = false)
 	private int did;
 	

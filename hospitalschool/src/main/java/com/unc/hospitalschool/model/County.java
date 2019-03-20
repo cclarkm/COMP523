@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class County {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "cid", nullable = false)
 	private int cid;
 	

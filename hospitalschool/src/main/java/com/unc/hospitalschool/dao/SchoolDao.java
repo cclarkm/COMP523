@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.unc.hospitalschool.model.School;
 
 @Repository
-public interface SchoolDao extends CrudRepository<School, Long>{
+public interface SchoolDao extends CrudRepository<School, Integer>{
 	
 	School findBySid(int sid);
 	List<School> findAll();

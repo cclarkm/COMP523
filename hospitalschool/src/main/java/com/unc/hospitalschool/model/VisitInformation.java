@@ -24,10 +24,11 @@ public class VisitInformation {
 
 	@Id
 	@Column(nullable = false, name = "id")
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "sid")
 	@JsonProperty(value = "sid")
 	private Student student;
 	
@@ -39,11 +40,13 @@ public class VisitInformation {
 	@JsonProperty(value = "notes")
 	private String notes;
 	
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "tid")
 	@JsonProperty(value = "tid")
 	private Teacher teacher;
 	
-	@Column(nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "lid")
 	@JsonProperty(value = "lid")
 	private LogType logType;
 	
