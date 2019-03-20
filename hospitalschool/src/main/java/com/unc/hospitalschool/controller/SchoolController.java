@@ -46,7 +46,7 @@ public class SchoolController {
 	}
 
 	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
-	public School newStudent(@RequestBody Map<String, String> body) {
+	public School newSchool(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return schoolDao.save(new School(body.get("school")));
 

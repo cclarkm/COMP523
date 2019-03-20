@@ -22,33 +22,33 @@ import com.unc.hospitalschool.dao.*;
 import com.unc.hospitalschool.model.*;
 
 @RestController
-@RequestMapping("/county")
-public class CountyController {
+@RequestMapping("/district")
+public class DistrictController {
 
 	private static Logger logger = LoggerFactory.getLogger("LOGGER");
 	
 
 	@Autowired
-	private CountyDao countyDao;
+	private DistrictDao districtDao;
 	
 	@GetMapping(value = "/")
 	@ResponseBody
-	public Map<String, Object> getAllCounties() {
-		logger.info("Get all counties called");
+	public Map<String, Object> getAllDistrict() {
+		logger.info("Get all districts called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
-		for (County county: countyDao.findAll()) {
-			jsons.add(county.toJson());
+		for (District district: districtDao.findAll()) {
+			jsons.add(district.toJson());
 		}
-		map.put("counties", jsons);
+		map.put("districts", jsons);
 		return map;	
 	}
 
 	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
-	public County newCounty(@RequestBody Map<String, String> body) {
+	public District newDistrict(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
-		return countyDao.save(new County(body.get("county")));
+		return districtDao.save(new District(body.get("district")));
 
 	}
 	

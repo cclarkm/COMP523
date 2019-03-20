@@ -22,14 +22,14 @@ import com.unc.hospitalschool.dao.*;
 import com.unc.hospitalschool.model.*;
 
 @RestController
-@RequestMapping("/county")
-public class CountyController {
+@RequestMapping("/psLabel")
+public class PSLabelController {
 
 	private static Logger logger = LoggerFactory.getLogger("LOGGER");
 	
 
 	@Autowired
-	private CountyDao countyDao;
+	private PSLabelDao psLabelDao;
 	
 	@GetMapping(value = "/")
 	@ResponseBody
@@ -38,17 +38,17 @@ public class CountyController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
-		for (County county: countyDao.findAll()) {
-			jsons.add(county.toJson());
+		for (PSLabel psLabel: psLabelDao.findAll()) {
+			jsons.add(psLabel.toJson());
 		}
-		map.put("counties", jsons);
+		map.put("PSLabels", jsons);
 		return map;	
 	}
 
 	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
-	public County newCounty(@RequestBody Map<String, String> body) {
+	public PSLabel newStudent(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
-		return countyDao.save(new County(body.get("county")));
+		return psLabelDao.save(new PSLabel(body.get("label"), body.get("code")));
 
 	}
 	
