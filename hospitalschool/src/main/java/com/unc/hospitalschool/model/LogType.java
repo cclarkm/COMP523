@@ -46,4 +46,8 @@ public class LogType {
 	public String getLogType() {
 		return this.logType;
 	}
+
+	public void setLogType(String logType) {
+		this.logType = logType;
+	}
 }

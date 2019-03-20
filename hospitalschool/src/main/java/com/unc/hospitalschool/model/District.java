@@ -46,4 +46,8 @@ public class District {
 	public String getSchoolDistrict() {
 		return schoolDistrict;
 	}
+
+	public void setDistrict(String district) {
+		this.schoolDistrict = district;
+	}
 }

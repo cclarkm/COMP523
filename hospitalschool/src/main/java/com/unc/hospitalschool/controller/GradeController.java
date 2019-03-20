@@ -45,12 +45,26 @@ public class GradeController {
 		return map;	
 	}
 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public Grade newStudent(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return gradeDao.save(new Grade(body.get("grade")));
-
 	}
 	
-	
+	@PutMapping(value="/update/gid={gid}")
+	public Grade updateGrade(@RequestBody Map<String, String> body, @PathVariable int gid) {
+		Grade grade = gradeDao.findByGid(gid);
+		logger.info("Updating grade " + gid);
+		if (grade == null) {
+			logger.error("Unable to update - grade with gid: " + gid + " not found");
+			return null;
+		}
+		if (body.containsKey("grade")) {
+			grade.setGrade(body.get("grade"));
+			return gradeDao.save(grade);
+		} else {
+			logger.error("Unable to update - county; incorrect request data");
+			return null;
+		}
+	}
 }

@@ -46,5 +46,9 @@ public class County {
 	public String getCounty() {
 		return this.county;
 	}
+	
+	public void setCounty(String county) {
+		this.county = county;
+	}
 
 }

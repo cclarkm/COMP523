@@ -45,12 +45,26 @@ public class LogTypeController {
 		return map;	
 	}
 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public LogType newStudent(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return logTypeDao.save(new LogType(body.get("logType")));
-
 	}
 	
-	
+	@PutMapping(value="/update/lid={lid}")
+	public LogType updateLogType(@RequestBody Map<String, String> body, @PathVariable int lid) {
+		LogType logType = logTypeDao.findByLid(lid);
+		logger.info("Updating logType " + lid);
+		if (logType == null) {
+			logger.error("Unable to update - logType with lid: " + lid + " not found");
+			return null;
+		}
+		if (body.containsKey("logType")) {
+			logType.setLogType(body.get("logType"));
+			return logTypeDao.save(logType);
+		} else {
+			logger.error("Unable to update - logType; incorrect request data");
+			return null;
+		}
+	}
 }

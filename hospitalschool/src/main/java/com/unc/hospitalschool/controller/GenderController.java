@@ -49,8 +49,22 @@ public class GenderController {
 	public Gender newGender(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return genderDao.save(new Gender(body.get("gender")));
-
 	}
 	
-	
+	@PutMapping(value="/update/id={id}")
+	public Gender updateGender(@RequestBody Map<String, String> body, @PathVariable int id) {
+		Gender gender = genderDao.findById(id);
+		logger.info("Updating gender " + id);
+		if (gender == null) {
+			logger.error("Unable to update - gender with id: " + id + " not found");
+			return null;
+		}
+		if (body.containsKey("gender")) {
+			gender.setGender(body.get("gender"));
+			return genderDao.save(gender);
+		} else {
+			logger.error("Unable to update - gender; incorrect request data");
+			return null;
+		}
+	}
 }

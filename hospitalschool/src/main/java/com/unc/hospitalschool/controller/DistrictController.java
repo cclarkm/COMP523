@@ -45,12 +45,26 @@ public class DistrictController {
 		return map;	
 	}
 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public District newDistrict(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return districtDao.save(new District(body.get("district")));
-
 	}
 	
-	
+	@PutMapping(value="/update/did={did}")
+	public District updateDistrict(@RequestBody Map<String, String> body, @PathVariable int did) {
+		District district = districtDao.findByDid(did);
+		logger.info("Updating district " + did);
+		if (district == null) {
+			logger.error("Unable to update - district with did: " + did);
+			return null;
+		}
+		if (body.containsKey("district")) {
+			district.setDistrict(body.get("district"));
+			return districtDao.save(district);
+		} else {
+			logger.error("Unable to update - district: incorrect request data");
+			return null;
+		}		
+	}
 }

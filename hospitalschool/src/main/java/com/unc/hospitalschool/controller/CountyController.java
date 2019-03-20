@@ -45,11 +45,29 @@ public class CountyController {
 		return map;	
 	}
 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public County newCounty(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return countyDao.save(new County(body.get("county")));
-
+	}
+	
+	//This needs to change what the string value of County is in the table
+	@PutMapping(value="/update/cid={cid}")
+	public County postByCid(@RequestBody Map<String, String> body, @PathVariable int cid) {
+		County county = countyDao.findByCid(cid);
+		logger.info("Updating county " + cid);
+		if (county == null) {
+			logger.error("Unable to update - county with cid: " + cid + " not found");
+			return null;
+		}
+		if (body.containsKey("county")) {
+			county.setCounty(body.get("county"));
+			return countyDao.save(county);
+		} else {
+			logger.error("Unable to update - county; incorrect request data");
+			return null;
+		}
+		
 	}
 	
 	
