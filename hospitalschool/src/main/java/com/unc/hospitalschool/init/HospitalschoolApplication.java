@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.unc.hospitalschool.dao.SchoolDao;
 import com.unc.hospitalschool.dao.StudentDao;
-import com.unc.hospitalschool.dao.TestDao;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -56,9 +56,8 @@ public class VisitInformation {
 	
 	protected VisitInformation() {}
 	
-	public VisitInformation(int id, Student sid, String dov, String notes, Teacher tid,
+	public VisitInformation(Student sid, String dov, String notes, Teacher tid,
 							LogType lid, boolean clinic) {
-		this.id = id;
 		this.student = sid;
 		this.dov = dov;
 		this.notes = notes;
