@@ -1,5 +1,8 @@
 package com.unc.hospitalschool.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +33,15 @@ public class RaceEth {
 	public RaceEth(String raceEth, String code) {
 		this.raceEth = raceEth;
 		this.code = code;
+	}
+	
+	public Map<String, String> toJson(){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("rid", Integer.toString(rid));
+		map.put("raceEth", raceEth);
+		map.put("code", code);
+		
+		return map;
 	}
 	
 	@Override

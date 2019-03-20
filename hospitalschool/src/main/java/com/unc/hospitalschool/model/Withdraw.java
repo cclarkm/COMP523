@@ -1,5 +1,8 @@
 package com.unc.hospitalschool.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +28,14 @@ public class Withdraw {
 	
 	public Withdraw(String withdraw) {
 		this.withdraw = withdraw;
+	}
+	
+	public Map<String, String> toJson(){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("wid", Integer.toString(wid));
+		map.put("withdraw", withdraw);
+		
+		return map;
 	}
 	
 	@Override

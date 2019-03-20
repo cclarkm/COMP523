@@ -1,5 +1,8 @@
 package com.unc.hospitalschool.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +28,14 @@ public class Gender {
 	
 	public Gender(String gender) {
 		this.gender = gender;
+	}
+	
+	public Map<String, String> toJson(){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("gid", Integer.toString(id));
+		map.put("gender", gender);
+		
+		return map;
 	}
 	
 	@Override

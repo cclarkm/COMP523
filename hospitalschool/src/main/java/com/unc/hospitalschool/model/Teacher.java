@@ -1,5 +1,8 @@
 package com.unc.hospitalschool.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +32,15 @@ public class Teacher {
 	public Teacher(String lastName, String firstName) {
 		this.lastName = lastName;
 		this.firstName = firstName;
+	}
+	
+	public Map<String, String> toJson(){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("tid", Integer.toString(tid));
+		map.put("lastName", lastName);
+		map.put("firstName", firstName);
+		
+		return map;
 	}
 	
 	@Override

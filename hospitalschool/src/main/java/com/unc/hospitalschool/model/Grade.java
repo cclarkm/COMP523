@@ -1,5 +1,8 @@
 package com.unc.hospitalschool.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +28,14 @@ public class Grade {
 	
 	public Grade(String grade) {
 		this.grade = grade;
+	}
+	
+	public Map<String, String> toJson(){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("gid", Integer.toString(gid));
+		map.put("grade", grade);
+		
+		return map;
 	}
 	
 	@Override

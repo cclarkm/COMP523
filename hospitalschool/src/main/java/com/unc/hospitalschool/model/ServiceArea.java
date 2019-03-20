@@ -1,5 +1,8 @@
 package com.unc.hospitalschool.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +30,14 @@ public class ServiceArea {
 	
 	public ServiceArea(String field1) {
 		this.field1 = field1;
+	}
+	
+	public Map<String, String> toJson(){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("sid", Integer.toString(sid));
+		map.put("field1", field1);
+		
+		return map;
 	}
 	
 	@Override

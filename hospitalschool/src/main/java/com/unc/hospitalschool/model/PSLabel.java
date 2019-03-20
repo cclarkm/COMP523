@@ -1,5 +1,8 @@
 package com.unc.hospitalschool.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +32,15 @@ public class PSLabel {
 	public PSLabel(String label, String code) {
 		this.label = label;
 		this.code = code;
+	}
+	
+	public Map<String, String> toJson(){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("lid", Integer.toString(lid));
+		map.put("label", label);
+		map.put("code", code);
+		
+		return map;
 	}
 	
 	@Override

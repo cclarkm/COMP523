@@ -22,24 +22,24 @@ import com.unc.hospitalschool.dao.*;
 import com.unc.hospitalschool.model.*;
 
 @RestController
-@RequestMapping("/school")
-public class SchoolController {
+@RequestMapping("/county")
+public class CountyController {
 
 	private static Logger logger = LoggerFactory.getLogger("LOGGER");
 	
 
 	@Autowired
-	private SchoolDao schoolDao;
+	private CountyDao countyDao;
 	
 	@GetMapping(value = "/")
 	@ResponseBody
-	public Map<String, Object> getAllSchools() {
-		logger.info("Get all schools called");
+	public Map<String, Object> getAllCounties() {
+		logger.info("Get all counties called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
-		for (School school: schoolDao.findAll()) {
-			jsons.add(school.toJson());
+		for (County county: countyDao.findAll()) {
+			jsons.add(county.toJson());
 		}
 		map.put("schools", jsons);
 		return map;	

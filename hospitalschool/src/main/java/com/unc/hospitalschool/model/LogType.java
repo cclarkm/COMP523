@@ -1,5 +1,8 @@
 package com.unc.hospitalschool.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +28,14 @@ public class LogType {
 	
 	public LogType(String logType) {
 		this.logType = logType;
+	}
+	
+	public Map<String, String> toJson(){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("lid", Integer.toString(lid));
+		map.put("logType", logType);
+		
+		return map;
 	}
 	
 	@Override

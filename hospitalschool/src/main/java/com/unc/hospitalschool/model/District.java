@@ -1,5 +1,8 @@
 package com.unc.hospitalschool.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +28,14 @@ public class District {
 	
 	public District(String schoolDistrict) {
 		this.schoolDistrict = schoolDistrict;
+	}
+	
+	public Map<String, String> toJson(){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("did", Integer.toString(did));
+		map.put("district", schoolDistrict);
+		
+		return map;
 	}
 	
 	@Override
