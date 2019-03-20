@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @Entity
 @Table(name = "raceEth")
@@ -26,6 +28,7 @@ public class RaceEth {
 	private String raceEth;
 	
 	@Column(name = "code", nullable = false)
+	@JsonProperty(value = "code")
 	private String code;
 	
 	protected RaceEth() {}

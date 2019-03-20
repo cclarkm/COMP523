@@ -45,7 +45,7 @@ public class RaceEthController {
 		return map;	
 	}
 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public RaceEth newRaceEth(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return raceEthDao.save(new RaceEth(body.get("raceEth"), body.get("code")));

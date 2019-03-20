@@ -92,7 +92,7 @@ public class StudentController {
 		return map;
 	}
 	
-	@GetMapping(value="/lname={lname}&fname={fname}")
+	@GetMapping(value="/lname={lname}/fname={fname}")
 	public Map<String, String> getStudentByFirstAndLastName(@PathVariable String lname, @PathVariable String fname){
 		logger.info(lname);
 		logger.info(fname);

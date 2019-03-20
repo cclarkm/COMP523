@@ -68,46 +68,59 @@ public class VisitInformationController {
 	
 	@GetMapping(value="/sid={sid}")
 	public Map<String, Object> getLogsByStudent(@PathVariable int sid) {
+		logger.info("Get Logs By Student Called with ID:");
+		logger.info(Integer.toString(sid));
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
-		for (VisitInformation visit: visitInformationDao.findByStudentOrderByDovDesc(sid)) {
+		for (VisitInformation visit: visitInformationDao.findByStudentOrderByDovDesc(studentDao.findBySid(sid))) {
 			jsons.add(visit.toJson());
 		}
 		map.put("visits", jsons);
 		return map;
 	}
 	
-	@GetMapping(value="/sid={sid}?tid={tid}")
+	@GetMapping(value="/sid={sid}/tid={tid}")
 	public Map<String, Object> getLogsByStudentAndTeacher(@PathVariable int sid, @PathVariable int tid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
-		for (VisitInformation visit: visitInformationDao.findByStudentAndTeacherOrderByDovDesc(sid, tid)) {
+		Student student = studentDao.findBySid(sid);
+		Teacher teacher = teacherDao.findByTid(tid);
+		
+		for (VisitInformation visit: visitInformationDao.findByStudentAndTeacherOrderByDovDesc(student, teacher)) {
 			jsons.add(visit.toJson());
 		}
 		map.put("visits", jsons);
 		return map;
 	}
 	
-	@GetMapping(value="/sid={sid}?lid={lid}")
+	@GetMapping(value="/sid={sid}/lid={lid}")
 	public Map<String, Object> getLogsByStudentAndType(@PathVariable int sid, @PathVariable int lid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
-		for (VisitInformation visit: visitInformationDao.findByStudentAndLogTypeOrderByDovDesc(sid, lid)) {
+		Student student = studentDao.findBySid(sid);
+		LogType logType = logTypeDao.findByLid(lid);
+		
+		for (VisitInformation visit: visitInformationDao.findByStudentAndLogTypeOrderByDovDesc(student, logType)) {
 			jsons.add(visit.toJson());
 		}
 		map.put("visits", jsons);
 		return map;
 	}
 	
-	@GetMapping(value="/sid={sid}?tid={tid}?lid={lid}")
+	@GetMapping(value="/sid={sid}/tid={tid}/lid={lid}")
 	public Map<String, Object> getLogsByStudentAndTeacherAndType(@PathVariable int sid, @PathVariable int tid, @PathVariable int lid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
-		for (VisitInformation visit: visitInformationDao.findByStudentAndTeacherAndLogTypeOrderByDovDesc(sid, tid, lid)) {
+		Student student = studentDao.findBySid(sid);
+		Teacher teacher = teacherDao.findByTid(tid);
+		LogType logType = logTypeDao.findByLid(lid);
+		
+		
+		for (VisitInformation visit: visitInformationDao.findByStudentAndTeacherAndLogTypeOrderByDovDesc(student, teacher, logType)) {
 			jsons.add(visit.toJson());
 		}
 		map.put("visits", jsons);

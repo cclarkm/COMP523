@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
+import com.unc.hospitalschool.model.LogType;
+import com.unc.hospitalschool.model.Student;
 import com.unc.hospitalschool.model.Teacher;
 import com.unc.hospitalschool.model.VisitInformation;
 
@@ -12,12 +14,12 @@ public interface VisitInformationDao extends CrudRepository<VisitInformation, In
 	
 	VisitInformation findById(int tid);
 	
-	List<VisitInformation> findByStudentOrderByDovDesc(int sid);
+	List<VisitInformation> findByStudentOrderByDovDesc(Student student);
 	
-	List<VisitInformation> findByStudentAndLogTypeOrderByDovDesc(int sid, int lid);
-	List<VisitInformation> findByStudentAndTeacherOrderByDovDesc(int sid, int tid);
+	List<VisitInformation> findByStudentAndLogTypeOrderByDovDesc(Student student, LogType logType);
+	List<VisitInformation> findByStudentAndTeacherOrderByDovDesc(Student student, Teacher teacher);
 	
 	
-	List<VisitInformation> findByStudentAndTeacherAndLogTypeOrderByDovDesc(int sid, int tid, int lid);
+	List<VisitInformation> findByStudentAndTeacherAndLogTypeOrderByDovDesc(Student student, Teacher teacher, LogType logType);
 	
 }
