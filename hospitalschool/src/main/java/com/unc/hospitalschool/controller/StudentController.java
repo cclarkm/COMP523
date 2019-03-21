@@ -49,7 +49,6 @@ public class StudentController {
 	private TeacherDao teacherDao;
 	
 	
-	//get request doesn't display gender - not sure if intentional or not
 	@GetMapping(value = "/")
 	@ResponseBody
 	public Map<String, Object> getAllStudents() {
@@ -111,7 +110,7 @@ public class StudentController {
 	
 	
 	//new 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public Student newStudent(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());		
 		String lName = body.get("lastName");
@@ -143,15 +142,13 @@ public class StudentController {
 	}
 	
 	//update
-	@PutMapping(value="/update/sid={sid}") //also need to pass in whatever is being changed; could be muliple things
+	@PutMapping(value="/update/sid={sid}")
 	public Student postBySid(@RequestBody Map<String, String> body, @PathVariable int sid) {
 		Student student = studentDao.findBySid(sid);
 		if (student == null) {
 			logger.error("Unable to update - student with sid: " + sid + " not found");
 			return null; //return an error here
 		}
-		//can use switch statement - less space but slower (maybe?)
-		//can use booleans - more space but faster?
 		for (String x: body.keySet()) {
 			switch(x) {
 			case "lastName":
@@ -215,8 +212,6 @@ public class StudentController {
 				student.setNewYrMessage(body.get("newYrMessage"));
 				break;
 			default:
-//				//a field that shouldn't have been sent; return an error or something?
-//				//can either not update anything or update all the valid stuff and not the error
 				logger.error("Cannot update " + x + " because the field does not exist on STUDENT");
 			}
 		}

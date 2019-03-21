@@ -45,7 +45,7 @@ public class GenderController {
 		return map;	
 	}
 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public Gender newGender(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return genderDao.save(new Gender(body.get("gender")));
@@ -65,6 +65,16 @@ public class GenderController {
 		} else {
 			logger.error("Unable to update - gender; incorrect request data");
 			return null;
+		}
+	}
+	
+	@DeleteMapping(value="/delete/id={id}")
+	public void deleteByGid(@PathVariable int id) {
+		Gender gender = genderDao.findById(id);
+		if (gender == null) {
+			logger.error("Unable to delete - gender with id: " + id + " not found");
+		} else {
+			genderDao.delete(gender);
 		}
 	}
 }

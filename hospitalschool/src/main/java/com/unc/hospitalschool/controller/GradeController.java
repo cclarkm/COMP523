@@ -33,8 +33,8 @@ public class GradeController {
 	
 	@GetMapping(value = "/")
 	@ResponseBody
-	public Map<String, Object> getAllCounties() {
-		logger.info("Get all counties called");
+	public Map<String, Object> getAllGrades() {
+		logger.info("Get all grades called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -65,6 +65,16 @@ public class GradeController {
 		} else {
 			logger.error("Unable to update - county; incorrect request data");
 			return null;
+		}
+	}
+	
+	@DeleteMapping(value="/delete/gid={gid}")
+	public void deleteByGid(@PathVariable int gid) {
+		Grade grade = gradeDao.findByGid(gid);
+		if (grade == null) {
+			logger.error("Unable to delete - grade with gid: " + gid + " not found");
+		} else {
+			gradeDao.delete(grade);
 		}
 	}
 }

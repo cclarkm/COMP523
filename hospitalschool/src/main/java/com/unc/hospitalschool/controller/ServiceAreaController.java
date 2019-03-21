@@ -33,8 +33,8 @@ public class ServiceAreaController {
 	
 	@GetMapping(value = "/")
 	@ResponseBody
-	public Map<String, Object> getAllCounties() {
-		logger.info("Get all counties called");
+	public Map<String, Object> getAllServiceAreas() {
+		logger.info("Get all service areas called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -45,7 +45,7 @@ public class ServiceAreaController {
 		return map;	
 	}
 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public ServiceArea newServiceArea(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return serviceAreaDao.save(new ServiceArea(body.get("field1")));
@@ -65,6 +65,16 @@ public class ServiceAreaController {
 		} else {
 			logger.error("Unable to update - serviceArea; incorrect request data");
 			return null;
+		}
+	}
+	
+	@DeleteMapping(value="/delete/sid={sid}")
+	public void deleteBySid(@PathVariable int sid) {
+		ServiceArea serviceArea = serviceAreaDao.findBySid(sid);
+		if (serviceArea == null) {
+			logger.error("Unable to delete - serviceArea with sid: " + sid + " not found");
+		} else {
+			serviceAreaDao.delete(serviceArea);
 		}
 	}
 }

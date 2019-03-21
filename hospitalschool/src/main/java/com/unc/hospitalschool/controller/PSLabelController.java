@@ -71,4 +71,14 @@ public class PSLabelController {
 		}
 		return psLabelDao.save(psLabel);
 	}
+	
+	@DeleteMapping(value="/delete/lid={lid}")
+	public void deleteByLid(@PathVariable int lid) {
+		PSLabel psLabel = psLabelDao.findByLid(lid);
+		if (psLabel == null) {
+			logger.error("Unable to delete - psLabel with lid: " + lid + " not found");
+		} else {
+			psLabelDao.delete(psLabel);
+		}
+	}
 }

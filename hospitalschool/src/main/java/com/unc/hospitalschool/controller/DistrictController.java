@@ -67,4 +67,14 @@ public class DistrictController {
 			return null;
 		}		
 	}
+	
+	@DeleteMapping(value="/delete/did={did}")
+	public void deleteByDid(@PathVariable int did) {
+		District district = districtDao.findByDid(did);
+		if (district == null) {
+			logger.error("Unable to delete - district with did: " + did + " not found");
+		} else {
+			districtDao.delete(district);
+		}
+	}
 }

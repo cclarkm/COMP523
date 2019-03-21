@@ -67,4 +67,14 @@ public class LogTypeController {
 			return null;
 		}
 	}
+	
+	@DeleteMapping(value="/delete/lid={lid}")
+	public void deleteByLid(@PathVariable int lid) {
+		LogType logType = logTypeDao.findByLid(lid);
+		if (logType == null) {
+			logger.error("Unable to delete - logType with lid: " + lid + " not found");
+		} else {
+			logTypeDao.delete(logType);
+		}
+	}
 }

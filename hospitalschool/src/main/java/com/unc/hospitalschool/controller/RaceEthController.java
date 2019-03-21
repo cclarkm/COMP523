@@ -34,7 +34,7 @@ public class RaceEthController {
 	@GetMapping(value = "/")
 	@ResponseBody
 	public Map<String, Object> getAllRaceEth() {
-		logger.info("Get all counties called");
+		logger.info("Get all raceEths called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -72,5 +72,13 @@ public class RaceEthController {
 		return raceEthDao.save(raceEth);
 	}
 	
-	
+	@DeleteMapping(value="/delete/rid={rid}")
+	public void deleteByRid(@PathVariable int rid) {
+		RaceEth raceEth = raceEthDao.findByRid(rid);
+		if (raceEth == null) {
+			logger.error("Unable to delete - raceEth with rid: " + rid + " not found");
+		} else {
+			raceEthDao.delete(raceEth);
+		}
+	}	
 }

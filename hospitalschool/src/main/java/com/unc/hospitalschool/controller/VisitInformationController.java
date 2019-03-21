@@ -54,7 +54,7 @@ public class VisitInformationController {
 		return map;	
 	}
 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public VisitInformation newStudent(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		Student student = studentDao.findBySid(Integer.parseInt(body.get("sid")));
@@ -162,4 +162,13 @@ public class VisitInformationController {
 		return visitInformationDao.save(visitInformation);
 	}
 	
+	@DeleteMapping(value="/delete/id={id}")
+	public void deleteById(@PathVariable int id) {
+		VisitInformation visitInformation = visitInformationDao.findById(id);
+		if (visitInformation == null) {
+			logger.error("Unable to delete - county with visitInformation: " + id + " not found");
+		} else {
+			visitInformationDao.delete(visitInformation);
+		}
+	}
 }

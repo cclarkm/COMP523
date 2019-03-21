@@ -45,7 +45,7 @@ public class SchoolController {
 		return map;	
 	}
 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public School newSchool(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return schoolDao.save(new School(body.get("school")));
@@ -68,4 +68,13 @@ public class SchoolController {
 		}
 	}
 	
+	@DeleteMapping(value="/delete/sid={sid}")
+	public void deleteBySid(@PathVariable int sid) {
+		School school = schoolDao.findBySid(sid);
+		if (school == null) {
+			logger.error("Unable to delete - school with sid: " + sid + " not found");
+		} else {
+			schoolDao.delete(school);
+		}
+	}
 }

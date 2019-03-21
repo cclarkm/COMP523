@@ -68,5 +68,13 @@ public class CountyController {
 		}
 	}
 	
-	
+	@DeleteMapping(value="/delete/cid={cid}")
+	public void deleteByCid(@PathVariable int cid) {
+		County county = countyDao.findByCid(cid);
+		if (county == null) {
+			logger.error("Unable to delete - county with cid: " + cid + " not found");
+		} else {
+			countyDao.delete(county);
+		}
+	}	
 }
