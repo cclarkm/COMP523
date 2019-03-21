@@ -127,6 +127,39 @@ public class VisitInformationController {
 		return map;
 	}
 	
-	
+	@PutMapping(value="/update/id={id}")
+	public VisitInformation updateVisitInformation(@RequestBody Map<String, String> body, @PathVariable int id) {
+		VisitInformation visitInformation = visitInformationDao.findById(id);
+		logger.info("Updating visitInformation " + id);
+		if (visitInformation == null) {
+			logger.error("Unable to update - visitInformation with id: " + id + " not found");
+			return null;
+		}
+		for (String x: body.keySet()) {
+			switch(x) {
+			case "student":
+				visitInformation.setStudent(studentDao.findBySid(Integer.parseInt(body.get("student"))));
+				break;
+			case "dov":
+				visitInformation.setDov(body.get("dov"));
+				break;
+			case "notes":
+				visitInformation.setNotes(body.get("notes"));
+				break;
+			case "teacher":
+				visitInformation.setTeacher(teacherDao.findByTid(Integer.parseInt(body.get("teacher"))));
+				break;
+			case "logType":
+				visitInformation.setLogType(logTypeDao.findByLid(Integer.parseInt(body.get("logType"))));
+				break;
+			case "clinic":
+				visitInformation.setClinic(Boolean.parseBoolean(body.get("clinic")));
+				break;
+			default:
+				logger.error("Cannot update " + x + " because the field does not exist");
+			}
+		}
+		return visitInformationDao.save(visitInformation);
+	}
 	
 }

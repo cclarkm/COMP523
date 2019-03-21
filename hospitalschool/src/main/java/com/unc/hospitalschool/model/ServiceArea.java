@@ -48,4 +48,8 @@ public class ServiceArea {
 	public String getServiceArea() {
 		return field1;
 	}
+	
+	public void setField1(String field) {
+		this.field1 = field;
+	}
 }

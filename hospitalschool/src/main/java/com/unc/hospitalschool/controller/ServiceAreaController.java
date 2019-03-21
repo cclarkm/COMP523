@@ -49,8 +49,22 @@ public class ServiceAreaController {
 	public ServiceArea newServiceArea(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return serviceAreaDao.save(new ServiceArea(body.get("field1")));
-
 	}
 	
-	
+	@PutMapping(value="/update/sid={sid}")
+	public ServiceArea updateServiceArea(@RequestBody Map<String, String> body, @PathVariable int sid) {
+		ServiceArea serviceArea = serviceAreaDao.findBySid(sid);
+		logger.info("Updating county " + sid);
+		if (serviceArea == null) {
+			logger.error("Unable to update - serviceArea with sid: " + sid + " not found");
+			return null;
+		}
+		if (body.containsKey("field1")) {
+			serviceArea.setField1(body.get("field1"));
+			return serviceAreaDao.save(serviceArea);
+		} else {
+			logger.error("Unable to update - serviceArea; incorrect request data");
+			return null;
+		}
+	}
 }

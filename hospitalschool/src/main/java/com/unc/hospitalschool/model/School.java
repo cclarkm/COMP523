@@ -46,4 +46,8 @@ public class School {
 	public String getSchool() {
 		return schoolName;
 	}
+
+	public void setSchool(String school) {
+		this.schoolName = school;
+	}
 }

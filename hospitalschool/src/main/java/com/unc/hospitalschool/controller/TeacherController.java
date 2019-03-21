@@ -34,7 +34,7 @@ public class TeacherController {
 	@GetMapping(value = "/")
 	@ResponseBody
 	public Map<String, Object> getAllTeachers() {
-		logger.info("Get all counties called");
+		logger.info("Get all teachers called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -49,8 +49,27 @@ public class TeacherController {
 	public Teacher newTeacher(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return teacherDao.save(new Teacher(body.get("lName"), body.get("fName")));
-
 	}
 	
+	@PutMapping(value="/update/tid={tid}")
+	public Teacher updateTeacher(@RequestBody Map<String, String> body, @PathVariable int tid) {
+		Teacher teacher = teacherDao.findByTid(tid);
+		logger.info("Updating teacher " + tid);
+		if (teacher == null) {
+			logger.error("Unable to update - teacher with tid: " + tid + " not found");
+			return null;
+		}
+		if (!body.containsKey("firstName") && !body.containsKey("lastName")) {
+			logger.error("Unable to update - county; incorrect request data");
+			return null;
+		}
+		if (body.containsKey("firstName")) {
+			teacher.setFirstName(body.get("firstName"));
+		}
+		if (body.containsKey("lastName")) {
+			teacher.setLastName(body.get("lastName"));
+		}
+		return teacherDao.save(teacher);
+	}
 	
 }

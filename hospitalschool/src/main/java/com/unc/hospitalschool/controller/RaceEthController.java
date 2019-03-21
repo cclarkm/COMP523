@@ -49,7 +49,27 @@ public class RaceEthController {
 	public RaceEth newRaceEth(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return raceEthDao.save(new RaceEth(body.get("raceEth"), body.get("code")));
-
+	}
+	
+	@PutMapping(value="/update/rid={rid}")
+	public RaceEth updateRaceEth(@RequestBody Map<String, String> body, @PathVariable int rid) {
+		RaceEth raceEth = raceEthDao.findByRid(rid);
+		logger.info("Updating county " + rid);
+		if (raceEth == null) {
+			logger.error("Unable to update - raceEthd with rid: " + rid + " not found");
+			return null;
+		}
+		if (!body.containsKey("raceEth") && !body.containsKey("code")) {
+			logger.error("Unable to update - county; incorrect request data");
+			return null;
+		}
+		if (body.containsKey("raceEth")) {
+			raceEth.setRaceEth(body.get("raceEth"));
+		}
+		if (body.containsKey("code")) {
+			raceEth.setCode(body.get("code"));
+		}
+		return raceEthDao.save(raceEth);
 	}
 	
 	

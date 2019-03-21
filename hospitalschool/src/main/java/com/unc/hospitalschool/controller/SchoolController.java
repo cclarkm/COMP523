@@ -49,8 +49,23 @@ public class SchoolController {
 	public School newSchool(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return schoolDao.save(new School(body.get("school")));
-
 	}
 	
+	@PutMapping(value="/update/sid={sid}")
+	public School updateSchool(@RequestBody Map<String, String> body, @PathVariable int sid) {
+		School school = schoolDao.findBySid(sid);
+		logger.info("Updating school " + sid);
+		if (school == null) {
+			logger.error("Unable to update - school with sid: " + sid + " not found");
+			return null;
+		}
+		if (body.containsKey("school")) {
+			school.setSchool(body.get("school"));
+			return schoolDao.save(school);
+		} else {
+			logger.error("Unable to update - school; incorrect request data");
+			return null;
+		}
+	}
 	
 }

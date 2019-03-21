@@ -33,8 +33,8 @@ public class PSLabelController {
 	
 	@GetMapping(value = "/")
 	@ResponseBody
-	public Map<String, Object> getAllCounties() {
-		logger.info("Get all counties called");
+	public Map<String, Object> getAllPSLabels() {
+		logger.info("Get all PSLabels called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -45,12 +45,30 @@ public class PSLabelController {
 		return map;	
 	}
 
-	@PostMapping(value="/new") //also need to pass in whatever is being changed; could be multiple things
+	@PostMapping(value="/new")
 	public PSLabel newStudent(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return psLabelDao.save(new PSLabel(body.get("label"), body.get("code")));
-
 	}
 	
-	
+	@PutMapping(value="/update/lid={lid}")
+	public PSLabel updatePSLabel(@RequestBody Map<String, String> body, @PathVariable int lid) {
+		PSLabel psLabel = psLabelDao.findByLid(lid);
+		logger.info("Updating PSLabel " + lid);
+		if (psLabel == null) {
+			logger.error("Unable to update - psLabel with lid: " + lid + " not found");
+			return null;
+		}
+		if (!body.containsKey("label") && !body.containsKey("code")) {
+			logger.error("Unable to update - psLabel; incorrect request data");
+			return null;
+		}
+		if (body.containsKey("label")) {
+			psLabel.setLabel(body.get("label"));
+		}
+		if (body.containsKey("code")) {
+			psLabel.setCode(body.get("code"));
+		}
+		return psLabelDao.save(psLabel);
+	}
 }

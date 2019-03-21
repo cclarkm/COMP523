@@ -55,4 +55,12 @@ public class PSLabel {
 	public String getCode() {
 		return code;
 	}
+
+	public void setLabel(String psLabel) {
+		this.label = psLabel;
+	}
+	
+	public void setCode(String code) {
+		this.code = code;
+	}
 }

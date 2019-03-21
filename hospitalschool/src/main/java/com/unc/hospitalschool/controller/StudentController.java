@@ -215,8 +215,8 @@ public class StudentController {
 				student.setNewYrMessage(body.get("newYrMessage"));
 				break;
 			default:
-				//a field that shouldn't have been sent; return an error or something?
-				//can either not update anything or update all the valid stuff and not the error
+//				//a field that shouldn't have been sent; return an error or something?
+//				//can either not update anything or update all the valid stuff and not the error
 				logger.error("Cannot update " + x + " because the field does not exist on STUDENT");
 			}
 		}

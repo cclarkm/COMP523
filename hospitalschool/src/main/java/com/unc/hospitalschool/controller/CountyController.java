@@ -51,7 +51,6 @@ public class CountyController {
 		return countyDao.save(new County(body.get("county")));
 	}
 	
-	//This needs to change what the string value of County is in the table
 	@PutMapping(value="/update/cid={cid}")
 	public County postByCid(@RequestBody Map<String, String> body, @PathVariable int cid) {
 		County county = countyDao.findByCid(cid);
@@ -67,7 +66,6 @@ public class CountyController {
 			logger.error("Unable to update - county; incorrect request data");
 			return null;
 		}
-		
 	}
 	
 	
