@@ -103,7 +103,7 @@ public class Student {
 	@JsonProperty(value = "secondTeacher")
 	private Teacher secondTeacher;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	@JsonProperty(value = "clinic")
 	private boolean clinic;
 
@@ -111,7 +111,7 @@ public class Student {
 	@JsonProperty(value = "hispanic")
 	private boolean hispanic;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	@JsonProperty(value = "petTherapy")
 	private boolean petTherapy;
 
@@ -251,43 +251,53 @@ public class Student {
 		
 	}
 	
-	public void setLastName(String lastName) {
+	public void setLastName(String lastName) throws Exception{
+		checkValid("lastName", lastName);
 		this.lastName = lastName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(String firstName) throws Exception{
+		checkValid("firstName", firstName);
 		this.firstName = firstName;
 	}
 
-	public void setDob(String dob) {
+	public void setDob(String dob) throws Exception{
+		checkValid("dob", dob);
 		this.dob = dob;
 	}
 
-	public void setGender(Gender gender) {
+	public void setGender(Gender gender) throws Exception{
+		checkValid("gender", gender);
 		this.gender = gender;
 	}
 
-	public void setRaceEth(RaceEth raceEth) {
+	public void setRaceEth(RaceEth raceEth) throws Exception{
+		checkValid("raceEthnicity", raceEth);
 		this.raceEth = raceEth;
 	}
 
-	public void setServiceArea(ServiceArea serviceArea) {
+	public void setServiceArea(ServiceArea serviceArea) throws Exception{
+		checkValid("serviceArea", serviceArea);
 		this.serviceArea = serviceArea;
 	}
 
-	public void setSchool(School school) {
+	public void setSchool(School school) throws Exception{
+		checkValid("school", school);
 		this.school = school;
 	}
 
-	public void setDistrict(District district) {
+	public void setDistrict(District district) throws Exception{
+		checkValid("district", district);
 		this.district = district;
 	}
 
-	public void setCounty(County county) {
+	public void setCounty(County county) throws Exception{
+		checkValid("county", county);
 		this.county = county;
 	}
 
-	public void setGrade(Grade grade) {
+	public void setGrade(Grade grade) throws Exception{
+		checkValid("grade", grade);
 		this.grade = grade;
 	}
 
@@ -303,15 +313,15 @@ public class Student {
 		this.label = label;
 	}
 
-	public void setPsLabel(PSLabel psLabel) {
+	public void setPsLabel(PSLabel psLabel){
 		this.psLabel = psLabel;
 	}
 
-	public void setCurrTeacher(Teacher currTeacher) {
+	public void setCurrTeacher(Teacher currTeacher){
 		this.currTeacher = currTeacher;
 	}
 
-	public void setSecondTeacher(Teacher secondTeacher) {
+	public void setSecondTeacher(Teacher secondTeacher){
 		this.secondTeacher = secondTeacher;
 	}
 
@@ -351,5 +361,11 @@ public class Student {
 				+ studentNotes + ", permissionDate=" + permissionDate + ", label=" + label + ", psLabel=" + psLabel
 				+ ", currTeacher=" + currTeacher + ", secondTeacher=" + secondTeacher + ", clinic=" + clinic
 				+ ", hispanic=" + hispanic + ", petTherapy=" + petTherapy + ", newYrMessage=" + newYrMessage + "]";
+	}
+	
+	private void checkValid(String fieldName, Object field) throws Exception{
+		if (field == null) {
+			throw new Exception("No matching entity for field: " + fieldName);
+		}
 	}
 }

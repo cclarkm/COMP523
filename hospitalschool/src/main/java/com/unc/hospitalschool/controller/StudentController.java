@@ -139,46 +139,21 @@ public class StudentController {
 	@PostMapping
 	public ResponseEntity<Object> newStudent(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());	
-		logger.info(body.get("INVALID KEY")); // returns null
 		if (!Student.validateFields(body)) {
 			logger.info("All required fields not provided");
 			return ResponseEntity.badRequest().body("Not all required student parameters provided");
 		}
-		// START OF REQUIRED FIELDS
-		String lName = body.get("lastName");
-		body.remove("lastName");
-		String fName = body.get("firstName");
-		body.remove("firstName");
-		String dob = body.get("dob");
-		body.remove("dob");
-		Gender gender = genderDao.findById(Integer.parseInt(body.get("gender")));
-		body.remove("gender");
-		RaceEth raceEth = raceEthDao.findByRid(Integer.parseInt(body.get("raceEthnicity")));
-		body.remove("raceEthnicity");
-		ServiceArea servArea = serviceAreaDao.findBySid(Integer.parseInt(body.get("serviceArea")));
-		body.remove("serviceArea");
-		School school = schoolDao.findBySid(Integer.parseInt(body.get("school")));
-		body.remove("school");
-		District district = districtDao.findByDid(Integer.parseInt(body.get("district")));
-		body.remove("district");
-		County county = countyDao.findByCid(Integer.parseInt(body.get("county")));
-		body.remove("county");
-		Grade grade = gradeDao.findByGid(Integer.parseInt(body.get("grade")));
-		body.remove("grade");
-		boolean hispanic = Boolean.parseBoolean(body.get("hispanic"));
-		body.remove("hispanic");
-		// END OF REQUIRED FIELDS
+		Student student = new Student();
 		
-		Student student = new Student(lName, fName, dob, gender, raceEth, servArea, school, district, county, grade, hispanic);
 		try {
 			setStudentFields(body, student);
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(e.toString());
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 		
 		studentDao.save(student);
-		
 		return new ResponseEntity<>(HttpStatus.OK);
+
 	}
 	
 	//update
@@ -190,18 +165,17 @@ public class StudentController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		//make sure that if catch, all work is undone
 		try {
 			setStudentFields(body, student);
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(e.toString());
+			//e.getMessage()
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-		
-		//return studentDao.save(student);
+		studentDao.save(student);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	private void setStudentFields(Map<String, String> body, Student student) {
+	private void setStudentFields(Map<String, String> body, Student student) throws Exception{
 		for (String x: body.keySet()) {
 			switch(x) {
 			case "lastName":
@@ -214,25 +188,25 @@ public class StudentController {
 				student.setDob(body.get(x));
 				break;
 			case "gender":
-				student.setGender(genderDao.findById(Integer.parseInt(body.get("gender"))));
+				student.setGender(genderDao.findById(parseInt("gender", body.get("gender"))));
 				break;
 			case "raceEthnicity":
-				student.setRaceEth(raceEthDao.findByRid(Integer.parseInt(body.get("raceEthnicity"))));
+				student.setRaceEth(raceEthDao.findByRid(parseInt("raceEthnicity", body.get("raceEthnicity"))));
 				break;
 			case "serviceArea":
-				student.setServiceArea(serviceAreaDao.findBySid(Integer.parseInt(body.get("serviceArea"))));
+				student.setServiceArea(serviceAreaDao.findBySid(parseInt("serviceArea", body.get("serviceArea"))));
 				break;
 			case "school":
-				student.setSchool(schoolDao.findBySid(Integer.parseInt(body.get("school"))));
+				student.setSchool(schoolDao.findBySid(parseInt("school", body.get("school"))));
 				break;
 			case "district":
-				student.setDistrict(districtDao.findByDid(Integer.parseInt(body.get("district"))));
+				student.setDistrict(districtDao.findByDid(parseInt("district", body.get("district"))));
 				break;
 			case "county":
-				student.setCounty(countyDao.findByCid(Integer.parseInt(body.get("county"))));
+				student.setCounty(countyDao.findByCid(parseInt("county", body.get("county"))));
 				break;
 			case "grade":
-				student.setGrade(gradeDao.findByGid(Integer.parseInt(body.get("grade"))));
+				student.setGrade(gradeDao.findByGid(parseInt("grade", body.get("grade"))));
 				break;
 			case "studentNotes":
 				student.setStudentNotes(body.get("studentNotes"));
@@ -244,22 +218,22 @@ public class StudentController {
 				student.setLabel(body.get("label"));
 				break;
 			case "psLabel":
-				student.setPsLabel(psLabelDao.findByLid(Integer.parseInt(body.get("psLabel"))));
+				student.setPsLabel(psLabelDao.findByLid(parseInt("psLabel", body.get("psLabel"))));
 				break;
 			case "currentTeacher":
-				student.setCurrTeacher(teacherDao.findByTid(Integer.parseInt(body.get("currentTeacher"))));
+				student.setCurrTeacher(teacherDao.findByTid(parseInt("currentTeacher", body.get("currentTeacher"))));
 				break;
 			case "secondTeacher":
-				student.setSecondTeacher(teacherDao.findByTid(Integer.parseInt(body.get("secondTeacher"))));
+				student.setSecondTeacher(teacherDao.findByTid(parseInt("secondTeacher", body.get("secondTeacher"))));
 				break;
 			case "clinic":
-				student.setClinic(Boolean.parseBoolean(body.get("clinic")));
+				student.setClinic(parseBoolean("clinic", body.get("clinic")));
 				break;
 			case "hispanic":
-				student.setHispanic(Boolean.parseBoolean(body.get("hispanic")));
+				student.setHispanic(parseBoolean("hispanic", body.get("hispanic")));
 				break;
 			case "petTherapy":
-				student.setPetTherapy(Boolean.parseBoolean(body.get("petTherapy")));
+				student.setPetTherapy(parseBoolean("petTherapy", body.get("petTherapy")));
 				break;
 			case "newYrMessage":
 				student.setNewYrMessage(body.get("newYrMessage"));
@@ -269,4 +243,21 @@ public class StudentController {
 			}
 		}
 	}
+	
+	private boolean parseBoolean(String fieldName, String fieldValue) throws Exception{
+		if (fieldValue.equals("true") || fieldValue.equals("false")) {
+			return Boolean.parseBoolean(fieldValue);
+		} else {
+			throw new Exception("Field " + fieldName + " must be boolean");
+		}
+	}
+	
+	private int parseInt(String fieldName, String fieldValue) throws Exception{
+		try {
+			return Integer.parseInt(fieldValue);
+		} catch (Exception e){
+			throw new Exception("Field " + fieldName + " must be int");
+		}
+	}
+	
 }
