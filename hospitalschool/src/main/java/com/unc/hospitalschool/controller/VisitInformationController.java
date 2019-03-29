@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -42,7 +44,7 @@ public class VisitInformationController {
 	
 	@GetMapping
 	@ResponseBody
-	public Map<String, Object> getAllCounties() {
+	public ResponseEntity<Map<String, Object>> getAllCounties() {
 		logger.info("Get all visit infos called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -51,11 +53,11 @@ public class VisitInformationController {
 			jsons.add(visitInformation.toJson());
 		}
 		map.put("visitInfos", jsons);
-		return map;	
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 
 	@PostMapping
-	public VisitInformation newStudent(@RequestBody Map<String, String> body) {
+	public ResponseEntity<Object> newVisitInformation(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		Student student = studentDao.findBySid(Integer.parseInt(body.get("sid")));
 		String dov = body.get("dov");
@@ -63,11 +65,12 @@ public class VisitInformationController {
 		Teacher teacher = teacherDao.findByTid(Integer.parseInt(body.get("tid")));
 		LogType logType = logTypeDao.findByLid(Integer.parseInt(body.get("logType")));
 		boolean clinic = Boolean.parseBoolean(body.get("clinic"));
-		return visitInformationDao.save(new VisitInformation(student, dov, notes, teacher, logType, clinic));
+		visitInformationDao.save(new VisitInformation(student, dov, notes, teacher, logType, clinic));
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/{sid}")
-	public Map<String, Object> getLogsByStudent(@PathVariable int sid) {
+	public ResponseEntity<Map<String, Object>> getLogsByStudent(@PathVariable int sid) {
 		logger.info("Get Logs By Student Called with ID:");
 		logger.info(Integer.toString(sid));
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -77,11 +80,11 @@ public class VisitInformationController {
 			jsons.add(visit.toJson());
 		}
 		map.put("visits", jsons);
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 	
 	@GetMapping(value="/{sid}/tid={tid}")
-	public Map<String, Object> getLogsByStudentAndTeacher(@PathVariable int sid, @PathVariable int tid) {
+	public ResponseEntity<Map<String, Object>> getLogsByStudentAndTeacher(@PathVariable int sid, @PathVariable int tid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -92,11 +95,11 @@ public class VisitInformationController {
 			jsons.add(visit.toJson());
 		}
 		map.put("visits", jsons);
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 	
 	@GetMapping(value="/{sid}/lid={lid}")
-	public Map<String, Object> getLogsByStudentAndType(@PathVariable int sid, @PathVariable int lid) {
+	public ResponseEntity<Map<String, Object>> getLogsByStudentAndType(@PathVariable int sid, @PathVariable int lid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -107,11 +110,11 @@ public class VisitInformationController {
 			jsons.add(visit.toJson());
 		}
 		map.put("visits", jsons);
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 	
 	@GetMapping(value="/{sid}/tid={tid}/lid={lid}")
-	public Map<String, Object> getLogsByStudentAndTeacherAndType(@PathVariable int sid, @PathVariable int tid, @PathVariable int lid) {
+	public ResponseEntity<Map<String, Object>> getLogsByStudentAndTeacherAndType(@PathVariable int sid, @PathVariable int tid, @PathVariable int lid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -124,16 +127,16 @@ public class VisitInformationController {
 			jsons.add(visit.toJson());
 		}
 		map.put("visits", jsons);
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 	
 	@PutMapping(value="/{id}")
-	public VisitInformation updateVisitInformation(@RequestBody Map<String, String> body, @PathVariable int id) {
+	public ResponseEntity<Object> updateVisitInformation(@RequestBody Map<String, String> body, @PathVariable int id) {
 		VisitInformation visitInformation = visitInformationDao.findById(id);
 		logger.info("Updating visitInformation " + id);
 		if (visitInformation == null) {
 			logger.error("Unable to update - visitInformation with id: " + id + " not found");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update visitInformation with id: " + id + " not found");
 		}
 		for (String x: body.keySet()) {
 			switch(x) {
@@ -159,16 +162,19 @@ public class VisitInformationController {
 				logger.error("Cannot update " + x + " because the field does not exist");
 			}
 		}
-		return visitInformationDao.save(visitInformation);
+		visitInformationDao.save(visitInformation);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/{id}")
-	public void deleteById(@PathVariable int id) {
+	public ResponseEntity<Object> deleteById(@PathVariable int id) {
 		VisitInformation visitInformation = visitInformationDao.findById(id);
 		if (visitInformation == null) {
-			logger.error("Unable to delete - county with visitInformation: " + id + " not found");
+			logger.error("Unable to delete - visitInformation with id: " + id + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - visitInformation with id: " + id + " not found");
 		} else {
 			visitInformationDao.delete(visitInformation);
+			return new ResponseEntity<>(HttpStatus.OK);	
 		}
 	}
 }

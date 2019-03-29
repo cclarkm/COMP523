@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +35,7 @@ public class TeacherController {
 	
 	@GetMapping
 	@ResponseBody
-	public Map<String, Object> getAllTeachers() {
+	public ResponseEntity<Map<String, Object>> getAllTeachers() {
 		logger.info("Get all teachers called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -42,26 +44,27 @@ public class TeacherController {
 			jsons.add(Teacher.toJson());
 		}
 		map.put("teachers", jsons);
-		return map;	
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 
 	@PostMapping
-	public Teacher newTeacher(@RequestBody Map<String, String> body) {
+	public ResponseEntity<Object> newTeacher(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
-		return teacherDao.save(new Teacher(body.get("lName"), body.get("fName")));
+		teacherDao.save(new Teacher(body.get("lName"), body.get("fName")));
+		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 	
 	@PutMapping(value="/{tid}")
-	public Teacher updateTeacher(@RequestBody Map<String, String> body, @PathVariable int tid) {
+	public ResponseEntity<Object> updateTeacher(@RequestBody Map<String, String> body, @PathVariable int tid) {
 		Teacher teacher = teacherDao.findByTid(tid);
 		logger.info("Updating teacher " + tid);
 		if (teacher == null) {
 			logger.error("Unable to update - teacher with tid: " + tid + " not found");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update - teacher with tid: " + tid + " not found");
 		}
 		if (!body.containsKey("firstName") && !body.containsKey("lastName")) {
 			logger.error("Unable to update - county; incorrect request data");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update - teacher. Incorrect request field");
 		}
 		if (body.containsKey("firstName")) {
 			teacher.setFirstName(body.get("firstName"));
@@ -69,16 +72,19 @@ public class TeacherController {
 		if (body.containsKey("lastName")) {
 			teacher.setLastName(body.get("lastName"));
 		}
-		return teacherDao.save(teacher);
+		teacherDao.save(teacher);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/{tid}")
-	public void deleteByTid(@PathVariable int tid) {
+	public ResponseEntity<Object> deleteByTid(@PathVariable int tid) {
 		Teacher teacher = teacherDao.findByTid(tid);
 		if (teacher == null) {
 			logger.error("Unable to delete - teacher with tid: " + tid + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - teacher with tid: " + tid + " not found");
 		} else {
 			teacherDao.delete(teacher);
+			return new ResponseEntity<>(HttpStatus.OK);	
 		}
 	}
 }

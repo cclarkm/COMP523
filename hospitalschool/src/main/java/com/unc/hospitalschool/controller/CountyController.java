@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +35,7 @@ public class CountyController {
 	
 	@GetMapping
 	@ResponseBody
-	public Map<String, Object> getAllCounties() {
+	public ResponseEntity<Map<String, Object>> getAllCounties() {
 		logger.info("Get all counties called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -42,39 +44,43 @@ public class CountyController {
 			jsons.add(county.toJson());
 		}
 		map.put("counties", jsons);
-		return map;	
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 
 	@PostMapping
-	public County newCounty(@RequestBody Map<String, String> body) {
+	public ResponseEntity<Object> newCounty(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
-		return countyDao.save(new County(body.get("county")));
+		countyDao.save(new County(body.get("county")));
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/{cid}")
-	public County postByCid(@RequestBody Map<String, String> body, @PathVariable int cid) {
+	public ResponseEntity<Object> postByCid(@RequestBody Map<String, String> body, @PathVariable int cid) {
 		County county = countyDao.findByCid(cid);
 		logger.info("Updating county " + cid);
 		if (county == null) {
 			logger.error("Unable to update - county with cid: " + cid + " not found");
-			return null;
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		if (body.containsKey("county")) {
 			county.setCounty(body.get("county"));
-			return countyDao.save(county);
+			countyDao.save(county);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			logger.error("Unable to update - county; incorrect request data");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update - county. Incorrect request field");
 		}
 	}
 	
 	@DeleteMapping(value="/{cid}")
-	public void deleteByCid(@PathVariable int cid) {
+	public ResponseEntity<Object> deleteByCid(@PathVariable int cid) {
 		County county = countyDao.findByCid(cid);
 		if (county == null) {
 			logger.error("Unable to delete - county with cid: " + cid + " not found");
+			return ResponseEntity.badRequest().body("Unable to update - county with cid: " + cid + " not found");
 		} else {
 			countyDao.delete(county);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}	
 }

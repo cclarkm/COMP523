@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +35,7 @@ public class SchoolController {
 	
 	@GetMapping
 	@ResponseBody
-	public Map<String, Object> getAllSchools() {
+	public ResponseEntity<Map<String, Object>> getAllSchools() {
 		logger.info("Get all schools called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -42,39 +44,43 @@ public class SchoolController {
 			jsons.add(school.toJson());
 		}
 		map.put("schools", jsons);
-		return map;	
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 
 	@PostMapping
-	public School newSchool(@RequestBody Map<String, String> body) {
+	public ResponseEntity<Object> newSchool(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
-		return schoolDao.save(new School(body.get("school")));
+		schoolDao.save(new School(body.get("school")));
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/{sid}")
-	public School updateSchool(@RequestBody Map<String, String> body, @PathVariable int sid) {
+	public ResponseEntity<Object> updateSchool(@RequestBody Map<String, String> body, @PathVariable int sid) {
 		School school = schoolDao.findBySid(sid);
 		logger.info("Updating school " + sid);
 		if (school == null) {
 			logger.error("Unable to update - school with sid: " + sid + " not found");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update - school with " + sid + " not found");
 		}
 		if (body.containsKey("school")) {
 			school.setSchool(body.get("school"));
-			return schoolDao.save(school);
+			schoolDao.save(school);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			logger.error("Unable to update - school; incorrect request data");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update - school. Incorrect request field");
 		}
 	}
 	
 	@DeleteMapping(value="/{sid}")
-	public void deleteBySid(@PathVariable int sid) {
+	public ResponseEntity<Object> deleteBySid(@PathVariable int sid) {
 		School school = schoolDao.findBySid(sid);
 		if (school == null) {
 			logger.error("Unable to delete - school with sid: " + sid + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - school with " + sid + " not found");
 		} else {
 			schoolDao.delete(school);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}
 }

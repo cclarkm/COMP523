@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +35,7 @@ public class RaceEthController {
 	
 	@GetMapping
 	@ResponseBody
-	public Map<String, Object> getAllRaceEth() {
+	public ResponseEntity<Map<String, Object>> getAllRaceEth() {
 		logger.info("Get all raceEths called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -42,26 +44,27 @@ public class RaceEthController {
 			jsons.add(raceeth.toJson());
 		}
 		map.put("raceEths", jsons);
-		return map;	
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 
 	@PostMapping
-	public RaceEth newRaceEth(@RequestBody Map<String, String> body) {
+	public ResponseEntity<Object> newRaceEth(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
-		return raceEthDao.save(new RaceEth(body.get("raceEth"), body.get("code")));
+		raceEthDao.save(new RaceEth(body.get("raceEth"), body.get("code")));
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/{rid}")
-	public RaceEth updateRaceEth(@RequestBody Map<String, String> body, @PathVariable int rid) {
+	public ResponseEntity<Object> updateRaceEth(@RequestBody Map<String, String> body, @PathVariable int rid) {
 		RaceEth raceEth = raceEthDao.findByRid(rid);
 		logger.info("Updating county " + rid);
 		if (raceEth == null) {
 			logger.error("Unable to update - raceEthd with rid: " + rid + " not found");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update - raceEth with rid: " + rid + " not found");
 		}
 		if (!body.containsKey("raceEth") && !body.containsKey("code")) {
-			logger.error("Unable to update - county; incorrect request data");
-			return null;
+			logger.error("Unable to update - raceEth; incorrect request data");
+			return ResponseEntity.badRequest().body("Unable to update - raceEth. Incorrect request field");
 		}
 		if (body.containsKey("raceEth")) {
 			raceEth.setRaceEth(body.get("raceEth"));
@@ -69,16 +72,19 @@ public class RaceEthController {
 		if (body.containsKey("code")) {
 			raceEth.setCode(body.get("code"));
 		}
-		return raceEthDao.save(raceEth);
+		raceEthDao.save(raceEth);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/{rid}")
-	public void deleteByRid(@PathVariable int rid) {
+	public ResponseEntity<Object> deleteByRid(@PathVariable int rid) {
 		RaceEth raceEth = raceEthDao.findByRid(rid);
 		if (raceEth == null) {
 			logger.error("Unable to delete - raceEth with rid: " + rid + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - raceEth with rid: " + rid + " not found");
 		} else {
 			raceEthDao.delete(raceEth);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}	
 }

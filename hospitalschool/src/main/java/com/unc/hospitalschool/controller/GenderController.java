@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +35,7 @@ public class GenderController {
 	
 	@GetMapping
 	@ResponseBody
-	public Map<String, Object> getAllGenders() {
+	public ResponseEntity<Map<String, Object>> getAllGenders() {
 		logger.info("Get all genders called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -42,39 +44,43 @@ public class GenderController {
 			jsons.add(gender.toJson());
 		}
 		map.put("genders", jsons);
-		return map;	
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 
 	@PostMapping
-	public Gender newGender(@RequestBody Map<String, String> body) {
+	public ResponseEntity<Object> newGender(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
-		return genderDao.save(new Gender(body.get("gender")));
+		genderDao.save(new Gender(body.get("gender")));
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/{id}")
-	public Gender updateGender(@RequestBody Map<String, String> body, @PathVariable int id) {
+	public ResponseEntity<Object> updateGender(@RequestBody Map<String, String> body, @PathVariable int id) {
 		Gender gender = genderDao.findById(id);
 		logger.info("Updating gender " + id);
 		if (gender == null) {
 			logger.error("Unable to update - gender with id: " + id + " not found");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to udpate - gender with id: " + id + " not found");
 		}
 		if (body.containsKey("gender")) {
 			gender.setGender(body.get("gender"));
-			return genderDao.save(gender);
+			genderDao.save(gender);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			logger.error("Unable to update - gender; incorrect request data");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update - gender. Incorrect request field");
 		}
 	}
 	
 	@DeleteMapping(value="/{id}")
-	public void deleteByGid(@PathVariable int id) {
+	public ResponseEntity<Object> deleteByGid(@PathVariable int id) {
 		Gender gender = genderDao.findById(id);
 		if (gender == null) {
 			logger.error("Unable to delete - gender with id: " + id + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - gender with id: " + id + " not found");
 		} else {
 			genderDao.delete(gender);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}
 }

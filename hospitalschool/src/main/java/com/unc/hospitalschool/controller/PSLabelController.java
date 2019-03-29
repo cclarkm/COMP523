@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +35,7 @@ public class PSLabelController {
 	
 	@GetMapping
 	@ResponseBody
-	public Map<String, Object> getAllPSLabels() {
+	public ResponseEntity<Map<String, Object>> getAllPSLabels() {
 		logger.info("Get all PSLabels called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -42,26 +44,27 @@ public class PSLabelController {
 			jsons.add(psLabel.toJson());
 		}
 		map.put("PSLabels", jsons);
-		return map;	
+		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 
 	@PostMapping
-	public PSLabel newPSLabel(@RequestBody Map<String, String> body) {
+	public ResponseEntity<Object> newPSLabel(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
-		return psLabelDao.save(new PSLabel(body.get("label"), body.get("code")));
+		psLabelDao.save(new PSLabel(body.get("label"), body.get("code")));
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/{lid}")
-	public PSLabel updatePSLabel(@RequestBody Map<String, String> body, @PathVariable int lid) {
+	public ResponseEntity<Object> updatePSLabel(@RequestBody Map<String, String> body, @PathVariable int lid) {
 		PSLabel psLabel = psLabelDao.findByLid(lid);
 		logger.info("Updating PSLabel " + lid);
 		if (psLabel == null) {
 			logger.error("Unable to update - psLabel with lid: " + lid + " not found");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update - psLabel with lid: " + lid + " not found");
 		}
 		if (!body.containsKey("label") && !body.containsKey("code")) {
 			logger.error("Unable to update - psLabel; incorrect request data");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update - psLabel. Incorrect request field");
 		}
 		if (body.containsKey("label")) {
 			psLabel.setLabel(body.get("label"));
@@ -69,16 +72,19 @@ public class PSLabelController {
 		if (body.containsKey("code")) {
 			psLabel.setCode(body.get("code"));
 		}
-		return psLabelDao.save(psLabel);
+		psLabelDao.save(psLabel);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/{lid}")
-	public void deleteByLid(@PathVariable int lid) {
+	public ResponseEntity<Object> deleteByLid(@PathVariable int lid) {
 		PSLabel psLabel = psLabelDao.findByLid(lid);
 		if (psLabel == null) {
 			logger.error("Unable to delete - psLabel with lid: " + lid + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - psLabel with lid: " + lid + " not found");
 		} else {
 			psLabelDao.delete(psLabel);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}
 }

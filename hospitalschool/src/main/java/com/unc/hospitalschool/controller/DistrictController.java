@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +35,7 @@ public class DistrictController {
 	
 	@GetMapping
 	@ResponseBody
-	public Map<String, Object> getAllDistrict() {
+	public ResponseEntity<Map<String, Object>> getAllDistrict() {
 		logger.info("Get all districts called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -42,39 +44,43 @@ public class DistrictController {
 			jsons.add(district.toJson());
 		}
 		map.put("districts", jsons);
-		return map;	
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 
 	@PostMapping
-	public District newDistrict(@RequestBody Map<String, String> body) {
+	public ResponseEntity<Object> newDistrict(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
-		return districtDao.save(new District(body.get("district")));
+		districtDao.save(new District(body.get("district")));
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping(value="/{did}")
-	public District updateDistrict(@RequestBody Map<String, String> body, @PathVariable int did) {
+	public ResponseEntity<Object> updateDistrict(@RequestBody Map<String, String> body, @PathVariable int did) {
 		District district = districtDao.findByDid(did);
 		logger.info("Updating district " + did);
 		if (district == null) {
 			logger.error("Unable to update - district with did: " + did);
-			return null;
+			return ResponseEntity.badRequest().body("Unable to update - district with did: " + did + " not found");
 		}
 		if (body.containsKey("district")) {
 			district.setDistrict(body.get("district"));
-			return districtDao.save(district);
+			districtDao.save(district);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			logger.error("Unable to update - district: incorrect request data");
-			return null;
+			return ResponseEntity.badRequest().body("Unable to udpate - district. Incorrect request field");
 		}		
 	}
 	
 	@DeleteMapping(value="/{did}")
-	public void deleteByDid(@PathVariable int did) {
+	public ResponseEntity<Object> deleteByDid(@PathVariable int did) {
 		District district = districtDao.findByDid(did);
 		if (district == null) {
 			logger.error("Unable to delete - district with did: " + did + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - district with did: " + did + " not found");
 		} else {
 			districtDao.delete(district);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}
 }
