@@ -8,6 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,6 +25,7 @@ import javax.persistence.Column;
 @Entity
 @Table(name = "visitInformation")
 public class VisitInformation {
+	private static Logger logger = LoggerFactory.getLogger("LOGGER");
 
 	@Id
 	@Column(nullable = false, name = "id")
@@ -54,7 +59,7 @@ public class VisitInformation {
 	@JsonProperty(value = "clinic")
 	private boolean clinic;
 	
-	protected VisitInformation() {}
+	public VisitInformation() {}
 	
 	public VisitInformation(Student sid, String dov, String notes, Teacher tid,
 							LogType lid, boolean clinic) {
@@ -94,6 +99,15 @@ public class VisitInformation {
 		this.clinic = clinic;
 	}
 	
+	public static boolean validateFields(Map<String, String> body) {
+		boolean student = body.containsKey("sid");
+		boolean dov = body.containsKey("dov");
+		boolean notes = body.containsKey("notes");
+		boolean teacher = body.containsKey("tid");
+		boolean logType = body.containsKey("logType");
+		boolean clinic = body.containsKey("clinic");
+		return student && dov && notes && teacher && logType && clinic;
+	}
 	
 	public Map<String, String> toJson(){
 		HashMap<String, String> map = new HashMap<>();

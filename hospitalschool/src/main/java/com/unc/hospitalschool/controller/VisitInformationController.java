@@ -55,19 +55,6 @@ public class VisitInformationController {
 		map.put("visitInfos", jsons);
 		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
-
-	@PostMapping
-	public ResponseEntity<Object> newVisitInformation(@RequestBody Map<String, String> body) {
-		logger.info(body.toString());
-		Student student = studentDao.findBySid(Integer.parseInt(body.get("sid")));
-		String dov = body.get("dov");
-		String notes = body.get("notes");
-		Teacher teacher = teacherDao.findByTid(Integer.parseInt(body.get("tid")));
-		LogType logType = logTypeDao.findByLid(Integer.parseInt(body.get("logType")));
-		boolean clinic = Boolean.parseBoolean(body.get("clinic"));
-		visitInformationDao.save(new VisitInformation(student, dov, notes, teacher, logType, clinic));
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
 	
 	@GetMapping(value="/{sid}")
 	public ResponseEntity<Map<String, Object>> getLogsByStudent(@PathVariable int sid) {
@@ -130,37 +117,35 @@ public class VisitInformationController {
 		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 	
+	@PostMapping
+	public ResponseEntity<Object> newVisitInformation(@RequestBody Map<String, String> body) {
+		logger.info(body.toString());
+		VisitInformation visitInformation = new VisitInformation();
+		if (!VisitInformation.validateFields(body)) {
+			return ResponseEntity.badRequest().body("Not all required VisitInformation parameters provided");
+		}
+		try {
+			this.setVisitInformationFields(body, visitInformation);
+
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		visitInformationDao.save(visitInformation);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 	@PutMapping(value="/{id}")
-	public ResponseEntity<Object> updateVisitInformation(@RequestBody Map<String, String> body, @PathVariable int id) {
+	public ResponseEntity<Object> updateVisitInformation(@RequestBody Map<String, String> body, @PathVariable int id) throws Exception {
 		VisitInformation visitInformation = visitInformationDao.findById(id);
 		logger.info("Updating visitInformation " + id);
 		if (visitInformation == null) {
 			logger.error("Unable to update - visitInformation with id: " + id + " not found");
 			return ResponseEntity.badRequest().body("Unable to update visitInformation with id: " + id + " not found");
 		}
-		for (String x: body.keySet()) {
-			switch(x) {
-			case "student":
-				visitInformation.setStudent(studentDao.findBySid(Integer.parseInt(body.get("student"))));
-				break;
-			case "dov":
-				visitInformation.setDov(body.get("dov"));
-				break;
-			case "notes":
-				visitInformation.setNotes(body.get("notes"));
-				break;
-			case "teacher":
-				visitInformation.setTeacher(teacherDao.findByTid(Integer.parseInt(body.get("teacher"))));
-				break;
-			case "logType":
-				visitInformation.setLogType(logTypeDao.findByLid(Integer.parseInt(body.get("logType"))));
-				break;
-			case "clinic":
-				visitInformation.setClinic(Boolean.parseBoolean(body.get("clinic")));
-				break;
-			default:
-				logger.error("Cannot update " + x + " because the field does not exist");
-			}
+		try {
+			this.setVisitInformationFields(body, visitInformation);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 		visitInformationDao.save(visitInformation);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -175,6 +160,50 @@ public class VisitInformationController {
 		} else {
 			visitInformationDao.delete(visitInformation);
 			return new ResponseEntity<>(HttpStatus.OK);	
+		}
+	}
+
+	private void setVisitInformationFields(Map<String, String> body, VisitInformation visitInformation) throws Exception {
+		for (String x : body.keySet()) {
+			switch (x) {
+			case "sid":
+				visitInformation.setStudent(studentDao.findBySid(parseInt("sid", (body.get("sid")))));
+				break;
+			case "dov":
+				visitInformation.setDov(body.get("dov"));
+				break;
+			case "notes":
+				visitInformation.setNotes(body.get("notes"));
+				break;
+			case "tid":
+				visitInformation.setTeacher(teacherDao.findByTid(parseInt("tid", body.get("tid"))));
+				break;
+			case "logType":
+				visitInformation.setLogType(logTypeDao.findByLid(parseInt("logType", body.get("logType"))));
+				break;
+			case "clinic":
+				visitInformation.setClinic(parseBoolean("clinic", body.get("clinic")));
+				break;
+			default:
+				logger.error("Cannot update " + x + " because the field does not exist");
+			}
+		}
+
+	}
+	
+	private boolean parseBoolean(String fieldName, String fieldValue) throws Exception {
+		if (fieldValue.equals("true") || fieldValue.equals("false")) {
+			return Boolean.parseBoolean(fieldValue);
+		} else {
+			throw new Exception("Field " + fieldName + " must be boolean");
+		}
+	}
+
+	private int parseInt(String fieldName, String fieldValue) throws Exception {
+		try {
+			return Integer.parseInt(fieldValue);
+		} catch (Exception e) {
+			throw new Exception("Field " + fieldName + " must be int");
 		}
 	}
 }
