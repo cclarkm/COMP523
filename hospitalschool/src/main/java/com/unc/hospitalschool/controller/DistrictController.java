@@ -31,7 +31,7 @@ public class DistrictController {
 	@Autowired
 	private DistrictDao districtDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllDistrict() {
 		logger.info("Get all districts called");
@@ -45,13 +45,13 @@ public class DistrictController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
+	@PostMapping
 	public District newDistrict(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return districtDao.save(new District(body.get("district")));
 	}
 	
-	@PutMapping(value="/update/did={did}")
+	@PutMapping(value="/{did}")
 	public District updateDistrict(@RequestBody Map<String, String> body, @PathVariable int did) {
 		District district = districtDao.findByDid(did);
 		logger.info("Updating district " + did);
@@ -68,7 +68,7 @@ public class DistrictController {
 		}		
 	}
 	
-	@DeleteMapping(value="/delete/did={did}")
+	@DeleteMapping(value="/{did}")
 	public void deleteByDid(@PathVariable int did) {
 		District district = districtDao.findByDid(did);
 		if (district == null) {

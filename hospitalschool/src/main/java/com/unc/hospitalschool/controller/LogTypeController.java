@@ -31,7 +31,7 @@ public class LogTypeController {
 	@Autowired
 	private LogTypeDao logTypeDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllLogTypes() {
 		logger.info("Get all log types called");
@@ -45,13 +45,13 @@ public class LogTypeController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
-	public LogType newStudent(@RequestBody Map<String, String> body) {
+	@PostMapping
+	public LogType newLogType(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return logTypeDao.save(new LogType(body.get("logType")));
 	}
 	
-	@PutMapping(value="/update/lid={lid}")
+	@PutMapping(value="/{lid}")
 	public LogType updateLogType(@RequestBody Map<String, String> body, @PathVariable int lid) {
 		LogType logType = logTypeDao.findByLid(lid);
 		logger.info("Updating logType " + lid);
@@ -68,7 +68,7 @@ public class LogTypeController {
 		}
 	}
 	
-	@DeleteMapping(value="/delete/lid={lid}")
+	@DeleteMapping(value="/{lid}")
 	public void deleteByLid(@PathVariable int lid) {
 		LogType logType = logTypeDao.findByLid(lid);
 		if (logType == null) {

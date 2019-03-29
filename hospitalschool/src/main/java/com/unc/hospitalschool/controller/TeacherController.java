@@ -31,7 +31,7 @@ public class TeacherController {
 	@Autowired
 	private TeacherDao teacherDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllTeachers() {
 		logger.info("Get all teachers called");
@@ -45,13 +45,13 @@ public class TeacherController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
+	@PostMapping
 	public Teacher newTeacher(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return teacherDao.save(new Teacher(body.get("lName"), body.get("fName")));
 	}
 	
-	@PutMapping(value="/update/tid={tid}")
+	@PutMapping(value="/{tid}")
 	public Teacher updateTeacher(@RequestBody Map<String, String> body, @PathVariable int tid) {
 		Teacher teacher = teacherDao.findByTid(tid);
 		logger.info("Updating teacher " + tid);
@@ -72,7 +72,7 @@ public class TeacherController {
 		return teacherDao.save(teacher);
 	}
 	
-	@DeleteMapping(value="/delete/tid={tid}")
+	@DeleteMapping(value="/{tid}")
 	public void deleteByTid(@PathVariable int tid) {
 		Teacher teacher = teacherDao.findByTid(tid);
 		if (teacher == null) {

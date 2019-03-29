@@ -31,7 +31,7 @@ public class GradeController {
 	@Autowired
 	private GradeDao gradeDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllGrades() {
 		logger.info("Get all grades called");
@@ -45,13 +45,13 @@ public class GradeController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
-	public Grade newStudent(@RequestBody Map<String, String> body) {
+	@PostMapping
+	public Grade newGrade(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return gradeDao.save(new Grade(body.get("grade")));
 	}
 	
-	@PutMapping(value="/update/gid={gid}")
+	@PutMapping(value="/{gid}")
 	public Grade updateGrade(@RequestBody Map<String, String> body, @PathVariable int gid) {
 		Grade grade = gradeDao.findByGid(gid);
 		logger.info("Updating grade " + gid);
@@ -68,7 +68,7 @@ public class GradeController {
 		}
 	}
 	
-	@DeleteMapping(value="/delete/gid={gid}")
+	@DeleteMapping(value="/{gid}")
 	public void deleteByGid(@PathVariable int gid) {
 		Grade grade = gradeDao.findByGid(gid);
 		if (grade == null) {

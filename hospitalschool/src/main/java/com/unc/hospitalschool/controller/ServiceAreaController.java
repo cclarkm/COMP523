@@ -31,7 +31,7 @@ public class ServiceAreaController {
 	@Autowired
 	private ServiceAreaDao serviceAreaDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllServiceAreas() {
 		logger.info("Get all service areas called");
@@ -45,13 +45,13 @@ public class ServiceAreaController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
+	@PostMapping
 	public ServiceArea newServiceArea(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return serviceAreaDao.save(new ServiceArea(body.get("field1")));
 	}
 	
-	@PutMapping(value="/update/sid={sid}")
+	@PutMapping(value="/{sid}")
 	public ServiceArea updateServiceArea(@RequestBody Map<String, String> body, @PathVariable int sid) {
 		ServiceArea serviceArea = serviceAreaDao.findBySid(sid);
 		logger.info("Updating county " + sid);
@@ -68,7 +68,7 @@ public class ServiceAreaController {
 		}
 	}
 	
-	@DeleteMapping(value="/delete/sid={sid}")
+	@DeleteMapping(value="/{sid}")
 	public void deleteBySid(@PathVariable int sid) {
 		ServiceArea serviceArea = serviceAreaDao.findBySid(sid);
 		if (serviceArea == null) {

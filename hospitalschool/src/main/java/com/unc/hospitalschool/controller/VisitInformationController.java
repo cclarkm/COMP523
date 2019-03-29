@@ -40,7 +40,7 @@ public class VisitInformationController {
 	@Autowired
 	private LogTypeDao logTypeDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllCounties() {
 		logger.info("Get all visit infos called");
@@ -54,7 +54,7 @@ public class VisitInformationController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
+	@PostMapping
 	public VisitInformation newStudent(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		Student student = studentDao.findBySid(Integer.parseInt(body.get("sid")));
@@ -66,7 +66,7 @@ public class VisitInformationController {
 		return visitInformationDao.save(new VisitInformation(student, dov, notes, teacher, logType, clinic));
 	}
 	
-	@GetMapping(value="/sid={sid}")
+	@GetMapping(value="/{sid}")
 	public Map<String, Object> getLogsByStudent(@PathVariable int sid) {
 		logger.info("Get Logs By Student Called with ID:");
 		logger.info(Integer.toString(sid));
@@ -80,7 +80,7 @@ public class VisitInformationController {
 		return map;
 	}
 	
-	@GetMapping(value="/sid={sid}/tid={tid}")
+	@GetMapping(value="/{sid}/tid={tid}")
 	public Map<String, Object> getLogsByStudentAndTeacher(@PathVariable int sid, @PathVariable int tid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -95,7 +95,7 @@ public class VisitInformationController {
 		return map;
 	}
 	
-	@GetMapping(value="/sid={sid}/lid={lid}")
+	@GetMapping(value="/{sid}/lid={lid}")
 	public Map<String, Object> getLogsByStudentAndType(@PathVariable int sid, @PathVariable int lid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -110,7 +110,7 @@ public class VisitInformationController {
 		return map;
 	}
 	
-	@GetMapping(value="/sid={sid}/tid={tid}/lid={lid}")
+	@GetMapping(value="/{sid}/tid={tid}/lid={lid}")
 	public Map<String, Object> getLogsByStudentAndTeacherAndType(@PathVariable int sid, @PathVariable int tid, @PathVariable int lid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -127,7 +127,7 @@ public class VisitInformationController {
 		return map;
 	}
 	
-	@PutMapping(value="/update/id={id}")
+	@PutMapping(value="/{id}")
 	public VisitInformation updateVisitInformation(@RequestBody Map<String, String> body, @PathVariable int id) {
 		VisitInformation visitInformation = visitInformationDao.findById(id);
 		logger.info("Updating visitInformation " + id);
@@ -162,7 +162,7 @@ public class VisitInformationController {
 		return visitInformationDao.save(visitInformation);
 	}
 	
-	@DeleteMapping(value="/delete/id={id}")
+	@DeleteMapping(value="/{id}")
 	public void deleteById(@PathVariable int id) {
 		VisitInformation visitInformation = visitInformationDao.findById(id);
 		if (visitInformation == null) {

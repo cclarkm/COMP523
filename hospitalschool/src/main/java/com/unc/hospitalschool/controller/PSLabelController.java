@@ -31,7 +31,7 @@ public class PSLabelController {
 	@Autowired
 	private PSLabelDao psLabelDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllPSLabels() {
 		logger.info("Get all PSLabels called");
@@ -45,13 +45,13 @@ public class PSLabelController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
-	public PSLabel newStudent(@RequestBody Map<String, String> body) {
+	@PostMapping
+	public PSLabel newPSLabel(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return psLabelDao.save(new PSLabel(body.get("label"), body.get("code")));
 	}
 	
-	@PutMapping(value="/update/lid={lid}")
+	@PutMapping(value="/{lid}")
 	public PSLabel updatePSLabel(@RequestBody Map<String, String> body, @PathVariable int lid) {
 		PSLabel psLabel = psLabelDao.findByLid(lid);
 		logger.info("Updating PSLabel " + lid);
@@ -72,7 +72,7 @@ public class PSLabelController {
 		return psLabelDao.save(psLabel);
 	}
 	
-	@DeleteMapping(value="/delete/lid={lid}")
+	@DeleteMapping(value="/{lid}")
 	public void deleteByLid(@PathVariable int lid) {
 		PSLabel psLabel = psLabelDao.findByLid(lid);
 		if (psLabel == null) {

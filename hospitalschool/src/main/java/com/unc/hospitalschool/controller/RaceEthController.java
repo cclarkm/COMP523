@@ -31,7 +31,7 @@ public class RaceEthController {
 	@Autowired
 	private RaceEthDao raceEthDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllRaceEth() {
 		logger.info("Get all raceEths called");
@@ -45,13 +45,13 @@ public class RaceEthController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
+	@PostMapping
 	public RaceEth newRaceEth(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return raceEthDao.save(new RaceEth(body.get("raceEth"), body.get("code")));
 	}
 	
-	@PutMapping(value="/update/rid={rid}")
+	@PutMapping(value="/{rid}")
 	public RaceEth updateRaceEth(@RequestBody Map<String, String> body, @PathVariable int rid) {
 		RaceEth raceEth = raceEthDao.findByRid(rid);
 		logger.info("Updating county " + rid);
@@ -72,7 +72,7 @@ public class RaceEthController {
 		return raceEthDao.save(raceEth);
 	}
 	
-	@DeleteMapping(value="/delete/rid={rid}")
+	@DeleteMapping(value="/{rid}")
 	public void deleteByRid(@PathVariable int rid) {
 		RaceEth raceEth = raceEthDao.findByRid(rid);
 		if (raceEth == null) {

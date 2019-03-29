@@ -31,7 +31,7 @@ public class SchoolController {
 	@Autowired
 	private SchoolDao schoolDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllSchools() {
 		logger.info("Get all schools called");
@@ -45,13 +45,13 @@ public class SchoolController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
+	@PostMapping
 	public School newSchool(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return schoolDao.save(new School(body.get("school")));
 	}
 	
-	@PutMapping(value="/update/sid={sid}")
+	@PutMapping(value="/{sid}")
 	public School updateSchool(@RequestBody Map<String, String> body, @PathVariable int sid) {
 		School school = schoolDao.findBySid(sid);
 		logger.info("Updating school " + sid);
@@ -68,7 +68,7 @@ public class SchoolController {
 		}
 	}
 	
-	@DeleteMapping(value="/delete/sid={sid}")
+	@DeleteMapping(value="/{sid}")
 	public void deleteBySid(@PathVariable int sid) {
 		School school = schoolDao.findBySid(sid);
 		if (school == null) {

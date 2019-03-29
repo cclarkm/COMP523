@@ -31,7 +31,7 @@ public class CountyController {
 	@Autowired
 	private CountyDao countyDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllCounties() {
 		logger.info("Get all counties called");
@@ -45,13 +45,13 @@ public class CountyController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
+	@PostMapping
 	public County newCounty(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return countyDao.save(new County(body.get("county")));
 	}
 	
-	@PutMapping(value="/update/cid={cid}")
+	@PutMapping(value="/{cid}")
 	public County postByCid(@RequestBody Map<String, String> body, @PathVariable int cid) {
 		County county = countyDao.findByCid(cid);
 		logger.info("Updating county " + cid);
@@ -68,7 +68,7 @@ public class CountyController {
 		}
 	}
 	
-	@DeleteMapping(value="/delete/cid={cid}")
+	@DeleteMapping(value="/{cid}")
 	public void deleteByCid(@PathVariable int cid) {
 		County county = countyDao.findByCid(cid);
 		if (county == null) {

@@ -31,7 +31,7 @@ public class GenderController {
 	@Autowired
 	private GenderDao genderDao;
 	
-	@GetMapping(value = "/")
+	@GetMapping
 	@ResponseBody
 	public Map<String, Object> getAllGenders() {
 		logger.info("Get all genders called");
@@ -45,13 +45,13 @@ public class GenderController {
 		return map;	
 	}
 
-	@PostMapping(value="/new")
+	@PostMapping
 	public Gender newGender(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
 		return genderDao.save(new Gender(body.get("gender")));
 	}
 	
-	@PutMapping(value="/update/id={id}")
+	@PutMapping(value="/{id}")
 	public Gender updateGender(@RequestBody Map<String, String> body, @PathVariable int id) {
 		Gender gender = genderDao.findById(id);
 		logger.info("Updating gender " + id);
@@ -68,7 +68,7 @@ public class GenderController {
 		}
 	}
 	
-	@DeleteMapping(value="/delete/id={id}")
+	@DeleteMapping(value="/{id}")
 	public void deleteByGid(@PathVariable int id) {
 		Gender gender = genderDao.findById(id);
 		if (gender == null) {
