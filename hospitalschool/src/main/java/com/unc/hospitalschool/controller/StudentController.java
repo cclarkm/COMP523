@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,9 +51,21 @@ public class StudentController {
 	private TeacherDao teacherDao;
 	
 	
-	@GetMapping(value = "/")
+	@GetMapping("/{sid}")
 	@ResponseBody
-	public Map<String, Object> getAllStudents() {
+	public ResponseEntity<?> getStudentById(@PathVariable int sid){
+		logger.info("Get student by id called");
+		Student studentOptional = studentDao.findBySid(sid);
+		if (studentOptional == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(studentOptional.toJson(), HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> getAllStudents() {
 		logger.info("Get all sudents called");
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
@@ -60,11 +74,12 @@ public class StudentController {
 			jsons.add(student.toJson());
 		}
 		map.put("students", jsons);
-		return map;	
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
+
 	@GetMapping(value="/fname={name}")
-	public Map<String, Object> getStudentsByFName(@PathVariable String name){
+	public ResponseEntity<Map<String, Object>> getStudentsByFName(@PathVariable String name){
 		logger.info("Get sudents called");
 		logger.info(name);
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -74,11 +89,11 @@ public class StudentController {
 			jsons.add(student.toJson());
 		}
 		map.put("students", jsons);
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/lname={name}")
-	public Map<String, Object> getStudentsByLName(@PathVariable String name){
+	public ResponseEntity<Map<String, Object>> getStudentsByLName(@PathVariable String name){
 		logger.info("Get sudents called");
 		logger.info(name);
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -88,67 +103,105 @@ public class StudentController {
 			jsons.add(student.toJson());
 		}
 		map.put("students", jsons);
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/lname={lname}/fname={fname}")
-	public Map<String, String> getStudentByFirstAndLastName(@PathVariable String lname, @PathVariable String fname){
-		logger.info(lname);
-		logger.info(fname);
-		return studentDao.findByFirstNameAndLastName(fname, lname).toJson();
+	public ResponseEntity<Map<String, Object>> getStudentByFirstAndLastName(@PathVariable String lname, @PathVariable String fname){
+		logger.info("Get students by first and last name called");
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		
+		for (Student student: studentDao.findByFirstNameAndLastName(fname, lname)) {
+			jsons.add(student.toJson());
+		}
+		map.put("students", jsons);
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
-	@DeleteMapping(value="/delete/sid={sid}")
-	public void deleteBySid(@PathVariable int sid) {
+	/*
+	 * Works as intended
+	 */
+	@DeleteMapping(value="/{sid}")
+	public ResponseEntity<Object> deleteBySid(@PathVariable int sid) {
 		Student studentOptional = studentDao.findBySid(sid);
 		if (studentOptional == null) {
 			logger.error("Unable to delete - student with sid: " + sid + " not found");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
 			studentDao.deleteById(sid);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}
 	
 	
 	//new 
-	@PostMapping(value="/new")
-	public Student newStudent(@RequestBody Map<String, String> body) {
-		logger.info(body.toString());		
+	@PostMapping
+	public ResponseEntity<Object> newStudent(@RequestBody Map<String, String> body) {
+		logger.info(body.toString());	
+		logger.info(body.get("INVALID KEY")); // returns null
+		if (!Student.validateFields(body)) {
+			logger.info("All required fields not provided");
+			return ResponseEntity.badRequest().body("Not all required student parameters provided");
+		}
+		// START OF REQUIRED FIELDS
 		String lName = body.get("lastName");
+		body.remove("lastName");
 		String fName = body.get("firstName");
+		body.remove("firstName");
 		String dob = body.get("dob");
-
+		body.remove("dob");
 		Gender gender = genderDao.findById(Integer.parseInt(body.get("gender")));
+		body.remove("gender");
 		RaceEth raceEth = raceEthDao.findByRid(Integer.parseInt(body.get("raceEthnicity")));
+		body.remove("raceEthnicity");
 		ServiceArea servArea = serviceAreaDao.findBySid(Integer.parseInt(body.get("serviceArea")));
+		body.remove("serviceArea");
 		School school = schoolDao.findBySid(Integer.parseInt(body.get("school")));
+		body.remove("school");
 		District district = districtDao.findByDid(Integer.parseInt(body.get("district")));
+		body.remove("district");
 		County county = countyDao.findByCid(Integer.parseInt(body.get("county")));
+		body.remove("county");
 		Grade grade = gradeDao.findByGid(Integer.parseInt(body.get("grade")));
-		String studentNotes = body.get("studentNotes");
-		String permissionDate = body.get("permissionDate");
-		String label = body.get("label");
-		PSLabel psLabel = psLabelDao.findByLid(Integer.parseInt(body.get("psLabel")));
-		Teacher currTeach = teacherDao.findByTid(Integer.parseInt(body.get("currentTeacher")));
-		Teacher secondTeacher = teacherDao.findByTid(Integer.parseInt(body.get("secondTeacher")));
-		boolean clinic = Boolean.parseBoolean(body.get("clinic"));
+		body.remove("grade");
 		boolean hispanic = Boolean.parseBoolean(body.get("hispanic"));
-		boolean petTherapy = Boolean.parseBoolean(body.get("petTherapy"));
-		String newYrMessage = body.get("newYrMessage");
+		body.remove("hispanic");
+		// END OF REQUIRED FIELDS
 		
-		return studentDao.save(new Student(lName, fName, dob, gender, raceEth, servArea,
-											school, district, county, grade, studentNotes,
-											permissionDate, label, psLabel, currTeach,
-											secondTeacher, clinic, hispanic, petTherapy, newYrMessage));
+		Student student = new Student(lName, fName, dob, gender, raceEth, servArea, school, district, county, grade, hispanic);
+		try {
+			setStudentFields(body, student);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.toString());
+		}
+		
+		studentDao.save(student);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	//update
-	@PutMapping(value="/update/sid={sid}")
-	public Student postBySid(@RequestBody Map<String, String> body, @PathVariable int sid) {
+	@PutMapping(value="/{sid}")
+	public ResponseEntity<Object> postBySid(@RequestBody Map<String, String> body, @PathVariable int sid) {
 		Student student = studentDao.findBySid(sid);
 		if (student == null) {
 			logger.error("Unable to update - student with sid: " + sid + " not found");
-			return null; //return an error here
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+		
+		//make sure that if catch, all work is undone
+		try {
+			setStudentFields(body, student);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.toString());
+		}
+		
+		//return studentDao.save(student);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	private void setStudentFields(Map<String, String> body, Student student) {
 		for (String x: body.keySet()) {
 			switch(x) {
 			case "lastName":
@@ -215,6 +268,5 @@ public class StudentController {
 				logger.error("Cannot update " + x + " because the field does not exist on STUDENT");
 			}
 		}
-		return studentDao.save(student);
 	}
 }
