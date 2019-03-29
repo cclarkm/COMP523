@@ -69,7 +69,6 @@ public class Student {
 	@ManyToOne
 	@JoinColumn(name = "county")
 	@JsonProperty(value = "county")
-//	@Column(nullable = true)
 	private County county;
 
 	@ManyToOne
@@ -146,8 +145,38 @@ public class Student {
 		this.newYrMessage = newYrMessage;
 	}
 	
+	public Student(String lastName, String firstName, String dob, Gender gender, RaceEth raceEth,
+			ServiceArea serviceArea, School school, District district, County county, Grade grade, boolean hispanic) {
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.dob = dob;
+		this.gender = gender;
+		this.raceEth = raceEth;
+		this.serviceArea = serviceArea;
+		this.school = school;
+		this.district = district;
+		this.county = county;
+		this.grade = grade;
+		this.hispanic = hispanic;
+	}
+	
 	public Student() {
 		
+	}
+	
+	public static boolean validateFields(Map<String, String> body) {
+		boolean lName = body.containsKey("lastName");
+		boolean fName = body.containsKey("firstName");
+		boolean dob = body.containsKey("dob");
+		boolean gender = body.containsKey("gender");
+		boolean raceEth = body.containsKey("raceEthnicity");
+		boolean servArea = body.containsKey("serviceArea");
+		boolean school = body.containsKey("school");
+		boolean district = body.containsKey("district");
+		boolean county = body.containsKey("county");
+		boolean grade = body.containsKey("grade");
+		boolean hispanic = body.containsKey("hispanic");
+		return lName && fName && dob && gender && raceEth && servArea && school && district && county && grade && hispanic;
 	}
 
 	
@@ -157,24 +186,67 @@ public class Student {
 		map.put("firstName", firstName);
 		map.put("lastName", lastName);
 		map.put("dob", dob);
-		map.put("gender", gender.getGender());
-		map.put("raceEthnicity", raceEth.getRaceEth());
-		map.put("serviceArea", serviceArea.getServiceArea());
-		map.put("school", school.getSchool());
-		map.put("district", district.getSchoolDistrict());
-		map.put("county", county.getCounty());
-		map.put("grade", grade.getGrade());
-		map.put("studentNotes", studentNotes);
-		map.put("permissionDate", permissionDate);
-		map.put("label", label);
-		map.put("psLabelCode", psLabel.getCode());
-		map.put("psLabelLabel", psLabel.getLabel());
-		map.put("currentTeacher", currTeacher.getFirstName() + " " + currTeacher.getLastName());
-		map.put("secondTeacher", secondTeacher.getFirstName() + " " + secondTeacher.getLastName());
+		if (gender != null) {
+			map.put("gender", gender.getGender());
+		}
+		
+		if (raceEth != null) {
+			map.put("raceEthnicity", raceEth.getRaceEth());
+		}
+		
+		if (serviceArea != null) {
+			map.put("serviceArea", serviceArea.getServiceArea());
+		}
+		
+		if (school != null) {
+			map.put("school", school.getSchool());
+		}
+		
+		if (district != null) {
+			map.put("district", district.getSchoolDistrict());
+		}
+		
+		if (county != null) {
+			map.put("county", county.getCounty());
+		}
+		
+		if (grade != null) {
+			map.put("grade", grade.getGrade());
+		}
+		
+		if (studentNotes !=null) {
+			map.put("studentNotes", studentNotes);
+		}
+		
+		if (permissionDate != null) {
+			map.put("permissionDate", permissionDate);
+		}
+		
+		if (label != null) {
+			map.put("label", label);
+		}
+		
+		if (psLabel != null) {
+			map.put("psLabelCode", psLabel.getCode());
+			map.put("psLabelLabel", psLabel.getLabel());
+		}
+		
+		if (currTeacher != null) {
+			map.put("currentTeacher", currTeacher.getFirstName() + " " + currTeacher.getLastName());
+		}
+		
+		if (secondTeacher != null) {
+			map.put("secondTeacher", secondTeacher.getFirstName() + " " + secondTeacher.getLastName());
+		}
+		
+		
 		map.put("clinic", Boolean.toString(clinic));
 		map.put("hispanic", Boolean.toString(hispanic));
 		map.put("petTherapy",  Boolean.toString(petTherapy));
-		map.put("newYrMessage", newYrMessage);
+		
+		if (newYrMessage != null) {
+			map.put("newYrMessage", newYrMessage);
+		}
 		return map;
 		
 	}
