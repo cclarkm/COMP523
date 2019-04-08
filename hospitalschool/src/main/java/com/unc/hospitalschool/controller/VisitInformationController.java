@@ -8,6 +8,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.AbstractPageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,10 +46,19 @@ public class VisitInformationController {
 	@Autowired
 	private LogTypeDao logTypeDao;
 	
+	
+	private QPageRequest goToPage(int page, int size) {
+		return new QPageRequest(page, size);
+	}
+	
+	private boolean validatePageAndSize(int page, int size) {
+		return (page >= 0) && (size >= 1);
+	}
+	
+	
 	@GetMapping
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> getAllCounties() {
-		logger.info("Get all visit infos called");
+	public ResponseEntity<Map<String, Object>> getAllLogs() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -56,8 +69,15 @@ public class VisitInformationController {
 		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 	
+	
+	
+	/*
+	 * ---------------------------------------------------------------------
+	 * GET LOGS BY STUDENT START
+	 * ---------------------------------------------------------------------
+	 */
 	@GetMapping(value="/{sid}")
-	public ResponseEntity<Map<String, Object>> getLogsByStudent(@PathVariable int sid) {
+	public ResponseEntity<Object> getLogsByStudent(@PathVariable int sid) {
 		logger.info("Get Logs By Student Called with ID:");
 		logger.info(Integer.toString(sid));
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -70,8 +90,35 @@ public class VisitInformationController {
 		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 	
+	@GetMapping(value="/{sid}/page={page}/size={size}")
+	public ResponseEntity<Object> getLogsByStudent(@PathVariable int sid, @PathVariable int page, @PathVariable int size){
+		if (!validatePageAndSize(page, size)) {
+			return ResponseEntity.badRequest().body("Page must be >= 0 and Size must be > 0");
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		
+		Page<VisitInformation> temp = visitInformationDao.findByStudentOrderByDovDesc(studentDao.findBySid(sid), goToPage(page, size));
+		for (VisitInformation visit: temp.getContent()) {
+			jsons.add(visit.toJson());
+		}
+		map.put("visits", jsons);
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+	/*
+	 * ---------------------------------------------------------------------
+	 * GET LOGS BY STUDENT END
+	 * ---------------------------------------------------------------------
+	 */
+	
+	
+	/*
+	 * ---------------------------------------------------------------------
+	 * GET LOGS BY STUDENT & TEACHER START
+	 * ---------------------------------------------------------------------
+	 */
 	@GetMapping(value="/{sid}/tid={tid}")
-	public ResponseEntity<Map<String, Object>> getLogsByStudentAndTeacher(@PathVariable int sid, @PathVariable int tid) {
+	public ResponseEntity<Object> getLogsByStudentAndTeacher(@PathVariable int sid, @PathVariable int tid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -85,8 +132,41 @@ public class VisitInformationController {
 		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 	
+	@GetMapping(value="/{sid}/tid={tid}/page={page}/size={size}")
+	public ResponseEntity<Object> getLogsByStudentAndTeacher(@PathVariable int sid, @PathVariable int tid, @PathVariable int page, @PathVariable int size) {
+		if (!validatePageAndSize(page, size)) {
+			return ResponseEntity.badRequest().body("Page must be >= 0 and Size must be > 0");
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		
+		Student student = studentDao.findBySid(sid);
+		Teacher teacher = teacherDao.findByTid(tid);
+		
+		Page<VisitInformation> temp = visitInformationDao.findByStudentAndTeacherOrderByDovDesc(student, teacher, goToPage(page, size));
+		for (VisitInformation visit: temp.getContent()) {
+			jsons.add(visit.toJson());
+		}
+		map.put("visits", jsons);
+		return new ResponseEntity<>(map, HttpStatus.OK);	
+	}
+	/*
+	 * ---------------------------------------------------------------------
+	 * GET LOGS BY STUDENT & TEACHER END
+	 * ---------------------------------------------------------------------
+	 */
+	
+	
+	
+	
+	/*
+	 * ---------------------------------------------------------------------
+	 * GET LOGS BY STUDENT & TYPE START
+	 * ---------------------------------------------------------------------
+	 */
 	@GetMapping(value="/{sid}/lid={lid}")
-	public ResponseEntity<Map<String, Object>> getLogsByStudentAndType(@PathVariable int sid, @PathVariable int lid) {
+	public ResponseEntity<Object> getLogsByStudentAndType(@PathVariable int sid, @PathVariable int lid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -100,8 +180,39 @@ public class VisitInformationController {
 		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 	
+	@GetMapping(value="/{sid}/lid={lid}/page={page}/size={size}")
+	public ResponseEntity<Object> getLogsByStudentAndType(@PathVariable int sid, @PathVariable int lid, @PathVariable int page, @PathVariable int size) {
+		if (!validatePageAndSize(page, size)) {
+			return ResponseEntity.badRequest().body("Page must be >= 0 and Size must be > 0");
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		
+		Student student = studentDao.findBySid(sid);
+		LogType logType = logTypeDao.findByLid(lid);
+		
+		Page<VisitInformation> temp = visitInformationDao.findByStudentAndLogTypeOrderByDovDesc(student, logType, goToPage(page, size));
+		for (VisitInformation visit: temp.getContent()) {
+			jsons.add(visit.toJson());
+		}
+		map.put("visits", jsons);
+		return new ResponseEntity<>(map, HttpStatus.OK);	
+	}	
+	/*
+	 * ---------------------------------------------------------------------
+	 * GET LOGS BY STUDENT & TYPE END
+	 * ---------------------------------------------------------------------
+	 */
+	
+	
+	/*
+	 * ---------------------------------------------------------------------
+	 * GET LOGS BY STUDENT & TEACHER & TYPE START
+	 * ---------------------------------------------------------------------
+	 */
 	@GetMapping(value="/{sid}/tid={tid}/lid={lid}")
-	public ResponseEntity<Map<String, Object>> getLogsByStudentAndTeacherAndType(@PathVariable int sid, @PathVariable int tid, @PathVariable int lid) {
+	public ResponseEntity<Object> getLogsByStudentAndTeacherAndType(@PathVariable int sid, @PathVariable int tid, @PathVariable int lid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
 		
@@ -117,9 +228,48 @@ public class VisitInformationController {
 		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 	
+	@GetMapping(value="/{sid}/tid={tid}/lid={lid}/page={page}/size={size}")
+	public ResponseEntity<Object> getLogsByStudentAndTeacherAndType(@PathVariable int sid, @PathVariable int tid, @PathVariable int lid, @PathVariable int page, @PathVariable int size) {
+		if (!validatePageAndSize(page, size)) {
+			return ResponseEntity.badRequest().body("Page must be >= 0 and Size must be > 0");
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		
+		Student student = studentDao.findBySid(sid);
+		Teacher teacher = teacherDao.findByTid(tid);
+		LogType logType = logTypeDao.findByLid(lid);
+		
+		Page<VisitInformation> temp = visitInformationDao.findByStudentAndTeacherAndLogTypeOrderByDovDesc(student, teacher, logType, goToPage(page, size));
+		for (VisitInformation visit: temp.getContent()) {
+			jsons.add(visit.toJson());
+		}
+		map.put("visits", jsons);
+		return new ResponseEntity<>(map, HttpStatus.OK);	
+	}
+	
+	/*
+	 * ---------------------------------------------------------------------
+	 * GET LOGS BY STUDENT & TEACHER & TYPE END
+	 * ---------------------------------------------------------------------
+	 */
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@PostMapping
 	public ResponseEntity<Object> newVisitInformation(@RequestBody Map<String, String> body) {
-		logger.info(body.toString());
 		VisitInformation visitInformation = new VisitInformation();
 		if (!VisitInformation.validateFields(body)) {
 			return ResponseEntity.badRequest().body("Not all required VisitInformation parameters provided");
