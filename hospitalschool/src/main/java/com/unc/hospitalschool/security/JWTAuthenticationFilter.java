@@ -1,8 +1,9 @@
 package com.unc.hospitalschool.security;
 
 import com.auth0.jwt.JWT;
-import com.unc.hospitalschool.user.ApplicationUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.unc.hospitalschool.model.ApplicationUser;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,8 +36,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-            User creds = new ObjectMapper()
-                    .readValue(req.getInputStream(), User.class);
+            ApplicationUser creds = new ObjectMapper()
+                    .readValue(req.getInputStream(), ApplicationUser.class);
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -45,6 +46,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                             new ArrayList<>())
             );
         } catch (IOException e) {
+        	System.out.println("ERROR: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
