@@ -24,6 +24,10 @@ public class ApplicationUser {
 	@JsonProperty(value = "password")
     private String password;
 
+    @Column(nullable = false)
+	@JsonProperty(value = "type")
+    private String type;
+    
     public ApplicationUser() {}
     
     //primary identifier of a user
