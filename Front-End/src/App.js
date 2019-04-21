@@ -231,12 +231,12 @@ class App extends Component {
         <div className="FlexColumns">
           <div className="LeftColumn">
             <FilterStudent className="FilterStudents" viewNewHandler={this.viewNewHandler} />
-            <NewStudentPopup visibility={this.state.createNewVisibility} viewNewHandler={this.viewNewHandler} />
             <StudentTable className="StudentTable"
               students={this.state.students} />
           </div>
           <div className="RightColumn">
             <StudentInfo className="StudentInfo" viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} />
+            <NewStudentPopup visibility={this.state.createNewVisibility} viewNewHandler={this.viewNewHandler} />
             <LogPopup visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} />
             <PrevDatesPopup visibility={this.state.moreVisibility} viewMoreHandler={this.viewMoreHandler} />
           </div>
