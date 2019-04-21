@@ -46,4 +46,8 @@ public class Withdraw {
 	public String getWithdraw() {
 		return this.withdraw;
 	}
+	
+	public void setWithdraw(String withdraw) {
+		this.withdraw = withdraw;
+	}
 }
