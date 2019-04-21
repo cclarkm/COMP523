@@ -60,8 +60,8 @@ public class ApplicationUserController {
   	  user.setUsername(body.get("username"));
       user.setPassword(bCryptPasswordEncoder.encode(body.get("password")));
       user.setRole(roleDao.findByRid(Integer.parseInt(body.get("role"))));
-      
-      logger.info(user.toString());
+
+//      logger.info(user.toString());
       applicationUserRepository.save(user);
 	return new ResponseEntity<>(HttpStatus.OK);
   }

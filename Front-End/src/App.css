@@ -1,0 +1,332 @@
+/* * { border: 1px solid black; } */
+.App {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: rgb(75, 156, 221);
+}
+
+
+.FlexColumns {
+  display: flex;
+  flex-direction: row;
+}
+
+.LeftColumn {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  width: 50%;
+  height: 100vh;
+  min-width: 400px;
+}
+
+.RightColumn {
+  display: flex;
+  width: 50%;
+  height: 100vh;
+  min-width: 400px;
+}
+
+.FilterStudents {
+  color:black;
+  padding: 20px;
+  margin: 20px;
+  overflow-y: scroll;
+  background-color: white;
+}
+
+.StudentFilterTable {
+  height: 150px;
+  width: 100%;
+}
+
+.StudentTableContainer {
+  color:black;
+  flex-grow: 1;
+  padding:10px;
+  margin: 20px;
+  overflow-x: scroll;
+  background-color: white;
+}
+
+.StudentTable {
+  width: 100%;
+}
+
+.StudentTableHeader {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.StudentRow {
+  font-size: 25px;
+}
+
+.StudentTable td, .StudentTable th {
+  border-bottom: 1px solid #ddd;
+  padding: 5px;
+}
+
+.StudentInfo {
+  overflow-y: scroll;
+  background-color: white;
+  color:black;
+  flex-grow: 1;
+  margin: 20px;
+  float:right;
+}
+
+.StudentInfo, .FilterStudents, .StudentTableContainer {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.Button {
+  text-align: center;
+  font-size: 30px;
+  min-width: 70%;
+  display: table;
+  margin: 20px auto;
+}
+
+.SmallButton {
+  text-align: center;
+  font-size: 25px;
+  min-width: 70%;
+  display: table;
+  margin: 20px auto;
+}
+
+.BackButton {
+  font-size: 30px;
+  background: none;
+  box-shadow: 0px 3px 5px rgba(0,0,0,0.20);
+  border: none;
+  background-color: rgb(126, 192, 247);
+  margin: 10px;
+  color: white;
+  white-space: nowrap;
+}
+
+.Button, .SmallButton {
+  background-color: #438CD0;
+  color: white;
+  border: none;
+  box-shadow: 0px 3px 5px rgba(0,0,0,0.20);
+  padding: 5px;
+  min-width: 10px;
+  flex-grow: 1;
+  margin: 20px;
+}
+
+.ButtonHolder {
+  display: flex;
+}
+
+.Heading {
+  font-size: 45px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.FilterHeading {
+  font-size: 45px;
+}
+
+.NewLine {
+  margin: 10px;
+  font-size: 25px;
+  width: 475px;
+}
+
+.Names {
+  width: 135px;
+  font-size:20px;
+  text-align: right;
+}
+
+.StudentInfoTable {
+  width: 100%;
+  border-spacing: 0 6px;
+}
+
+.InputLabel, .LeftInputLabel {
+  width: 180px;
+  font-size:20px;
+  text-align: right;
+  padding-right: 10px;
+  /* background: yellow; */
+}
+
+.LeftInputLabel {
+  text-align: left;
+  width: 100px;
+  white-space: nowrap;
+}
+
+.InputField {
+  font-size: 20px;
+  width: 95%;
+  min-width: 150px;
+  margin: 1.3px;
+}
+
+.DateTable {
+  width: 100%;
+  padding-left: 20px;
+  /* padding-right: 20px; */
+  border-spacing: 0 6px;
+}
+
+.SmallHeading {
+  font-size: 40px;
+  padding: 10px;
+  padding-right: 0;
+}
+
+.SpecialHeading {
+  font-size: 30px;
+  margin: 10px;
+}
+
+.TableHeading {
+  font-size: 30px;
+  margin-left:10px;
+}
+
+.Dates {
+  padding: 10px;
+  font-size:20px
+}
+
+.SmallLine {
+  font-size:20px;
+  width: 300px;
+}
+
+.AdmissionTable {
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.Multi {
+  font-size: 20px;
+  width: 100%;
+}
+
+.Text {
+  font-size: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
+}
+
+.StudentPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.InnerPopup {
+  /* min-width: 90%; */
+  height: 75%;
+  margin: 0 auto;
+  background: white;
+  overflow-y: scroll;
+  border-style: solid;
+  border-width: 3px;
+  border-color: white;
+}
+
+.PopupHeader {
+  width: 100%;
+  display: flex;
+  background-color: rgb(75, 156, 221);
+  color: white;
+}
+
+.PopTitle {
+  font-size: 35px;
+  width: 100%;
+  padding-right: 110px;
+  padding-top: 7px;
+  text-align: center;
+}
+
+.PopTable {
+  overflow-y: auto;
+  width: 100%;
+  padding: 10px;
+}
+
+.Log {
+  /* width: 100%; */
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 5px;
+  /* border-bottom: 1px solid #ddd; */
+  box-shadow:inset 0px 0px 0px 1px grey;
+  background-color: rgb(75, 156, 221, 0.2);
+  margin-bottom: 25px;
+}
+
+.LogHeader {
+  padding: 5px;
+  padding-left: 0;
+  padding-right: 0;
+  margin: 5px;
+  margin-left: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.PopSpan {
+  font-size: 20px;
+  /* padding: 10px; */
+  white-space: nowrap;
+}
+
+.PopInput {
+  font-size: 20px;
+  width: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.LogHeaderSection {
+  flex-grow: 1;
+  display: flex;
+}
+
+.LogBody {
+  display: flex;
+  margin: 15px;
+}
+
+.NoteInput {
+  font-size: 18px;
+  flex-grow: 1;
+  border: none;
+  box-shadow:inset 0px 0px 0px 1px grey;
+  resize: none;
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.LogSubmit {
+  font-size: 25px;
+  background-color: #438CD0;
+  box-shadow: 0px 3px 5px rgba(0,0,0,0.20);
+  color: white;
+}
