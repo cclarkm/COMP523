@@ -139,19 +139,6 @@
   min-width: 10px;
   flex-grow: 1;
   font-size: 19px;
-  margin-top: 20%;
-  margin-bottom: 30%;
-}
-
-.NewLog {
-  background-color: #438CD0;
-  color: white;
-  border: none;
-  box-shadow: 0px 3px 5px rgba(0,0,0,0.20);
-  padding: 10%;
-  min-width: 10px;
-  flex-grow: 1;
-  font-size: 19px;
 }
 
 .ButtonHolder {
@@ -247,9 +234,18 @@
   padding-right: 10px;
 }
 
-.Multi {
+.Multi1 {
+  position: relative;
+  left: 5%;
   font-size: 20px;
-  width: 100%;
+  width: 90%;
+}
+
+.Multi2 {
+  position: relative;
+  left: 3%;
+  font-size: 20px;
+  width: 90%;
 }
 
 .Text {
@@ -297,6 +293,11 @@
   padding-right: 110px;
   padding-top: 7px;
   text-align: center;
+}
+
+.NewTitle {
+  position: relative;
+  left: 16%;
 }
 
 .PopTable {
