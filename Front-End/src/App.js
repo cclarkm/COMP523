@@ -419,19 +419,19 @@ class StudentInfo extends Component {
         <table className="AdmissionTable">
           <tbody>
             <tr>
-              <td><input type="text" className="Multi"></input></td>
+              <td><input type="text" className="Multi1"></input></td>
               <td className="Text">through</td>
-              <td><input type="text" className="Multi"></input></td>
+              <td><input type="text" className="Multi1"></input></td>
             </tr>
             <tr>
-              <td><input type="text" className="Multi"></input></td>
+              <td><input type="text" className="Multi1"></input></td>
               <td className="Text">through</td>
-              <td><input type="text" className="Multi"></input></td>
+              <td><input type="text" className="Multi1"></input></td>
             </tr>
             <tr>
-              <td><input type="text" className="Multi"></input></td>
+              <td><input type="text" className="Multi1"></input></td>
               <td className="Text">through</td>
-              <td><input type="text" className="Multi"></input></td>
+              <td><input type="text" className="Multi1"></input></td>
             </tr>
           </tbody>
         </table>

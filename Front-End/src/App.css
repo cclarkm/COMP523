@@ -79,6 +79,11 @@
   padding: 5px;
 }
 
+.StudentTable tbody tr:hover {
+  border-width: 1px;
+  background: rgb(75, 156, 221, 0.1);
+}
+
 .StudentInfo {
   overflow-y: scroll;
   background-color: white;
