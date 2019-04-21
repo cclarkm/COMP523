@@ -317,7 +317,7 @@ public class VisitInformationController {
 		for (String x : body.keySet()) {
 			switch (x) {
 			case "sid":
-				visitInformation.setStudent(studentDao.findBySid(parseInt("sid", (body.get("sid")))));
+				visitInformation.setStudent(studentDao.findBySid(FieldValidation.parseInt("sid", (body.get("sid")))));
 				break;
 			case "dov":
 				visitInformation.setDov(body.get("dov"));
@@ -326,13 +326,13 @@ public class VisitInformationController {
 				visitInformation.setNotes(body.get("notes"));
 				break;
 			case "tid":
-				visitInformation.setTeacher(teacherDao.findByTid(parseInt("tid", body.get("tid"))));
+				visitInformation.setTeacher(teacherDao.findByTid(FieldValidation.parseInt("tid", body.get("tid"))));
 				break;
 			case "logType":
-				visitInformation.setLogType(logTypeDao.findByLid(parseInt("logType", body.get("logType"))));
+				visitInformation.setLogType(logTypeDao.findByLid(FieldValidation.parseInt("logType", body.get("logType"))));
 				break;
 			case "clinic":
-				visitInformation.setClinic(parseBoolean("clinic", body.get("clinic")));
+				visitInformation.setClinic(FieldValidation.parseBoolean("clinic", body.get("clinic")));
 				break;
 			default:
 				logger.error("Cannot update " + x + " because the field does not exist");
@@ -341,19 +341,5 @@ public class VisitInformationController {
 
 	}
 	
-	private boolean parseBoolean(String fieldName, String fieldValue) throws Exception {
-		if (fieldValue.equals("true") || fieldValue.equals("false")) {
-			return Boolean.parseBoolean(fieldValue);
-		} else {
-			throw new Exception("Field " + fieldName + " must be boolean");
-		}
-	}
 
-	private int parseInt(String fieldName, String fieldValue) throws Exception {
-		try {
-			return Integer.parseInt(fieldValue);
-		} catch (Exception e) {
-			throw new Exception("Field " + fieldName + " must be int");
-		}
-	}
 }

@@ -50,6 +50,9 @@ public class GenderController {
 	@PostMapping
 	public ResponseEntity<Object> newGender(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!body.containsKey("gender")) {
+			return ResponseEntity.badRequest().body("gender field not provided");
+		}
 		genderDao.save(new Gender(body.get("gender")));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
