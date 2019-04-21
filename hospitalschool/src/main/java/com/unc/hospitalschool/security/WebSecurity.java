@@ -2,6 +2,7 @@ package com.unc.hospitalschool.security;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,10 +13,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import static com.unc.hospitalschool.security.SecurityConstants.SIGN_UP_URL;
 
+@Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter {
     private UserDetailsServiceImpl userDetailsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -28,12 +32,15 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     //commented the .antMatchers line because that would allow anyone to create an account
     	//we only want to be able to create an account through an admin, which needs to be logged in
     	//thus, the only way to create an account is to visit the sign-up url with a valid token as part of the header
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-//                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
-//        		.antMatchers(HttpMethod.POST, SIGN_UP_URL).hasRole("ADMIN")
-                .anyRequest().authenticated()
+                //.antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+        		//.antMatchers(HttpMethod.POST, SIGN_UP_URL).hasRole("ADMIN")
+        		//.antMatchers(HttpMethod.POST, SIGN_UP_URL).access("hasRole('ADMIN')")
+        		.anyRequest().authenticated()
+     
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))

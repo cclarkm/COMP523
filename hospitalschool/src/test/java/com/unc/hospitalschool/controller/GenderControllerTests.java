@@ -66,6 +66,7 @@ public class GenderControllerTests {
 	@Test
 	public void updateGender() throws Exception{
 		Map<String, String> input = new HashMap<String, String>();
+		//input.put(key, value)
 	}
 	
 	

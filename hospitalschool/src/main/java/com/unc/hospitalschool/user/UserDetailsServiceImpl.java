@@ -45,12 +45,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		Set<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
 		String grantedAuthorities = applicationUser.getRole().getRole(); //returns string of role
 		logger.info("YO " + grantedAuthorities);
-		roles.add(new SimpleGrantedAuthority("ROLE_" + grantedAuthorities));
+		roles.add(new SimpleGrantedAuthority(grantedAuthorities));
 		
         //added
 		User user = new User(applicationUser.getUsername(), applicationUser.getPassword(), roles);
 		return user;
 
-//		return new User(applicationUser.getUsername(), applicationUser.getPassword(), emptyList());
 	}
 }

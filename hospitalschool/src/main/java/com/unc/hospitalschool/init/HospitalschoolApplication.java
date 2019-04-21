@@ -33,16 +33,12 @@ public class HospitalschoolApplication{
 
 	private static Logger logger = LoggerFactory.getLogger("LOGGER");
 
-<<<<<<< HEAD
-		
-=======
 	//not sure if this is the right place for this but idk:
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
->>>>>>> 59d44591ea418fd9e4ddb812d6a502da052e28ed
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = SpringApplication.run(HospitalschoolApplication.class,  args);
 //		SpringApplication.run(SpringBootAuthUpdatedApplication.class, args);
