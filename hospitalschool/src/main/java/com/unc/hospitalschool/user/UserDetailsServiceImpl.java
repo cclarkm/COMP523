@@ -46,7 +46,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		String grantedAuthorities = applicationUser.getRole().getRole(); //returns string of role
 		logger.info("YO " + grantedAuthorities);
 		roles.add(new SimpleGrantedAuthority("ROLE_" + grantedAuthorities));
-		
+		logger.info("ROLES " + roles);
         //added
 		User user = new User(applicationUser.getUsername(), applicationUser.getPassword(), roles);
 		return user;
