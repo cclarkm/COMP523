@@ -46,8 +46,8 @@ class Log extends Component {
         </div>
         <div className="LogBody">
           <textarea rows="7" cols="85" className="NoteInput" placeholder="Notes">
-        </textarea>
-          <button className="LogSubmit">Submit</button>
+          </textarea>
+          <button className="LogSubmit">Update</button>
         </div>
       </div>
     );
@@ -67,9 +67,9 @@ class App extends Component {
 
   viewLogsHandler = (show) => {
     if (show) {
-      this.setState({"popupVisibility": "visible"});
+      this.setState({ "popupVisibility": "visible" });
     } else {
-      this.setState({"popupVisibility": "hidden"});
+      this.setState({ "popupVisibility": "hidden" });
     }
   }
 
@@ -83,7 +83,7 @@ class App extends Component {
               students={this.state.students} />
           </div>
           <div className="RightColumn">
-            <StudentInfo className="StudentInfo" viewLogsHandler={this.viewLogsHandler}/ >
+            <StudentInfo className="StudentInfo" viewLogsHandler={this.viewLogsHandler} />
             <Popup visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} />
           </div>
         </div>
@@ -96,25 +96,31 @@ class FilterStudent extends Component {
   render() {
     return (
       <div className="FilterStudents">
-        <div className="FilterHeading">
-          Filter Students
+        <div className="Filter">
+          <div className="FilterHeading">
+            Filter Students
         </div>
-        <table className="StudentFilterTable">
-          <tbody>
-            <tr>
-            <td className="LeftInputLabel">First Name</td>
-              <td><input type="text" className="InputField" align="right"></input></td>
-            </tr>
-            <tr>
-            <td className="LeftInputLabel">Last Name</td>
-              <td><input type="text" className="InputField" align="right"></input></td>
-            </tr>
-            <tr>
-              <td className="LeftInputLabel">Teacher</td>
-              <td><input type="text" className="InputField" align="right"></input></td>
-            </tr>
-          </tbody>
-        </table>
+          <table className="StudentFilterTable">
+            <tbody>
+              <tr>
+                <td className="LeftInputLabel">First Name</td>
+                <td><input type="text" className="InputField" align="right"></input></td>
+              </tr>
+              <tr>
+                <td className="LeftInputLabel">Last Name</td>
+                <td><input type="text" className="InputField" align="right"></input></td>
+              </tr>
+              <tr>
+                <td className="LeftInputLabel">Teacher</td>
+                <td><input type="text" className="InputField" align="right"></input></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="CreateNew">
+          <button type="button" className="NewStudent">Create New Student</button>
+          <button type="button" className="NewLog">Create New Student Log</button>
+        </div>
       </div>
     )
   }
@@ -130,7 +136,7 @@ class StudentTable extends Component {
           <td>{this.props.students[i].lastName}</td>
           <td>{this.props.students[i].admitDate}</td>
         </tr>
-        );
+      );
     }
     return listOfStudents;
   }
@@ -274,7 +280,7 @@ class StudentInfo extends Component {
             </tr>
           </tbody>
         </table>
-        <div style={{"width": "60%", "display": "flex", "margin": "0 auto"}}>
+        <div style={{ "width": "60%", "display": "flex", "margin": "0 auto" }}>
           <button type="button" className="SmallButton">
             View More
           </button>
