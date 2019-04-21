@@ -75,7 +75,10 @@ public class ApplicationUser {
     public boolean isAdmin() {
     	return (this.role.equals("ADMIN"));
     }
-
+    
+    public String toString() {
+    	return "\nID: " + id + "\n USERNAME: " + username + "\n PASSWORD: " + password + "\n ROLE: " + role.getRole();
+    }
 //    public UserDetails toSecurityUserDetails() {
 //    	return SecurityUserDetails.create(this);
 //    }
