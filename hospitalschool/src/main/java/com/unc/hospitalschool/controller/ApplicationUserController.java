@@ -56,22 +56,42 @@ public class ApplicationUserController {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   	  }
   	  
-  	  // Creating user
-  	  user.setUsername(body.get("username"));
-      user.setPassword(bCryptPasswordEncoder.encode(body.get("password")));
-      user.setRole(roleDao.findByRid(Integer.parseInt(body.get("role"))));
+		// Creating user
+		try {
+			this.setUserFields(body, user);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 
-//      logger.info(user.toString());
-      applicationUserRepository.save(user);
-	return new ResponseEntity<>(HttpStatus.OK);
-  }
-    
-    //maybe this should also be in authentication
+		applicationUserRepository.save(user);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	// maybe this should also be in authentication
     @PostMapping("/logout")
     public void login(@RequestBody ApplicationUser user) {
     	//maybe somehow add the JWT to a list of those no longer valid; should remove
     		//itself from list after it expires? maybe
     	//when checking login credentials, need to make sure that if the token appears in the list, it is not valid
     
+    }
+    
+    public void setUserFields(Map<String, String> body, ApplicationUser user) throws Exception {
+    	for (String x: body.keySet()) {
+    		switch(x) {
+    		case "username":
+    			user.setUsername(body.get(x));
+    			break;
+    		case "password":
+    			user.setPassword(bCryptPasswordEncoder.encode(body.get("password")));
+    			break;
+    		case "role":
+    			user.setRole(roleDao.findByRid(Integer.parseInt(body.get("role"))));
+    			break;
+    		default:
+    			logger.error("Cannot update " + x + " because the field does not exist on USER");
+    			throw new IllegalArgumentException("Field " + x + " does not exist.");
+    		}
+    	}
     }
 }
