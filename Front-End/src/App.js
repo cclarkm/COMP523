@@ -77,10 +77,6 @@ class NewStudentPopup extends Component {
               <td><input type="text" className="InputField" align="right"></input></td>
             </tr>
             <tr>
-              <td className="InputLabel">Teacher</td>
-              <td><input type="text" className="InputField" align="right"></input></td>
-            </tr>
-            <tr>
               <td className="InputLabel">Admit Date</td>
               <td><input type="text" className="InputField" align="right"></input></td>
             </tr>
