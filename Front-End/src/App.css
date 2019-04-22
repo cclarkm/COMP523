@@ -97,6 +97,22 @@
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
+.InputField:read-only {
+  border-color: rgb(223, 223, 223);
+  /* border-width: 1px; */
+  user-select: none;
+  outline-width: 0;
+  /* border: none; */
+  /* font-weight: bold; */
+}
+
+.InputField:not(read-only) {
+  border-style: solid;
+  border-color: rgb(75, 156, 221);
+  border-width: 1px;
+}
+
+
 .Button {
   text-align: center;
   font-size: 30px;
@@ -133,6 +149,23 @@
   min-width: 10px;
   flex-grow: 1;
   margin: 20px;
+}
+
+.SubmitButton {
+  text-align: center;
+  font-size: 30px;
+  min-width: 70%;
+  display: table;
+  margin: 20px auto;
+  background-color: rgb(48, 156, 21);
+  color: white;
+  border: none;
+  box-shadow: 0px 3px 5px rgba(0,0,0,0.20);
+  padding: 5px;
+  min-width: 10px;
+  flex-grow: 1;
+  margin: 20px;
+  margin-bottom: 5px;
 }
 
 .NewStudent {

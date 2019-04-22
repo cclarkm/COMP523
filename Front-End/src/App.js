@@ -14,7 +14,8 @@ class App extends Component {
       students: [],
       createNewVisibility: "hidden",
       popupVisibility: "hidden",
-      moreVisibility: "hidden"
+      moreVisibility: "hidden",
+      studentSelected: {}
     };
   }
 
@@ -33,6 +34,10 @@ class App extends Component {
     }, (error) => {
       console.error(error);
     });
+  }
+
+  handleStudentRowClick = (student) => {
+    this.setState({studentSelected: student});
   }
 
   viewNewHandler = (show) => {
@@ -65,10 +70,10 @@ class App extends Component {
         <div className="FlexColumns">
           <div className="LeftColumn">
             <FilterStudent className="FilterStudents" viewNewHandler={this.viewNewHandler} />
-            <StudentTable className="StudentTable" students={this.state.students} />
+            <StudentTable className="StudentTable" students={this.state.students} onSelect={this.handleStudentRowClick}/>
           </div>
           <div className="RightColumn">
-            <StudentInfo className="StudentInfo" viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} />
+            <StudentInfo className="StudentInfo" viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} student={this.state.studentSelected}/>
             <NewStudentPopup visibility={this.state.createNewVisibility} viewNewHandler={this.viewNewHandler} />
             <LogPopup visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} />
             <PrevDatesPopup visibility={this.state.moreVisibility} viewMoreHandler={this.viewMoreHandler} />
@@ -119,7 +124,7 @@ class StudentTable extends Component {
     let listOfStudents = [];
     for (let i = 0; i < this.props.students.length; i++) {
       listOfStudents.push(
-        <tr className="StudentRow">
+        <tr className="StudentRow" onClick={() => this.props.onSelect(this.props.students[i])}>
           <td>{this.props.students[i].firstName}</td>
           <td>{this.props.students[i].lastName}</td>
           <td>{this.props.students[i].permissionDate}</td>
@@ -151,75 +156,92 @@ class StudentTable extends Component {
 }
 
 class StudentInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      editable: false,
+      dob: this.props.student.dob,
+      gender: this.props.student.gender,
+      raceEthnicity: this.props.student.raceEthnicity,
+      hispanic: this.props.student.hispanic,
+      grade: this.props.student.grade,
+      serviceArea: this.props.student.serviceArea,
+      county: this.props.student.county,
+      district: this.props.student.district,
+      school: this.props.student.school,
+      label: this.props.student.label,
+      currentTeacher: this.props.student.currentTeacher,
+      secondTeacher: this.props.student.secondTeacher
+    };
+  }
+
+  resetFormState = () => {
+    this.setState({
+      editable: false,
+      dob: this.props.student.dob,
+      gender: this.props.student.gender,
+      raceEthnicity: this.props.student.raceEthnicity,
+      hispanic: this.props.student.hispanic,
+      grade: this.props.student.grade,
+      serviceArea: this.props.student.serviceArea,
+      county: this.props.student.county,
+      district: this.props.student.district,
+      school: this.props.student.school,
+      label: this.props.student.label,
+      currentTeacher: this.props.student.currentTeacher,
+      secondTeacher: this.props.student.secondTeacher
+    });
+  }
+
+  componentDidUpdate(oldProps) {
+    const newProps = this.props;
+    if(oldProps.student !== newProps.student) {
+      this.resetFormState();
+    }
+  }
+
+  componentDidMount() {
+    this.resetFormState();
+  }
+
   render() {
     return (
       <div className="StudentInfo">
         <div className="Heading">
-          Student Info for <b>Idrees Hassan</b>
+          {(this.props.student.firstName !== undefined) ? <span>Student Info for <b>{this.props.student.firstName} {this.props.student.lastName}</b></span> : "No Student Selected"}
         </div>
         <table className="StudentInfoTable">
           <tbody>
-            <tr>
-              <td className="InputLabel">Date of Birth</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Gender</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Race</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Hispanic</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Grade</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Service Area</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Country</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">District</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">School</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Label</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">IEP,504,etc.</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Signed Release Date</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Primary Teacher</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Secondary Teacher</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
+            <StudentInfoField label="Date of Birth" value={this.state.dob} onChange={(v) => this.setState({"dob": v})} editable={this.state.editable} />
+            <StudentInfoField label="Gender" value={this.state.gender} onChange={(v) => this.setState({"gender": v})} editable={this.state.editable} />
+            <StudentInfoField label="Race" value={this.state.raceEthnicity} onChange={(v) => this.setState({"raceEthnicity": v})} editable={this.state.editable} />
+            <StudentInfoField label="Hispanic" value={this.state.hispanic} onChange={(v) => this.setState({"hispanic": v})} editable={this.state.editable} />
+            <StudentInfoField label="Grade" value={this.state.grade} onChange={(v) => this.setState({"grade": v})} editable={this.state.editable} />
+            <StudentInfoField label="Service Area" value={this.state.serviceArea} onChange={(v) => this.setState({"serviceArea": v})} editable={this.state.editable} />
+            <StudentInfoField label="County" value={this.state.county} onChange={(v) => this.setState({"county": v})} editable={this.state.editable} />
+            <StudentInfoField label="District" value={this.state.district} onChange={(v) => this.setState({"district": v})} editable={this.state.editable} />
+            <StudentInfoField label="School" value={this.state.school} onChange={(v) => this.setState({"school": v})} editable={this.state.editable} />
+            <StudentInfoField label="Label" value={this.state.label} onChange={(v) => this.setState({"label": v})} editable={this.state.editable} />
+            {/* <StudentInfoField label="IEP, 504, etc." value={this.props.student.dob} editable={this.state.editable} /> */}
+            {/* <StudentInfoField label="Signed Release Date" value={this.props.student.dob} editable={this.state.editable} /> */}
+            <StudentInfoField label="Primary Teacher" value={this.state.currentTeacher} onChange={(v) => this.setState({"currentTeacher": v})} editable={this.state.editable} />
+            <StudentInfoField label="Secondary Teacher" value={this.state.secondTeacher} onChange={(v) => this.setState({"secondTeacher": v})} editable={this.state.editable} />
           </tbody>
         </table>
         <div className="ButtonHolder">
-          <button type="button" className="Button">
-            Edit Student Information
+          <button type="button" className="SubmitButton" style={{"display": this.state.editable ? "block" : "none"}}>
+            Submit Updated Info
+          </button>
+        </div>
+        <div className="ButtonHolder">
+          <button type="button" className="Button" onClick={() => {
+            if (this.state.editable) {
+              this.resetFormState();
+            } else {
+              this.setState({editable: true})
+            }
+            }}>
+            {this.state.editable ? "Cancel Editing" : "Edit Student Information"}
           </button>
           <button type="button" className="Button" onClick={() => this.props.viewLogsHandler(true)}>
             View Student Logs
@@ -274,6 +296,17 @@ class StudentInfo extends Component {
           </button>
         </div>
       </div>
+    );
+  }
+}
+
+class StudentInfoField extends Component {
+  render() {
+    return (
+      <tr>
+        <td className="InputLabel">{this.props.label === undefined ? "" : this.props.label}</td>
+        <td><input type="text" className="InputField" value={this.props.value} onChange={(e) => this.props.onChange(e.target.value)} readOnly={!this.props.editable} /></td>
+      </tr>
     );
   }
 }
