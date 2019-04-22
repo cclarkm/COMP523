@@ -145,6 +145,7 @@ public class StudentController {
 		}
 		Student student = new Student();
 		
+		//need to also have a thing where if there are extra fields, there is an error, maybe?
 		try {
 			setStudentFields(body, student);
 		} catch (Exception e) {
