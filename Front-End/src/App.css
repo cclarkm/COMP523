@@ -64,17 +64,17 @@
 
 .StudentTable {
   width: 100%;
+  font-size: 23px;
 }
 
 .StudentTableHeader {
-  font-size: 25px;
   font-weight: bold;
 }
 
 .StudentRow {
-  font-size: 25px;
   border-bottom: 1px solid #ddd;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .StudentTable td, .StudentTable th {
@@ -94,6 +94,7 @@
   flex-grow: 1;
   margin: 20px;
   float:right;
+  padding: 10px;
 }
 
 .StudentInfo, .FilterStudents, .StudentTableContainer {
@@ -175,6 +176,7 @@
 .Button, .BackButton, .SubmitButton, .SmallButton, .LogSubmit {
   transition-duration: 0.05s;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 .Button:hover, .BackButton:hover, .SubmitButton:hover, .SmallButton:hover, .LogSubmit:hover {
@@ -199,7 +201,7 @@
 .Heading {
   font-size: 45px;
   margin: 10px;
-  padding: 10px;
+  /* padding: 10px; */
 }
 
 .FilterHeading {
@@ -259,13 +261,14 @@
 }
 
 .SpecialHeading {
-  font-size: 30px;
+  font-size: 25px;
   margin: 10px;
 }
 
 .TableHeading {
   font-size: 30px;
   margin-left:10px;
+  margin-top: 20px;
 }
 
 .Dates {
@@ -367,6 +370,14 @@
   box-shadow:inset 0px 0px 0px 1px grey;
   background-color: rgb(75, 156, 221, 0.2);
   margin-bottom: 25px;
+}
+
+.DateRow {
+  /* width: 100%; */
+  width: 100%;
+  padding: 5px;
+  margin: 20px;
+  /* background-color: rgb(75, 156, 221, 0.2); */
 }
 
 .LogHeader {

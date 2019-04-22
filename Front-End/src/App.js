@@ -542,7 +542,7 @@ class Log extends Component {
               this.props.onUpdate(this.props.log, this.state);
             }
           }}>
-            {this.props.new ? "Create New Log" : "Update"}
+            {this.props.new ? "New Log" : "Update"}
           </button>
         </div>
       </tr>
@@ -654,7 +654,7 @@ class PrevDatesPopup extends Component {
             <div className="PopTitle">Previous Admissions</div>
           </div>
           <table className="PopTable">
-            <tr>
+            <tbody>
               <Dates />
               <Dates />
               <Dates />
@@ -666,7 +666,7 @@ class PrevDatesPopup extends Component {
               <Dates />
               <Dates />
               <Dates />
-            </tr>
+              </tbody>
           </table>
         </div>
       </div>
@@ -677,11 +677,11 @@ class PrevDatesPopup extends Component {
 class Dates extends Component {
   render() {
     return (
-      <div className="Log">
+      <tr className="DateRow">
             <td><input type="text" className="Multi1"></input></td>
             <td className="Text">through</td>
             <td><input type="text" className="Multi2"></input></td>
-      </div>
+      </tr>
     );
   }
 }
