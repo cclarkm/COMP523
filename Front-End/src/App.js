@@ -1,204 +1,38 @@
 import React, { Component } from 'react';
 import './App.css';
 
-class LogPopup extends Component {
-  render() {
-    let style = {
-      'visibility': this.props.visibility
-    };
-    return (
-      <div className="StudentPopup" style={style}>
-        <div className="InnerPopup">
-          <div className="PopupHeader">
-            <button className="BackButton" onClick={() => this.props.viewLogsHandler(false)}>Go Back</button>
-            <div className="PopTitle">View Logs for <b>Idrees Hassan</b></div>
-          </div>
-          <table className="PopTable">
-            <tr>
-              <Log />
-              <Log />
-              <Log />
-            </tr>
-          </table>
-        </div>
-      </div>
-    );
-  }
-}
-
-class Log extends Component {
-  render() {
-    return (
-      <div className="Log">
-        <div className="LogHeader">
-          <div className="LogHeaderSection">
-            <span className="PopSpan">Date of Log</span>
-            <input className="PopInput" type="text"></input>
-          </div>
-          <div className="LogHeaderSection">
-            <span className="PopSpan">Teacher</span>
-            <input className="PopInput" type="text"></input>
-          </div>
-          <div className="LogHeaderSection">
-            <span className="PopSpan">Type</span>
-            <input className="PopInput" type="text"></input>
-          </div>
-        </div>
-        <div className="LogBody">
-          <textarea rows="7" cols="85" className="NoteInput" placeholder="Notes">
-          </textarea>
-          <button className="LogSubmit">Update</button>
-        </div>
-      </div>
-    );
-  }
-}
-
-class NewStudentPopup extends Component {
-  render() {
-    let style = {
-      'visibility': this.props.visibility
-    };
-    return (
-      <div className="StudentPopup" style={style}>
-        <div className="InnerPopup">
-          <div className="PopupHeader">
-            <button className="BackButton" onClick={() => this.props.viewNewHandler(false)}>Go Back</button>
-            <div className="PopTitle"><b className="NewTitle">Create New Student</b></div>
-            <button className="BackButton"><b>Create</b></button>
-          </div>
-          <table className="PopTable">
-            <tr>
-              <td className="InputLabel">First Name</td>
-              <td><input type="text" className="InputField" align="right"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Last Name</td>
-              <td><input type="text" className="InputField" align="right"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Admit Date</td>
-              <td><input type="text" className="InputField" align="right"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Date of Birth</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Gender</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Race</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Hispanic</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Grade</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Service Area</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Country</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">District</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">School</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Label</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">IEP,504,etc.</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Signed Release Date</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Primary Teacher</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-            <tr>
-              <td className="InputLabel">Secondary Teacher</td>
-              <td><input type="text" className="InputField"></input></td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    );
-  }
-}
-
-class PrevDatesPopup extends Component {
-  render() {
-    let style = {
-      'visibility': this.props.visibility
-    };
-    return (
-      <div className="StudentPopup" style={style}>
-        <div className="InnerPopup">
-          <div className="PopupHeader">
-            <button className="BackButton" onClick={() => this.props.viewMoreHandler(false)}>Go Back</button>
-            <div className="PopTitle">Previous Admissions</div>
-          </div>
-          <table className="PopTable">
-            <tr>
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-            </tr>
-          </table>
-        </div>
-      </div>
-    );
-  }
-}
-
-class Dates extends Component {
-  render() {
-    return (
-      <div className="Log">
-            <td><input type="text" className="Multi1"></input></td>
-            <td className="Text">through</td>
-            <td><input type="text" className="Multi2"></input></td>
-      </div>
-    );
-  }
-}
+const URL = "http://localhost:8080/";
+var TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZWFjaGVydGVzdCIsImV4cCI6MTU1Njc1MjQ3M30.ewZPngGjEF5TfWlc2O1TzKiGHV-f19lC_D49VTc6qs5aiOnX1dmHUo-vNErx8HAm7E9jDb8iwTEcd-g5dTNDsw";
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.getStudents();
 
     //Assign state's default values
     this.state = {
-      students: getStudents(),
+      students: [],
       createNewVisibility: "hidden",
       popupVisibility: "hidden",
       moreVisibility: "hidden"
     };
+  }
+
+  getStudents = () => {
+    fetch(URL + "student", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({students: data.students});
+    }, (error) => {
+      console.error(error);
+    });
   }
 
   viewNewHandler = (show) => {
@@ -231,8 +65,7 @@ class App extends Component {
         <div className="FlexColumns">
           <div className="LeftColumn">
             <FilterStudent className="FilterStudents" viewNewHandler={this.viewNewHandler} />
-            <StudentTable className="StudentTable"
-              students={this.state.students} />
+            <StudentTable className="StudentTable" students={this.state.students} />
           </div>
           <div className="RightColumn">
             <StudentInfo className="StudentInfo" viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} />
@@ -289,7 +122,7 @@ class StudentTable extends Component {
         <tr className="StudentRow">
           <td>{this.props.students[i].firstName}</td>
           <td>{this.props.students[i].lastName}</td>
-          <td>{this.props.students[i].admitDate}</td>
+          <td>{this.props.students[i].permissionDate}</td>
         </tr>
       );
     }
@@ -445,19 +278,191 @@ class StudentInfo extends Component {
   }
 }
 
-function getStudents() {
-  return [
-    {
-      "firstName": "Idrees",
-      "lastName": "Hassan",
-      "admitDate": "10/21/1997"
-    },
-    {
-      "firstName": "Paul",
-      "lastName": "Song",
-      "admitDate": "10/22/1997"
-    }
-  ];
+class LogPopup extends Component {
+  render() {
+    let style = {
+      'visibility': this.props.visibility
+    };
+    return (
+      <div className="StudentPopup" style={style}>
+        <div className="InnerPopup">
+          <div className="PopupHeader">
+            <button className="BackButton" onClick={() => this.props.viewLogsHandler(false)}>Go Back</button>
+            <div className="PopTitle">View Logs for <b>Idrees Hassan</b></div>
+          </div>
+          <table className="PopTable">
+              <Log />
+              <Log />
+              <Log />
+          </table>
+        </div>
+      </div>
+    );
+  }
+}
+
+class Log extends Component {
+  render() {
+    return (
+      <tr className="Log">
+        <div className="LogHeader">
+          <div className="LogHeaderSection">
+            <span className="PopSpan">Date of Log</span>
+            <input className="PopInput" type="text"></input>
+          </div>
+          <div className="LogHeaderSection">
+            <span className="PopSpan">Teacher</span>
+            <input className="PopInput" type="text"></input>
+          </div>
+          <div className="LogHeaderSection">
+            <span className="PopSpan">Type</span>
+            <input className="PopInput" type="text"></input>
+          </div>
+        </div>
+        <div className="LogBody">
+          <textarea rows="7" cols="85" className="NoteInput" placeholder="Notes">
+          </textarea>
+          <button className="LogSubmit">Update</button>
+        </div>
+      </tr>
+    );
+  }
+}
+
+class NewStudentPopup extends Component {
+  render() {
+    let style = {
+      'visibility': this.props.visibility
+    };
+    return (
+      <div className="StudentPopup" style={style}>
+        <div className="InnerPopup">
+          <div className="PopupHeader">
+            <button className="BackButton" onClick={() => this.props.viewNewHandler(false)}>Go Back</button>
+            <div className="PopTitle"><b className="NewTitle">Create New Student</b></div>
+            <button className="BackButton"><b>Create</b></button>
+          </div>
+          <table className="PopTable">
+            <tbody>
+              <tr>
+                <td className="InputLabel">First Name</td>
+                <td><input type="text" className="InputField" align="right"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Last Name</td>
+                <td><input type="text" className="InputField" align="right"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Admit Date</td>
+                <td><input type="text" className="InputField" align="right"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Date of Birth</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Gender</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Race</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Hispanic</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Grade</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Service Area</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Country</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">District</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">School</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Label</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">IEP,504,etc.</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Signed Release Date</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Primary Teacher</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+              <tr>
+                <td className="InputLabel">Secondary Teacher</td>
+                <td><input type="text" className="InputField"></input></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+}
+
+class PrevDatesPopup extends Component {
+  render() {
+    let style = {
+      'visibility': this.props.visibility
+    };
+    return (
+      <div className="StudentPopup" style={style}>
+        <div className="InnerPopup">
+          <div className="PopupHeader">
+            <button className="BackButton" onClick={() => this.props.viewMoreHandler(false)}>Go Back</button>
+            <div className="PopTitle">Previous Admissions</div>
+          </div>
+          <table className="PopTable">
+            <tr>
+              <Dates />
+              <Dates />
+              <Dates />
+              <Dates />
+              <Dates />
+              <Dates />
+              <Dates />
+              <Dates />
+              <Dates />
+              <Dates />
+              <Dates />
+            </tr>
+          </table>
+        </div>
+      </div>
+    );
+  }
+}
+
+class Dates extends Component {
+  render() {
+    return (
+      <div className="Log">
+            <td><input type="text" className="Multi1"></input></td>
+            <td className="Text">through</td>
+            <td><input type="text" className="Multi2"></input></td>
+      </div>
+    );
+  }
 }
 
 export default App;
