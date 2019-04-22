@@ -15,7 +15,10 @@ class App extends Component {
       createNewVisibility: "hidden",
       popupVisibility: "hidden",
       moreVisibility: "hidden",
-      studentSelected: {}
+      studentSelected: {},
+      firstNameFilter: "",
+      lastNameFilter: "",
+      teacherFilter: ""
     };
   }
 
@@ -95,13 +98,25 @@ class App extends Component {
     }
   }
 
+  handleFirstNameFilter = (filter) => {
+    this.setState({"firstNameFilter": filter});
+  }
+
+  handleLastNameFilter = (filter) => {
+    this.setState({"lastNameFilter": filter});
+  }
+
+  handleTeacherFilter = (filter) => {
+    this.setState({"teacherFilter": filter});
+  }
+
   render() {
     return (
       <div className="App">
         <div className="FlexColumns">
           <div className="LeftColumn">
-            <FilterStudent className="FilterStudents" viewNewHandler={this.viewNewHandler} />
-            <StudentTable className="StudentTable" students={this.state.students} onSelect={this.handleStudentRowClick} />
+            <FilterStudent className="FilterStudents" viewNewHandler={this.viewNewHandler} onFirstNameChange={this.handleFirstNameFilter} onLastNameChange={this.handleLastNameFilter} onTeacherChange={this.handleTeacherFilter}/>
+            <StudentTable className="StudentTable" students={this.state.students} onSelect={this.handleStudentRowClick} firstNameFilter={this.state.firstNameFilter} lastNameFilter={this.state.lastNameFilter} teacherFilter={this.state.teacherFilter}/>
           </div>
           <div className="RightColumn">
             <StudentInfo className="StudentInfo" onUpdate={this.handleStudentUpdate} viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} student={this.state.studentSelected} />
@@ -127,15 +142,15 @@ class FilterStudent extends Component {
             <tbody>
               <tr>
                 <td className="LeftInputLabel">First Name</td>
-                <td><input type="text" className="InputField" align="right"></input></td>
+                <td><input type="text" className="InputField" align="right" onChange={(e) => this.props.onFirstNameChange(e.target.value)}></input></td>
               </tr>
               <tr>
                 <td className="LeftInputLabel">Last Name</td>
-                <td><input type="text" className="InputField" align="right"></input></td>
+                <td><input type="text" className="InputField" align="right" onChange={(e) => this.props.onLastNameChange(e.target.value)}></input></td>
               </tr>
               <tr>
                 <td className="LeftInputLabel">Teacher</td>
-                <td><input type="text" className="InputField" align="right"></input></td>
+                <td><input type="text" className="InputField" align="right" onChange={(e) => this.props.onTeacherChange(e.target.value)}></input></td>
               </tr>
             </tbody>
           </table>
@@ -154,13 +169,20 @@ class StudentTable extends Component {
   getStudentRows = () => {
     let listOfStudents = [];
     for (let i = 0; i < this.props.students.length; i++) {
-      listOfStudents.push(
-        <tr className="StudentRow" onClick={() => this.props.onSelect(this.props.students[i])}>
-          <td>{this.props.students[i].firstName}</td>
-          <td>{this.props.students[i].lastName}</td>
-          <td>{this.props.students[i].permissionDate}</td>
-        </tr>
-      );
+      if (this.props.students[i].firstName.toLowerCase().startsWith(this.props.firstNameFilter.toLowerCase())
+       && this.props.students[i].lastName.toLowerCase().startsWith(this.props.lastNameFilter.toLowerCase())
+       && (this.props.teacherFilter === ""
+       || this.props.students[i].currentTeacher.toLowerCase().startsWith(this.props.teacherFilter.toLowerCase())
+       || this.props.students[i].currentTeacher.toLowerCase().split(" ")[0].startsWith(this.props.teacherFilter.toLowerCase())
+       || this.props.students[i].currentTeacher.toLowerCase().split(" ")[this.props.students[i].currentTeacher.toLowerCase().split(" ").length - 1].startsWith(this.props.teacherFilter.toLowerCase()))) {
+        listOfStudents.push(
+          <tr className="StudentRow" onClick={() => this.props.onSelect(this.props.students[i])}>
+            <td>{this.props.students[i].firstName}</td>
+            <td>{this.props.students[i].lastName}</td>
+            <td>{this.props.students[i].permissionDate}</td>
+          </tr>
+        );
+      }
     }
     return listOfStudents;
   }
