@@ -31,6 +31,32 @@ class App extends Component {
     .then(response => response.json())
     .then((data) => {
       this.setState({students: data.students});
+      if (this.state.studentSelected !== {}) {
+        for (let student of data.students) {
+          if (student.id === this.state.studentSelected.id) {
+            this.setState({"studentSelected": student});
+            break;
+          }
+        }
+      }
+      console.log(data);
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  updateStudent = (id, data) => {
+    fetch(URL + "student/" + id, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => {
+      console.log(response);
+      this.getStudents();
     }, (error) => {
       console.error(error);
     });
@@ -38,6 +64,11 @@ class App extends Component {
 
   handleStudentRowClick = (student) => {
     this.setState({studentSelected: student});
+  }
+
+  handleStudentUpdate = (data) => {
+    delete data.editable;
+    this.updateStudent(this.state.studentSelected.id, data);
   }
 
   viewNewHandler = (show) => {
@@ -70,10 +101,10 @@ class App extends Component {
         <div className="FlexColumns">
           <div className="LeftColumn">
             <FilterStudent className="FilterStudents" viewNewHandler={this.viewNewHandler} />
-            <StudentTable className="StudentTable" students={this.state.students} onSelect={this.handleStudentRowClick}/>
+            <StudentTable className="StudentTable" students={this.state.students} onSelect={this.handleStudentRowClick} />
           </div>
           <div className="RightColumn">
-            <StudentInfo className="StudentInfo" viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} student={this.state.studentSelected}/>
+            <StudentInfo className="StudentInfo" onUpdate={this.handleStudentUpdate} viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} student={this.state.studentSelected} />
             <NewStudentPopup visibility={this.state.createNewVisibility} viewNewHandler={this.viewNewHandler} />
             <LogPopup visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} />
             <PrevDatesPopup visibility={this.state.moreVisibility} viewMoreHandler={this.viewMoreHandler} />
@@ -109,11 +140,11 @@ class FilterStudent extends Component {
             </tbody>
           </table>
         </div>
-        <div className="CreateNew">
+        {/* <div className="CreateNew">
           <button type="button" className="NewStudent" onClick={() => this.props.viewNewHandler(true)}>
             Create New Student
           </button>
-        </div>
+        </div> */}
       </div>
     )
   }
@@ -160,6 +191,8 @@ class StudentInfo extends Component {
     super(props);
     this.state = {
       editable: false,
+      firstName: this.props.student.firstName,
+      lastName: this.props.student.lastName,
       dob: this.props.student.dob,
       gender: this.props.student.gender,
       raceEthnicity: this.props.student.raceEthnicity,
@@ -178,6 +211,8 @@ class StudentInfo extends Component {
   resetFormState = () => {
     this.setState({
       editable: false,
+      firstName: this.props.student.firstName,
+      lastName: this.props.student.lastName,
       dob: this.props.student.dob,
       gender: this.props.student.gender,
       raceEthnicity: this.props.student.raceEthnicity,
@@ -212,6 +247,11 @@ class StudentInfo extends Component {
         </div>
         <table className="StudentInfoTable">
           <tbody>
+            {this.state.editable ?
+            <React.Fragment>
+              <StudentInfoField label="First Name" value={this.state.firstName} onChange={(v) => this.setState({"firstName": v})} editable={this.state.editable} />
+              <StudentInfoField label="Last Name" value={this.state.lastName} onChange={(v) => this.setState({"lastName": v})} editable={this.state.editable} />
+            </React.Fragment>: ""}
             <StudentInfoField label="Date of Birth" value={this.state.dob} onChange={(v) => this.setState({"dob": v})} editable={this.state.editable} />
             <StudentInfoField label="Gender" value={this.state.gender} onChange={(v) => this.setState({"gender": v})} editable={this.state.editable} />
             <StudentInfoField label="Race" value={this.state.raceEthnicity} onChange={(v) => this.setState({"raceEthnicity": v})} editable={this.state.editable} />
@@ -229,7 +269,21 @@ class StudentInfo extends Component {
           </tbody>
         </table>
         <div className="ButtonHolder">
-          <button type="button" className="SubmitButton" style={{"display": this.state.editable ? "block" : "none"}}>
+          <button type="button" className="SubmitButton" onClick={() => {
+            let output = JSON.parse(JSON.stringify(this.state));
+            delete output.editable;
+            delete output.gender;
+            delete output.raceEthnicity;
+            delete output.serviceArea;
+            delete output.school;
+            delete output.district;
+            delete output.county;
+            delete output.grade;
+            delete output.currentTeacher;
+            delete output.secondTeacher;
+            this.props.onUpdate(output);
+            this.setState({editable: false});
+            }} style={{"display": this.state.editable ? "block" : "none"}}>
             Submit Updated Info
           </button>
         </div>
