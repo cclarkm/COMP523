@@ -18,7 +18,8 @@ class App extends Component {
       studentSelected: {},
       firstNameFilter: "",
       lastNameFilter: "",
-      teacherFilter: ""
+      teacherFilter: "",
+      studentSelectedLogs: ""
     };
   }
 
@@ -48,6 +49,24 @@ class App extends Component {
     });
   }
 
+  getLogs = (id) => {
+    fetch(URL + "visitInformation/" + id, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({studentSelectedLogs: data.visits});
+      console.log(data);
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
   updateStudent = (id, data) => {
     fetch(URL + "student/" + id, {
       method: 'POST',
@@ -65,8 +84,43 @@ class App extends Component {
     });
   }
 
+  updateLog = (id, data) => {
+    fetch(URL + "visitInformation/" + id, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => {
+      console.log(response);
+      this.getLogs(this.state.studentSelected.id);
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  createLog = (data) => {
+    fetch(URL + "visitInformation", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => {
+      console.log(response);
+      this.getLogs(this.state.studentSelected.id);
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
   handleStudentRowClick = (student) => {
     this.setState({studentSelected: student});
+    this.getLogs(student.id);
   }
 
   handleStudentUpdate = (data) => {
@@ -110,18 +164,41 @@ class App extends Component {
     this.setState({"teacherFilter": filter});
   }
 
+  handleLogSubmit = (logState) => {
+    console.log({
+      "sid": this.state.studentSelected.id,
+      "dov": logState.dov,
+      "notes": logState.notes,
+      "tid": 2,
+      "logType": 5
+    });
+    this.createLog({
+      "sid": this.state.studentSelected.id,
+      "dov": logState.dov,
+      "notes": logState.notes,
+      "tid": 2,
+      "logType": 5
+    });
+  }
+
+  handleLogUpdate = (previousLog, logState) => {
+    this.updateLog(previousLog.id, {
+      "notes": logState.notes
+    });
+  }
+
   render() {
     return (
       <div className="App">
         <div className="FlexColumns">
           <div className="LeftColumn">
             <FilterStudent className="FilterStudents" viewNewHandler={this.viewNewHandler} onFirstNameChange={this.handleFirstNameFilter} onLastNameChange={this.handleLastNameFilter} onTeacherChange={this.handleTeacherFilter}/>
-            <StudentTable className="StudentTable" students={this.state.students} onSelect={this.handleStudentRowClick} firstNameFilter={this.state.firstNameFilter} lastNameFilter={this.state.lastNameFilter} teacherFilter={this.state.teacherFilter}/>
+            <StudentTable className="StudentTable" studentSelected={this.state.studentSelected} students={this.state.students} onSelect={this.handleStudentRowClick} firstNameFilter={this.state.firstNameFilter} lastNameFilter={this.state.lastNameFilter} teacherFilter={this.state.teacherFilter}/>
           </div>
           <div className="RightColumn">
             <StudentInfo className="StudentInfo" onUpdate={this.handleStudentUpdate} viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} student={this.state.studentSelected} />
             <NewStudentPopup visibility={this.state.createNewVisibility} viewNewHandler={this.viewNewHandler} />
-            <LogPopup visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} />
+            <LogPopup student={this.state.studentSelected} visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} logs={this.state.studentSelectedLogs} onLogSubmit={this.handleLogSubmit} onLogUpdate={this.handleLogUpdate} />
             <PrevDatesPopup visibility={this.state.moreVisibility} viewMoreHandler={this.viewMoreHandler} />
           </div>
         </div>
@@ -175,8 +252,16 @@ class StudentTable extends Component {
        || this.props.students[i].currentTeacher.toLowerCase().startsWith(this.props.teacherFilter.toLowerCase())
        || this.props.students[i].currentTeacher.toLowerCase().split(" ")[0].startsWith(this.props.teacherFilter.toLowerCase())
        || this.props.students[i].currentTeacher.toLowerCase().split(" ")[this.props.students[i].currentTeacher.toLowerCase().split(" ").length - 1].startsWith(this.props.teacherFilter.toLowerCase()))) {
+        let style = {};
+        if (this.props.studentSelected.id !== undefined && this.props.studentSelected.id === this.props.students[i].id) {
+          style = {
+            "border-style": "solid",
+            "background": "rgba(126, 197, 255, 0.3)",
+            'cursor': "auto"
+          };
+        }
         listOfStudents.push(
-          <tr className="StudentRow" onClick={() => this.props.onSelect(this.props.students[i])}>
+          <tr className="StudentRow" style={style} onClick={() => this.props.onSelect(this.props.students[i])}>
             <td>{this.props.students[i].firstName}</td>
             <td>{this.props.students[i].lastName}</td>
             <td>{this.props.students[i].permissionDate}</td>
@@ -327,7 +412,7 @@ class StudentInfo extends Component {
           Admissions Info
         </div>
         <div className="SpecialHeading">
-          <span>Total Prior Admissions: <b>42</b></span>
+          <span>Total Prior Admissions: <b>0</b></span>
         </div>
         <div className="TableHeading">
           Current Admissions Dates
@@ -388,6 +473,17 @@ class StudentInfoField extends Component {
 }
 
 class LogPopup extends Component {
+  getLogs = () => {
+    let listOfLogs = [];
+    listOfLogs.push(<Log log={{"dov": "", "teacher": "", "notes": "", "type": "General"}} new={true} onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate}/>);
+    console.log(this);
+    for (let i = 0; i < this.props.logs.length; i++) {
+      let log = this.props.logs[i];
+      listOfLogs.push(<Log log={log} new={false} onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate} />);
+    }
+    return listOfLogs;
+  }
+
   render() {
     let style = {
       'visibility': this.props.visibility
@@ -397,12 +493,10 @@ class LogPopup extends Component {
         <div className="InnerPopup">
           <div className="PopupHeader">
             <button className="BackButton" onClick={() => this.props.viewLogsHandler(false)}>Go Back</button>
-            <div className="PopTitle">View Logs for <b>Idrees Hassan</b></div>
+            <div className="PopTitle">View Logs for <b>{this.props.student.firstName + " " + this.props.student.lastName}</b></div>
           </div>
           <table className="PopTable">
-              <Log />
-              <Log />
-              <Log />
+            {this.getLogs()}
           </table>
         </div>
       </div>
@@ -411,27 +505,45 @@ class LogPopup extends Component {
 }
 
 class Log extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dov: "",
+      teacher: "",
+      logType: "",
+      notes: ""
+    };
+  }
+
   render() {
     return (
       <tr className="Log">
         <div className="LogHeader">
           <div className="LogHeaderSection">
             <span className="PopSpan">Date of Log</span>
-            <input className="PopInput" type="text"></input>
+            <input className="PopInput" type="text" defaultValue={this.props.log.dov} onChange={(e) => this.setState({"dov": e.target.value})}></input>
           </div>
           <div className="LogHeaderSection">
             <span className="PopSpan">Teacher</span>
-            <input className="PopInput" type="text"></input>
+            <input className="PopInput" type="text" defaultValue={this.props.log.teacher} onChange={(e) => this.setState({"teacher": e.target.value})}></input>
           </div>
           <div className="LogHeaderSection">
             <span className="PopSpan">Type</span>
-            <input className="PopInput" type="text"></input>
+            <input className="PopInput" type="text" defaultValue={this.props.log.logType} onChange={(e) => this.setState({"logType": e.target.value})}></input>
           </div>
         </div>
         <div className="LogBody">
-          <textarea rows="7" cols="85" className="NoteInput" placeholder="Notes">
+          <textarea rows="7" cols="85" className="NoteInput" placeholder="Notes" defaultValue={this.props.log.notes}  onChange={(e) => this.setState({"notes": e.target.value})}>
           </textarea>
-          <button className="LogSubmit">Update</button>
+          <button className="LogSubmit" onClick={() => {
+            if (this.props.new) {
+              this.props.onSubmit(this.state);
+            } else {
+              this.props.onUpdate(this.props.log, this.state);
+            }
+          }}>
+            {this.props.new ? "Create New Log" : "Update"}
+          </button>
         </div>
       </tr>
     );
