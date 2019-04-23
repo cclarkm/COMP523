@@ -69,7 +69,7 @@ class App extends Component {
 
   updateStudent = (id, data) => {
     fetch(URL + "student/" + id, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': TOKEN
@@ -86,7 +86,7 @@ class App extends Component {
 
   updateLog = (id, data) => {
     fetch(URL + "visitInformation/" + id, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': TOKEN
