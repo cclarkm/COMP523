@@ -378,21 +378,26 @@ class App extends Component {
       "sid": this.state.currentStudent.id,
       "dov": logState.dov,
       "notes": logState.notes,
-      "tid": 2,
-      "logType": 5
+      "tid": logState.teacher,
+      "logType": logState.logType,
+      "clinic": true
     });
     this.createLog({
       "sid": this.state.currentStudent.id,
       "dov": logState.dov,
       "notes": logState.notes,
-      "tid": 2,
-      "logType": 5
+      "tid": logState.teacher,
+      "logType": logState.logType,
+      "clinic": true
     });
   }
 
   handleLogUpdate = (previousLog, logState) => {
     this.updateLog(previousLog.id, {
-      "notes": logState.notes
+      "dov": logState.dov,
+      "notes": logState.notes,
+      "tid": logState.teacher,
+      "logType": logState.logType
     });
   }
 
@@ -418,7 +423,7 @@ class App extends Component {
             logTypes={this.state.logTypes}
             onUpdate={this.handleStudentUpdate} viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} student={this.state.currentStudent} />
             <NewStudentPopup visibility={this.state.createNewVisibility} viewNewHandler={this.viewNewHandler} />
-            <LogPopup student={this.state.currentStudent} visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} logs={this.state.currentStudentLogs} onLogSubmit={this.handleLogSubmit} onLogUpdate={this.handleLogUpdate} />
+            <LogPopup student={this.state.currentStudent} teachers={this.state.teachers} logTypes={this.state.logTypes} visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} logs={this.state.currentStudentLogs} onLogSubmit={this.handleLogSubmit} onLogUpdate={this.handleLogUpdate} />
             <AdmissionsPopup visibility={this.state.moreVisibility} admissions={this.state.currentStudentAdmissions} viewMoreHandler={this.viewMoreHandler} />
           </div>
         </div>
@@ -721,11 +726,11 @@ class StudentInfoSelect extends Component {
 class LogPopup extends Component {
   getLogs = () => {
     let listOfLogs = [];
-    listOfLogs.push(<Log log={{"dov": "", "teacher": "", "notes": "", "type": "General"}} new={true} onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate}/>);
+    listOfLogs.push(<Log log={{"dov": "", "teacher": "", "notes": "", "type": ""}} teachers={this.props.teachers} logTypes={this.props.logTypes} new={true} onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate}/>);
     console.log(this);
     for (let i = 0; i < this.props.logs.length; i++) {
       let log = this.props.logs[i];
-      listOfLogs.push(<Log log={log} new={false} onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate} />);
+      listOfLogs.push(<Log log={log} teachers={this.props.teachers} logTypes={this.props.logTypes} new={false}  onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate} />);
     }
     return listOfLogs;
   }
@@ -751,13 +756,50 @@ class LogPopup extends Component {
 }
 
 class Log extends Component {
+  getID = (table, textKey, idKey, currentText) => {
+    if (this.props.new && table.length === 0) {
+      return 1;
+    }
+    if (currentText === undefined) {
+      return "";
+    }
+    for (let i = 0; i < table.length; i++) {
+      if (table[i][textKey] === currentText) {
+        return table[i][idKey];
+      }
+    }
+    return "";
+  }
+
+  getTeacherID = (table, name) => {
+    if (this.props.new && table.length === 0) {
+      return 1;
+    }
+    if (name === undefined) {
+      return "";
+    }
+    for (let i = 0; i < table.length; i++) {
+      if (table[i]["firstName"] + " " + table[i]["lastName"] === name) {
+        return table[i].tid;
+      }
+    }
+    return "";
+  }
+
+  reset = () => {
+    this.setState({
+      "dov": "",
+      notes: ""
+    });
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      dov: "",
-      teacher: "",
-      logType: "",
-      notes: ""
+      dov: this.props.log.dov,
+      teacher: this.getTeacherID(this.props.teachers, this.props.log.teacher),
+      logType: this.getID(this.props.logTypes, "logType", "lid", this.props.log.logType),
+      notes: this.props.log.notes
     };
   }
 
@@ -767,23 +809,26 @@ class Log extends Component {
         <div className="LogHeader">
           <div className="LogHeaderSection">
             <span className="PopSpan">Date of Log</span>
-            <input className="PopInput" type="text" defaultValue={this.props.log.dov} onChange={(e) => this.setState({"dov": e.target.value})}></input>
+            <input className="PopInput" type="text" value={this.state.dov} onChange={(e) => this.setState({"dov": e.target.value})}></input>
           </div>
           <div className="LogHeaderSection">
             <span className="PopSpan">Teacher</span>
-            <input className="PopInput" type="text" defaultValue={this.props.log.teacher} onChange={(e) => this.setState({"teacher": e.target.value})}></input>
+            {/* <input className="PopInput" type="text" defaultValue={this.props.log.teacher} onChange={(e) => this.setState({"teacher": e.target.value})}></input> */}
+            <LogSelect value={this.state.teacher} options={this.props.teachers.map(o => {return {"text": o.firstName + " " + o.lastName, "value": o.tid}})} onChange={(v) => this.setState({"teacher": v})} editable={true} />
           </div>
           <div className="LogHeaderSection">
             <span className="PopSpan">Type</span>
-            <input className="PopInput" type="text" defaultValue={this.props.log.logType} onChange={(e) => this.setState({"logType": e.target.value})}></input>
+            {/* <input className="PopInput" type="text" defaultValue={this.props.log.logType} onChange={(e) => this.setState({"logType": e.target.value})}></input> */}
+            <LogSelect value={this.state.logType} options={this.props.logTypes.map(o => {return {"text": o.logType, "value": o.lid}})} onChange={(v) => this.setState({"logType": v})} editable={true} />
           </div>
         </div>
         <div className="LogBody">
-          <textarea rows="7" cols="85" className="NoteInput" placeholder="Notes" defaultValue={this.props.log.notes}  onChange={(e) => this.setState({"notes": e.target.value})}>
+          <textarea rows="7" cols="85" className="NoteInput" placeholder="Notes" value={this.state.notes}  onChange={(e) => this.setState({"notes": e.target.value})}>
           </textarea>
           <button className="LogSubmit" onClick={() => {
             if (this.props.new) {
               this.props.onSubmit(this.state);
+              this.reset();
             } else {
               this.props.onUpdate(this.props.log, this.state);
             }
@@ -792,6 +837,27 @@ class Log extends Component {
           </button>
         </div>
       </tr>
+    );
+  }
+}
+
+class LogSelect extends Component {
+
+  getOptions = () => {
+    let listOfOptions = [];
+    for (let i = 0; i < this.props.options.length; i++) {
+      listOfOptions.push(
+        <option value={this.props.options[i].value}>{this.props.options[i].text}</option>
+      );
+    }
+    return listOfOptions;
+  }
+
+  render() {
+    return (
+      <select value={this.props.value} className="InputSelect" onChange={(e) => this.props.onChange(e.target.value)} disabled={!this.props.editable}>
+        {this.getOptions()}
+      </select>
     );
   }
 }
