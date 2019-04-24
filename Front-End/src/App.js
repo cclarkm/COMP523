@@ -404,6 +404,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+      <div className="Nav">
+        <div className="Title">
+          UNC Hospital School
+        </div>
+      </div>
         <div className="FlexColumns">
           <div className="LeftColumn">
             <FilterStudent className="FilterStudents" viewNewHandler={this.viewNewHandler} onFirstNameChange={this.handleFirstNameFilter} onLastNameChange={this.handleLastNameFilter} onTeacherChange={this.handleTeacherFilter}/>
