@@ -19,7 +19,8 @@ class App extends Component {
       firstNameFilter: "",
       lastNameFilter: "",
       teacherFilter: "",
-      studentSelectedLogs: ""
+      studentSelectedLogs: "",
+      showRightColumn: false
     };
   }
 
@@ -119,7 +120,10 @@ class App extends Component {
   }
 
   handleStudentRowClick = (student) => {
-    this.setState({studentSelected: student});
+    this.setState({
+      studentSelected: student,
+      showRightColumn: true
+    });
     this.getLogs(student.id);
   }
 
@@ -195,7 +199,7 @@ class App extends Component {
             <FilterStudent className="FilterStudents" viewNewHandler={this.viewNewHandler} onFirstNameChange={this.handleFirstNameFilter} onLastNameChange={this.handleLastNameFilter} onTeacherChange={this.handleTeacherFilter}/>
             <StudentTable className="StudentTable" studentSelected={this.state.studentSelected} students={this.state.students} onSelect={this.handleStudentRowClick} firstNameFilter={this.state.firstNameFilter} lastNameFilter={this.state.lastNameFilter} teacherFilter={this.state.teacherFilter}/>
           </div>
-          <div className="RightColumn">
+          <div className="RightColumn" style={this.state.showRightColumn ? {"width": "50%"} : {}}>
             <StudentInfo className="StudentInfo" onUpdate={this.handleStudentUpdate} viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} student={this.state.studentSelected} />
             <NewStudentPopup visibility={this.state.createNewVisibility} viewNewHandler={this.viewNewHandler} />
             <LogPopup student={this.state.studentSelected} visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} logs={this.state.studentSelectedLogs} onLogSubmit={this.handleLogSubmit} onLogUpdate={this.handleLogUpdate} />
@@ -264,7 +268,8 @@ class StudentTable extends Component {
           <tr className="StudentRow" style={style} onClick={() => this.props.onSelect(this.props.students[i])}>
             <td>{this.props.students[i].firstName}</td>
             <td>{this.props.students[i].lastName}</td>
-            <td>{this.props.students[i].permissionDate}</td>
+            <td>{this.props.students[i].currentTeacher}</td>
+            <td  className="StudentRowDate">{this.props.students[i].permissionDate}</td>
           </tr>
         );
       }
@@ -278,9 +283,10 @@ class StudentTable extends Component {
         <table className="StudentTable">
           <thead>
             <tr className="StudentTableHeader">
-              <td className="StudentLeft">First Name</td>
-              <td className="StudentCenter">Last Name</td>
-              <td className="StudentRight">Admit Date</td>
+              <td>First Name</td>
+              <td>Last Name</td>
+              <td>Current Teacher</td>
+              <td>Admit Date</td>
             </tr>
           </thead>
           <tbody>
