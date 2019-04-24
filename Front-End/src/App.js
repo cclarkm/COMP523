@@ -356,7 +356,7 @@ class StudentInfo extends Component {
     return (
       <div className="StudentInfo">
         <div className="Heading">
-          {(this.props.student.firstName !== undefined) ? <span>Student Info for <b>{this.props.student.firstName} {this.props.student.lastName}</b></span> : "No Student Selected"}
+          {(this.props.student.firstName !== undefined) ? <span>Student <b>{this.props.student.firstName} {this.props.student.lastName}</b></span> : "No Student Selected"}
         </div>
         <table className="StudentInfoTable">
           <tbody>
@@ -420,7 +420,7 @@ class StudentInfo extends Component {
         <div className="SpecialHeading">
           <span>Total Prior Admissions: <b>0</b></span>
         </div>
-        <div className="TableHeading">
+        {/* <div className="TableHeading">
           Current Admissions Dates
         </div>
         <table className="DateTable">
@@ -434,31 +434,31 @@ class StudentInfo extends Component {
               <td><input type="text" className="InputField"></input></td>
             </tr>
           </tbody>
-        </table>
+        </table> */}
         <div className="TableHeading">
           Previous Admissions
         </div>
         <table className="AdmissionTable">
           <tbody>
-            <tr>
-              <td><input type="text" className="Multi1"></input></td>
-              <td className="Text">through</td>
-              <td><input type="text" className="Multi1"></input></td>
+            <tr className="AdmissionTableRow">
+              <td><input type="text" className="AdmissionField"></input></td>
+              <td className="AdmissionText">through</td>
+              <td><input type="text" className="AdmissionField"></input></td>
             </tr>
-            <tr>
-              <td><input type="text" className="Multi1"></input></td>
-              <td className="Text">through</td>
-              <td><input type="text" className="Multi1"></input></td>
+            <tr className="AdmissionTableRow">
+              <td><input type="text" className="AdmissionField"></input></td>
+              <td className="AdmissionText">through</td>
+              <td><input type="text" className="AdmissionField"></input></td>
             </tr>
-            <tr>
-              <td><input type="text" className="Multi1"></input></td>
-              <td className="Text">through</td>
-              <td><input type="text" className="Multi1"></input></td>
+            <tr className="AdmissionTableRow">
+              <td><input type="text" className="AdmissionField"></input></td>
+              <td className="AdmissionText">through</td>
+              <td><input type="text" className="AdmissionField"></input></td>
             </tr>
           </tbody>
         </table>
         <div style={{ "width": "60%", "display": "flex", "margin": "0 auto" }}>
-          <button type="button" className="SmallButton" onClick={() => this.props.viewMoreHandler(true)}>
+          <button type="button" className="Button" onClick={() => this.props.viewMoreHandler(true)}>
             View More
           </button>
         </div>
@@ -683,10 +683,10 @@ class PrevDatesPopup extends Component {
 class Dates extends Component {
   render() {
     return (
-      <tr className="DateRow">
-            <td><input type="text" className="Multi1"></input></td>
-            <td className="Text">through</td>
-            <td><input type="text" className="Multi2"></input></td>
+      <tr className="AdmissionTableRow">
+        <td><input type="text" className="AdmissionField"></input></td>
+        <td className="AdmissionText">through</td>
+        <td><input type="text" className="AdmissionField"></input></td>
       </tr>
     );
   }

@@ -3,8 +3,8 @@
   position: relative;
   width: 100%;
   height: 100vh;
-  /* background-color: rgb(75, 156, 221); */
-  background-image: linear-gradient(160deg, rgb(75, 156, 221), #66BDCC);;
+  background-color: rgb(255, 255, 255);
+  /* background-image: linear-gradient(160deg, rgb(75, 156, 221), #66BDCC);; */
 }
 
 
@@ -60,7 +60,6 @@
   padding:10px;
   margin: 20px;
   overflow-x: scroll;
-  background-color: white;
 }
 
 .StudentTable {
@@ -99,16 +98,20 @@
   flex-grow: 1;
   margin: 20px;
   float:right;
-  padding: 10px;
+  padding: 15px;
 }
 
 .StudentInfo, .FilterStudents, .StudentTableContainer {
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0px 2px 8px 1px rgba(0,0,0,0.2);
+  /* background-color: rgb(233, 233, 233); */
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color: rgba(0, 0, 0, 0.068);
 }
 
 .InputField:read-only {
-  border-color: rgb(223, 223, 223);
   /* border-width: 1px; */
+  border-color: rgb(223, 223, 223);
   user-select: none;
   outline-width: 0;
   /* border: none; */
@@ -122,22 +125,6 @@
 }
 
 
-.Button {
-  text-align: center;
-  font-size: 30px;
-  min-width: 70%;
-  display: table;
-  margin: 20px auto;
-}
-
-.SmallButton {
-  text-align: center;
-  font-size: 25px;
-  min-width: 70%;
-  display: table;
-  margin: 20px auto;
-}
-
 .BackButton {
   font-size: 30px;
   background: none;
@@ -149,15 +136,27 @@
   white-space: nowrap;
 }
 
-.Button, .SmallButton {
-  background-image: linear-gradient(135deg, rgb(75, 156, 221), rgb(117, 186, 243));;
+.Button {
+  text-align: center;
+  font-size: 25px;
+  min-width: 70%;
+  display: table;
+  margin: 20px auto;
+  /* background-image: linear-gradient(135deg, rgb(75, 156, 221), rgb(117, 186, 243));; */
+  background: rgb(75, 156, 221);
   color: white;
-  border: none;
+  border-style: solid;
+  border-color: rgb(69, 144, 206);
   box-shadow: 0px 3px 5px rgba(0,0,0,0.20);
   padding: 5px;
   min-width: 10px;
   flex-grow: 1;
   margin: 20px;
+  outline: none;
+}
+
+.Button:active {
+  box-shadow: none;
 }
 
 .SubmitButton {
@@ -178,14 +177,9 @@
   margin-bottom: 5px;
 }
 
-.Button, .BackButton, .SubmitButton, .SmallButton, .LogSubmit {
-  transition-duration: 0.05s;
+.Button, .BackButton, .SubmitButton, .LogSubmit {
   cursor: pointer;
   border-radius: 5px;
-}
-
-.Button:hover, .BackButton:hover, .SubmitButton:hover, .SmallButton:hover, .LogSubmit:hover {
-  transform: scale(1.01);
 }
 
 .NewStudent {
@@ -204,13 +198,13 @@
 }
 
 .Heading {
-  font-size: 45px;
-  margin: 10px;
+  font-size: 35px;
+  margin-bottom: 10px;
   /* padding: 10px; */
 }
 
 .FilterHeading {
-  font-size: 45px;
+  font-size: 35px;
 }
 
 .NewLine {
@@ -233,9 +227,10 @@
 .InputLabel, .LeftInputLabel {
   width: 180px;
   font-size:20px;
-  text-align: right;
+  /* text-align: right; */
+  text-align: left;
   padding-right: 10px;
-  padding-left: 10px;
+  /* padding-left: 10px; */
   /* background: yellow; */
 }
 
@@ -254,25 +249,25 @@
 
 .DateTable {
   width: 100%;
-  padding-left: 20px;
+  /* padding-left: 10px; */
   /* padding-right: 20px; */
   border-spacing: 0 6px;
 }
 
 .SmallHeading {
-  font-size: 40px;
-  padding: 10px;
+  font-size: 36px;
+  /* padding-left: 10px; */
   padding-right: 0;
 }
 
 .SpecialHeading {
   font-size: 25px;
-  margin: 10px;
+  margin-top: 10px;
 }
 
 .TableHeading {
   font-size: 30px;
-  margin-left:10px;
+  /* margin-left:10px; */
   margin-top: 20px;
 }
 
@@ -287,31 +282,25 @@
 }
 
 .AdmissionTable {
+  overflow-y: auto;
   width: 100%;
-  position: relative;
-  margin: 0 auto;
-  padding-left: 10px;
   padding-right: 10px;
 }
 
-.Multi1 {
-  position: relative;
-  left: 5%;
-  font-size: 20px;
-  width: 90%;
+.AdmissionTableRow {
+  width: 100%;
+  display: flex;
 }
 
-.Multi2 {
-  position: relative;
-  left: 3%;
+.AdmissionField {
   font-size: 20px;
-  width: 90%;
+  width: 100%;
 }
 
-.Text {
+.AdmissionText {
   font-size: 20px;
-  padding-left: 5px;
-  padding-right: 5px;
+  margin-left: 13px;
+  margin-right: 10px;
   text-align: center;
 }
 
