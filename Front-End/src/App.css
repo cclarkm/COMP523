@@ -109,22 +109,6 @@
   outline-color: rgba(0, 0, 0, 0.068);
 }
 
-.InputField:read-only {
-  /* border-width: 1px; */
-  border-color: rgb(223, 223, 223);
-  user-select: none;
-  outline-width: 0;
-  /* border: none; */
-  /* font-weight: bold; */
-}
-
-.InputField:not(read-only) {
-  border-style: solid;
-  border-color: rgb(75, 156, 221);
-  border-width: 1px;
-}
-
-
 .BackButton {
   font-size: 30px;
   background: none;
@@ -142,7 +126,6 @@
   min-width: 70%;
   display: table;
   margin: 20px auto;
-  /* background-image: linear-gradient(135deg, rgb(75, 156, 221), rgb(117, 186, 243));; */
   background: rgb(75, 156, 221);
   color: white;
   border-style: solid;
@@ -240,11 +223,41 @@
   white-space: nowrap;
 }
 
+.InputField:read-only {
+  /* border-width: 1px; */
+  border-color: rgb(223, 223, 223);
+  user-select: none;
+  outline-width: 0;
+  /* border: none; */
+  /* font-weight: bold; */
+}
+
+.InputField:not(read-only) {
+  border-style: solid;
+  border-color: rgb(75, 156, 221);
+  border-width: 1px;
+}
+
 .InputField {
   font-size: 20px;
   width: 95%;
   min-width: 150px;
   margin: 1.3px;
+  transition-duration: 0.15s;
+}
+
+.InputSelect {
+  color: black;
+  border-color: rgb(75, 156, 221);
+  font-size: 20px;
+  width: 95%;
+  min-width: 150px;
+  margin: 1.3px;
+  border-radius: 0;
+}
+
+.InputSelect:disabled {
+  border-color: rgb(223, 223, 223);
 }
 
 .DateTable {
@@ -258,6 +271,7 @@
   font-size: 36px;
   /* padding-left: 10px; */
   padding-right: 0;
+  padding-top: 10px;
 }
 
 .SpecialHeading {
@@ -295,6 +309,7 @@
 .AdmissionField {
   font-size: 20px;
   width: 100%;
+  text-align: center;
 }
 
 .AdmissionText {

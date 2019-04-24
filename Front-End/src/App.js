@@ -8,6 +8,15 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.getStudents();
+    this.getGenders();
+    this.getRaces();
+    this.getGrades();
+    this.getServiceAreas();
+    this.getCounties();
+    this.getDistricts();
+    this.getSchools();
+    this.getTeachers();
+    this.getLogTypes();
 
     //Assign state's default values
     this.state = {
@@ -15,12 +24,22 @@ class App extends Component {
       createNewVisibility: "hidden",
       popupVisibility: "hidden",
       moreVisibility: "hidden",
-      studentSelected: {},
+      currentStudent: {},
+      currentStudentLogs: [],
+      currentStudentAdmissions: [],
       firstNameFilter: "",
       lastNameFilter: "",
       teacherFilter: "",
-      studentSelectedLogs: "",
-      showRightColumn: false
+      showRightColumn: false,
+      genders: [],
+      races: [],
+      grades: [],
+      serviceAreas: [],
+      counties: [],
+      districts: [],
+      schools: [],
+      teachers: [],
+      logTypes: []
     };
   }
 
@@ -36,15 +55,14 @@ class App extends Component {
     .then(response => response.json())
     .then((data) => {
       this.setState({students: data.students});
-      if (this.state.studentSelected !== {}) {
+      if (this.state.currentStudent !== {}) {
         for (let student of data.students) {
-          if (student.id === this.state.studentSelected.id) {
-            this.setState({"studentSelected": student});
+          if (student.id === this.state.currentStudent.id) {
+            this.setState({"currentStudent": student});
             break;
           }
         }
       }
-      console.log(data);
     }, (error) => {
       console.error(error);
     });
@@ -61,8 +79,194 @@ class App extends Component {
     })
     .then(response => response.json())
     .then((data) => {
-      this.setState({studentSelectedLogs: data.visits});
-      console.log(data);
+      this.setState({currentStudentLogs: data.visits});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getAdmissions = (id) => {
+    fetch(URL + "admission/" + id, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({currentStudentAdmissions: data.admissions});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getGenders = () => {
+    fetch(URL + "gender", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({genders: data.genders});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getRaces = () => {
+    fetch(URL + "raceEth", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({races: data.raceEths});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getGrades = () => {
+    fetch(URL + "grade", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({grades: data.grades});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getServiceAreas = () => {
+    fetch(URL + "serviceArea", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({serviceAreas: data.serviceAreas});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getCounties = () => {
+    fetch(URL + "county", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({counties: data.counties});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getDistricts = () => {
+    fetch(URL + "district", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({districts: data.districts});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getSchools = () => {
+    fetch(URL + "school", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({schools: data.schools});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getSchools = () => {
+    fetch(URL + "school", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({schools: data.schools});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getTeachers = () => {
+    fetch(URL + "teacher", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({teachers: data.teachers});
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  getLogTypes = () => {
+    fetch(URL + "logType", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({logTypes: data.logTypes});
     }, (error) => {
       console.error(error);
     });
@@ -96,7 +300,7 @@ class App extends Component {
     })
     .then((response) => {
       console.log(response);
-      this.getLogs(this.state.studentSelected.id);
+      this.getLogs(this.state.currentStudent.id);
     }, (error) => {
       console.error(error);
     });
@@ -113,7 +317,7 @@ class App extends Component {
     })
     .then((response) => {
       console.log(response);
-      this.getLogs(this.state.studentSelected.id);
+      this.getLogs(this.state.currentStudent.id);
     }, (error) => {
       console.error(error);
     });
@@ -121,15 +325,16 @@ class App extends Component {
 
   handleStudentRowClick = (student) => {
     this.setState({
-      studentSelected: student,
+      currentStudent: student,
       showRightColumn: true
     });
     this.getLogs(student.id);
+    this.getAdmissions(student.id);
   }
 
   handleStudentUpdate = (data) => {
     delete data.editable;
-    this.updateStudent(this.state.studentSelected.id, data);
+    this.updateStudent(this.state.currentStudent.id, data);
   }
 
   viewNewHandler = (show) => {
@@ -170,14 +375,14 @@ class App extends Component {
 
   handleLogSubmit = (logState) => {
     console.log({
-      "sid": this.state.studentSelected.id,
+      "sid": this.state.currentStudent.id,
       "dov": logState.dov,
       "notes": logState.notes,
       "tid": 2,
       "logType": 5
     });
     this.createLog({
-      "sid": this.state.studentSelected.id,
+      "sid": this.state.currentStudent.id,
       "dov": logState.dov,
       "notes": logState.notes,
       "tid": 2,
@@ -197,13 +402,24 @@ class App extends Component {
         <div className="FlexColumns">
           <div className="LeftColumn">
             <FilterStudent className="FilterStudents" viewNewHandler={this.viewNewHandler} onFirstNameChange={this.handleFirstNameFilter} onLastNameChange={this.handleLastNameFilter} onTeacherChange={this.handleTeacherFilter}/>
-            <StudentTable className="StudentTable" studentSelected={this.state.studentSelected} students={this.state.students} onSelect={this.handleStudentRowClick} firstNameFilter={this.state.firstNameFilter} lastNameFilter={this.state.lastNameFilter} teacherFilter={this.state.teacherFilter}/>
+            <StudentTable className="StudentTable" currentStudent={this.state.currentStudent} students={this.state.students} onSelect={this.handleStudentRowClick} firstNameFilter={this.state.firstNameFilter} lastNameFilter={this.state.lastNameFilter} teacherFilter={this.state.teacherFilter}/>
           </div>
           <div className="RightColumn" style={this.state.showRightColumn ? {"width": "50%"} : {}}>
-            <StudentInfo className="StudentInfo" onUpdate={this.handleStudentUpdate} viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} student={this.state.studentSelected} />
+            <StudentInfo className="StudentInfo"
+            admissions={this.state.currentStudentAdmissions}
+            genders={this.state.genders}
+            races={this.state.races}
+            grades={this.state.grades}
+            serviceAreas={this.state.serviceAreas}
+            counties={this.state.counties}
+            districts={this.state.districts}
+            schools={this.state.schools}
+            teachers={this.state.teachers}
+            logTypes={this.state.logTypes}
+            onUpdate={this.handleStudentUpdate} viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} student={this.state.currentStudent} />
             <NewStudentPopup visibility={this.state.createNewVisibility} viewNewHandler={this.viewNewHandler} />
-            <LogPopup student={this.state.studentSelected} visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} logs={this.state.studentSelectedLogs} onLogSubmit={this.handleLogSubmit} onLogUpdate={this.handleLogUpdate} />
-            <PrevDatesPopup visibility={this.state.moreVisibility} viewMoreHandler={this.viewMoreHandler} />
+            <LogPopup student={this.state.currentStudent} visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} logs={this.state.currentStudentLogs} onLogSubmit={this.handleLogSubmit} onLogUpdate={this.handleLogUpdate} />
+            <AdmissionsPopup visibility={this.state.moreVisibility} admissions={this.state.currentStudentAdmissions} viewMoreHandler={this.viewMoreHandler} />
           </div>
         </div>
       </div>
@@ -257,7 +473,7 @@ class StudentTable extends Component {
        || this.props.students[i].currentTeacher.toLowerCase().split(" ")[0].startsWith(this.props.teacherFilter.toLowerCase())
        || this.props.students[i].currentTeacher.toLowerCase().split(" ")[this.props.students[i].currentTeacher.toLowerCase().split(" ").length - 1].startsWith(this.props.teacherFilter.toLowerCase()))) {
         let style = {};
-        if (this.props.studentSelected.id !== undefined && this.props.studentSelected.id === this.props.students[i].id) {
+        if (this.props.currentStudent.id !== undefined && this.props.currentStudent.id === this.props.students[i].id) {
           style = {
             "border-style": "solid",
             "background": "rgba(126, 197, 255, 0.3)",
@@ -300,45 +516,62 @@ class StudentTable extends Component {
 }
 
 class StudentInfo extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+  getID = (table, textKey, idKey, currentText) => {
+    for (let i = 0; i < table.length; i++) {
+      if (table[i][textKey] === currentText) {
+        return table[i][idKey];
+      }
+    }
+  }
+
+  getTeacherID = (table, name) => {
+    for (let i = 0; i < table.length; i++) {
+      if (table[i]["firstName"] + " " + table[i]["lastName"] === name) {
+        return table[i].tid;
+      }
+    }
+  }
+
+  getCleanState = () => {
+    return {
       editable: false,
       firstName: this.props.student.firstName,
       lastName: this.props.student.lastName,
       dob: this.props.student.dob,
-      gender: this.props.student.gender,
-      raceEthnicity: this.props.student.raceEthnicity,
+      gender: this.getID(this.props.genders, "gender", "gid", this.props.student.gender),
+      raceEthnicity: this.getID(this.props.races, "raceEth", "rid", this.props.student.raceEthnicity),
       hispanic: this.props.student.hispanic,
-      grade: this.props.student.grade,
-      serviceArea: this.props.student.serviceArea,
-      county: this.props.student.county,
-      district: this.props.student.district,
-      school: this.props.student.school,
+      grade: this.getID(this.props.grades, "grade", "gid", this.props.student.grade),
+      serviceArea: this.getID(this.props.serviceAreas, "field1", "sid", this.props.student.serviceArea),
+      county: this.getID(this.props.counties, "county", "cid", this.props.student.county),
+      district: this.getID(this.props.districts, "district", "did", this.props.student.district),
+      school: this.getID(this.props.schools, "school", "sid", this.props.student.school),
       label: this.props.student.label,
-      currentTeacher: this.props.student.currentTeacher,
-      secondTeacher: this.props.student.secondTeacher
+      currentTeacher: this.getTeacherID(this.props.teachers, this.props.student.currentTeacher),
+      secondTeacher: this.getTeacherID(this.props.teachers, this.props.student.secondTeacher),
     };
   }
 
+  constructor(props) {
+    super(props);
+    this.state = this.getCleanState();
+  }
+
   resetFormState = () => {
-    this.setState({
-      editable: false,
-      firstName: this.props.student.firstName,
-      lastName: this.props.student.lastName,
-      dob: this.props.student.dob,
-      gender: this.props.student.gender,
-      raceEthnicity: this.props.student.raceEthnicity,
-      hispanic: this.props.student.hispanic,
-      grade: this.props.student.grade,
-      serviceArea: this.props.student.serviceArea,
-      county: this.props.student.county,
-      district: this.props.student.district,
-      school: this.props.student.school,
-      label: this.props.student.label,
-      currentTeacher: this.props.student.currentTeacher,
-      secondTeacher: this.props.student.secondTeacher
-    });
+    this.setState(this.getCleanState());
+  }
+
+  getAdmissionRows = (limit = -1) => {
+    let listOfAdmissions = [];
+    if (limit === -1) {
+      limit = this.props.admissions.length;
+    }
+    for (let i = 0; i < Math.min(this.props.admissions.length, limit); i++) {
+      listOfAdmissions.push(
+        <DateRange start={this.props.admissions[i].admissionDate} end={this.props.admissions[i].dischargeDate} />
+      );
+    }
+    return listOfAdmissions;
   }
 
   componentDidUpdate(oldProps) {
@@ -366,34 +599,27 @@ class StudentInfo extends Component {
               <StudentInfoField label="Last Name" value={this.state.lastName} onChange={(v) => this.setState({"lastName": v})} editable={this.state.editable} />
             </React.Fragment>: ""}
             <StudentInfoField label="Date of Birth" value={this.state.dob} onChange={(v) => this.setState({"dob": v})} editable={this.state.editable} />
-            <StudentInfoField label="Gender" value={this.state.gender} onChange={(v) => this.setState({"gender": v})} editable={this.state.editable} />
-            <StudentInfoField label="Race" value={this.state.raceEthnicity} onChange={(v) => this.setState({"raceEthnicity": v})} editable={this.state.editable} />
-            <StudentInfoField label="Hispanic" value={this.state.hispanic} onChange={(v) => this.setState({"hispanic": v})} editable={this.state.editable} />
-            <StudentInfoField label="Grade" value={this.state.grade} onChange={(v) => this.setState({"grade": v})} editable={this.state.editable} />
-            <StudentInfoField label="Service Area" value={this.state.serviceArea} onChange={(v) => this.setState({"serviceArea": v})} editable={this.state.editable} />
-            <StudentInfoField label="County" value={this.state.county} onChange={(v) => this.setState({"county": v})} editable={this.state.editable} />
-            <StudentInfoField label="District" value={this.state.district} onChange={(v) => this.setState({"district": v})} editable={this.state.editable} />
-            <StudentInfoField label="School" value={this.state.school} onChange={(v) => this.setState({"school": v})} editable={this.state.editable} />
+            <StudentInfoSelect label="Gender" value={this.state.gender} options={this.props.genders.map(o => {return {"text": o.gender, "value": o.gid}})} onChange={(v) => this.setState({"gender": v})} editable={this.state.editable} />
+            <StudentInfoSelect label="Race" value={this.state.raceEthnicity} options={this.props.races.map(o => {return {"text": o.raceEth, "value": o.rid}})} onChange={(v) => this.setState({"raceEthnicity": v})} editable={this.state.editable} />
+            <StudentInfoSelect label="Hispanic" value={this.state.hispanic} options={[{"text": "Yes", "value": "true"}, {"text": "No", "value": "false"}]} onChange={(v) => this.setState({"hispanic": v})} editable={this.state.editable} />
+            <StudentInfoSelect label="Grade" value={this.state.grade} options={this.props.grades.map(o => {return {"text": o.grade, "value": o.gid}})} onChange={(v) => this.setState({"grade": v})} editable={this.state.editable} />
+            <StudentInfoSelect label="Service Area" value={this.state.serviceArea} options={this.props.serviceAreas.map(o => {return {"text": o.field1, "value": o.sid}})} onChange={(v) => this.setState({"serviceArea": v})} editable={this.state.editable} />
+            <StudentInfoSelect label="County" value={this.state.county} options={this.props.counties.map(o => {return {"text": o.county, "value": o.cid}})} onChange={(v) => this.setState({"county": v})} editable={this.state.editable} />
+            <StudentInfoSelect label="District" value={this.state.district} options={this.props.districts.map(o => {return {"text": o.district, "value": o.did}})} onChange={(v) => this.setState({"district": v})} editable={this.state.editable} />
+            <StudentInfoSelect label="School" value={this.state.school} options={this.props.schools.map(o => {return {"text": o.school, "value": o.sid}})} onChange={(v) => this.setState({"school": v})} editable={this.state.editable} />
             <StudentInfoField label="Label" value={this.state.label} onChange={(v) => this.setState({"label": v})} editable={this.state.editable} />
             {/* <StudentInfoField label="IEP, 504, etc." value={this.props.student.dob} editable={this.state.editable} /> */}
             {/* <StudentInfoField label="Signed Release Date" value={this.props.student.dob} editable={this.state.editable} /> */}
-            <StudentInfoField label="Primary Teacher" value={this.state.currentTeacher} onChange={(v) => this.setState({"currentTeacher": v})} editable={this.state.editable} />
-            <StudentInfoField label="Secondary Teacher" value={this.state.secondTeacher} onChange={(v) => this.setState({"secondTeacher": v})} editable={this.state.editable} />
+            {/* <StudentInfoField label="Primary Teacher" value={this.state.currentTeacher} onChange={(v) => this.setState({"currentTeacher": v})} editable={this.state.editable} /> */}
+            <StudentInfoSelect label="Primary Teacher" value={this.state.currentTeacher} options={this.props.teachers.map(o => {return {"text": o.firstName + " " + o.lastName, "value": o.tid}})} onChange={(v) => this.setState({"currentTeacher": v})} editable={this.state.editable} />
+            {/* <StudentInfoField label="Secondary Teacher" value={this.state.secondTeacher} onChange={(v) => this.setState({"secondTeacher": v})} editable={this.state.editable} /> */}
+            <StudentInfoSelect label="Secondary Teacher" value={this.state.secondTeacher} options={this.props.teachers.map(o => {return {"text": o.firstName + " " + o.lastName, "value": o.tid}})} onChange={(v) => this.setState({"secondTeacher": v})} editable={this.state.editable} />
           </tbody>
         </table>
         <div className="ButtonHolder">
           <button type="button" className="SubmitButton" onClick={() => {
             let output = JSON.parse(JSON.stringify(this.state));
             delete output.editable;
-            delete output.gender;
-            delete output.raceEthnicity;
-            delete output.serviceArea;
-            delete output.school;
-            delete output.district;
-            delete output.county;
-            delete output.grade;
-            delete output.currentTeacher;
-            delete output.secondTeacher;
             this.props.onUpdate(output);
             this.setState({editable: false});
             }} style={{"display": this.state.editable ? "block" : "none"}}>
@@ -418,7 +644,7 @@ class StudentInfo extends Component {
           Admissions Info
         </div>
         <div className="SpecialHeading">
-          <span>Total Prior Admissions: <b>0</b></span>
+          <span>Total Prior Admissions: <b>{this.props.admissions.length}</b></span>
         </div>
         {/* <div className="TableHeading">
           Current Admissions Dates
@@ -435,32 +661,20 @@ class StudentInfo extends Component {
             </tr>
           </tbody>
         </table> */}
-        <div className="TableHeading">
-          Previous Admissions
-        </div>
-        <table className="AdmissionTable">
-          <tbody>
-            <tr className="AdmissionTableRow">
-              <td><input type="text" className="AdmissionField"></input></td>
-              <td className="AdmissionText">through</td>
-              <td><input type="text" className="AdmissionField"></input></td>
-            </tr>
-            <tr className="AdmissionTableRow">
-              <td><input type="text" className="AdmissionField"></input></td>
-              <td className="AdmissionText">through</td>
-              <td><input type="text" className="AdmissionField"></input></td>
-            </tr>
-            <tr className="AdmissionTableRow">
-              <td><input type="text" className="AdmissionField"></input></td>
-              <td className="AdmissionText">through</td>
-              <td><input type="text" className="AdmissionField"></input></td>
-            </tr>
-          </tbody>
-        </table>
-        <div style={{ "width": "60%", "display": "flex", "margin": "0 auto" }}>
-          <button type="button" className="Button" onClick={() => this.props.viewMoreHandler(true)}>
-            View More
-          </button>
+        <div style={{"visibility": this.props.admissions.length > 0 ? "visible" : "hidden"}}>
+          <div className="TableHeading">
+            Recent Admissions
+          </div>
+          <table className="AdmissionTable">
+            <tbody>
+            {this.getAdmissionRows(2)}
+            </tbody>
+          </table>
+          <div style={{ "width": "60%", "display": "flex", "margin": "0 auto" }}>
+            <button type="button" className="Button" onClick={() => this.props.viewMoreHandler(true)}>
+              View All Admissions
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -473,6 +687,32 @@ class StudentInfoField extends Component {
       <tr>
         <td className="InputLabel">{this.props.label === undefined ? "" : this.props.label}</td>
         <td><input type="text" className="InputField" value={this.props.value} onChange={(e) => this.props.onChange(e.target.value)} readOnly={!this.props.editable} /></td>
+      </tr>
+    );
+  }
+}
+
+class StudentInfoSelect extends Component {
+
+  getOptions = () => {
+    let listOfOptions = [];
+    for (let i = 0; i < this.props.options.length; i++) {
+      listOfOptions.push(
+        <option value={this.props.options[i].value}>{this.props.options[i].text}</option>
+      );
+    }
+    return listOfOptions;
+  }
+
+  render() {
+    return (
+      <tr>
+        <td className="InputLabel">{this.props.label === undefined ? "" : this.props.label}</td>
+        <td>
+          <select value={this.props.value} className="InputSelect" onChange={(e) => this.props.onChange(e.target.value)} disabled={!this.props.editable}>
+            {this.getOptions()}
+          </select>
+        </td>
       </tr>
     );
   }
@@ -647,7 +887,17 @@ class NewStudentPopup extends Component {
   }
 }
 
-class PrevDatesPopup extends Component {
+class AdmissionsPopup extends Component {
+  getAdmissionRows = () => {
+    let listOfAdmissions = [];
+    for (let i = 0; i < this.props.admissions.length; i++) {
+      listOfAdmissions.push(
+        <DateRange start={this.props.admissions[i].admissionDate} end={this.props.admissions[i].dischargeDate} />
+      );
+    }
+    return listOfAdmissions;
+  }
+
   render() {
     let style = {
       'visibility': this.props.visibility
@@ -661,18 +911,8 @@ class PrevDatesPopup extends Component {
           </div>
           <table className="PopTable">
             <tbody>
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              <Dates />
-              </tbody>
+              {this.getAdmissionRows()}
+            </tbody>
           </table>
         </div>
       </div>
@@ -680,13 +920,13 @@ class PrevDatesPopup extends Component {
   }
 }
 
-class Dates extends Component {
+class DateRange extends Component {
   render() {
     return (
       <tr className="AdmissionTableRow">
-        <td><input type="text" className="AdmissionField"></input></td>
+        <td><input type="text" className="AdmissionField" value={this.props.start}></input></td>
         <td className="AdmissionText">through</td>
-        <td><input type="text" className="AdmissionField"></input></td>
+        <td><input type="text" className="AdmissionField" value={this.props.end}></input></td>
       </tr>
     );
   }
