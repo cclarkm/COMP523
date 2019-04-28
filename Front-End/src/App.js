@@ -80,6 +80,7 @@ class App extends Component {
     .then(response => response.json())
     .then((data) => {
       this.setState({currentStudentLogs: data.visits});
+      console.log(data.visits);
     }, (error) => {
       console.error(error);
     });
@@ -731,11 +732,10 @@ class StudentInfoSelect extends Component {
 class LogPopup extends Component {
   getLogs = () => {
     let listOfLogs = [];
-    listOfLogs.push(<Log log={{"dov": "", "teacher": "", "notes": "", "type": ""}} teachers={this.props.teachers} logTypes={this.props.logTypes} new={true} onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate}/>);
-    console.log(this);
+    listOfLogs.push(<Log key={"new-log-for-" + this.props.student.id} log={{"dov": "", "teacher": "", "notes": "", "type": ""}} teachers={this.props.teachers} logTypes={this.props.logTypes} new={true} onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate}/>);
     for (let i = 0; i < this.props.logs.length; i++) {
       let log = this.props.logs[i];
-      listOfLogs.push(<Log log={log} teachers={this.props.teachers} logTypes={this.props.logTypes} new={false}  onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate} />);
+      listOfLogs.push(<Log key={"log-" + log.id + "-for-" + this.props.student.id} log={log} teachers={this.props.teachers} logTypes={this.props.logTypes} new={false}  onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate} />);
     }
     return listOfLogs;
   }
@@ -752,7 +752,10 @@ class LogPopup extends Component {
             <div className="PopTitle">View Logs for <b>{this.props.student.firstName + " " + this.props.student.lastName}</b></div>
           </div>
           <table className="PopTable">
-            {this.getLogs()}
+            <tbody>
+              {this.getLogs()}
+              {console.log("BOOP render")}
+            </tbody>
           </table>
         </div>
       </div>
