@@ -50,6 +50,9 @@ public class DistrictController {
 	@PostMapping
 	public ResponseEntity<Object> newDistrict(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!body.containsKey("district")) {
+			return ResponseEntity.badRequest().body("district field not provided");
+		}
 		districtDao.save(new District(body.get("district")));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -68,7 +71,7 @@ public class DistrictController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			logger.error("Unable to update - district: incorrect request data");
-			return ResponseEntity.badRequest().body("Unable to udpate - district. Incorrect request field");
+			return ResponseEntity.badRequest().body("Unable to update - district. Incorrect request field");
 		}		
 	}
 	

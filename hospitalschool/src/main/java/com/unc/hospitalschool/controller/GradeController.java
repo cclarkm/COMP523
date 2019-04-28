@@ -50,6 +50,9 @@ public class GradeController {
 	@PostMapping
 	public ResponseEntity<Object> newGrade(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!body.containsKey("grade")) {
+			return ResponseEntity.badRequest().body("grade field not provided");
+		}
 		gradeDao.save(new Grade(body.get("grade")));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

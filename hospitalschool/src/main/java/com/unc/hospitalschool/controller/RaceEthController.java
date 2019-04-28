@@ -50,6 +50,9 @@ public class RaceEthController {
 	@PostMapping
 	public ResponseEntity<Object> newRaceEth(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!(body.containsKey("raceEth") && body.containsKey("code"))) {
+			return ResponseEntity.badRequest().body("raceEth/code field not provided");
+		}
 		raceEthDao.save(new RaceEth(body.get("raceEth"), body.get("code")));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

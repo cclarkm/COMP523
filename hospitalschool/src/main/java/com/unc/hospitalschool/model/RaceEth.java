@@ -55,6 +55,10 @@ public class RaceEth {
 	public String getRaceEth() {
 		return raceEth;
 	}
+	
+	public String getCode() {
+		return code;
+	}
 
 	public void setRaceEth(String raceEth) {
 		this.raceEth = raceEth;

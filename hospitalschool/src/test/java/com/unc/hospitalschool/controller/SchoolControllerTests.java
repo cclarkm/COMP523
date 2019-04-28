@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.unc.hospitalschool.dao.CountyDao;
 import com.unc.hospitalschool.dao.GenderDao;
+import com.unc.hospitalschool.dao.SchoolDao;
 import com.unc.hospitalschool.init.HospitalschoolApplication;
 
 import static org.junit.Assert.assertTrue;
@@ -36,7 +38,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = HospitalschoolApplication.class)
 @AutoConfigureMockMvc
 @Transactional
-public class GenderControllerTests {
+public class SchoolControllerTests {
 	
 	@Autowired
     protected WebApplicationContext context;
@@ -45,68 +47,72 @@ public class GenderControllerTests {
 	private MockMvc mockMvc;
 	
 	@Autowired
-	private GenderDao genderDao;
+	private SchoolDao schoolDao;
 	
-	private String base = "/gender/";
+	private String base = "/school/";
 
 	
 	
 	@Test
 	@WithMockUser(username="admin",roles={"USER","ADMIN"})
-	public void getAllGenders() throws Exception{
+	public void getAllSchools() throws Exception{
 		MvcResult result = mockMvc.perform(get(base)).andExpect(status().isOk()).andReturn();
 		String text = result.getResponse().getContentAsString();
 		
-		assertTrue(text.contains("genders"));
+		assertTrue(text.contains("schools"));
 	}
 	
 	@Test
-	public void getAllGendersUnauthenticated() throws Exception{
+	public void getAllSchoolsUnauthenticated() throws Exception{
 		mockMvc.perform(get(base)).andExpect(status().is(403));
 	}
 	
+	
+	
 	@Test
 	@WithMockUser(username="admin",roles={"USER","ADMIN"})
-	public void createGender() throws Exception{
+	public void createSchool() throws Exception{
 		Map<String, String> input = new HashMap<String, String>();
-		input.put("gender",	"test gender");
+		input.put("school",	"test school");
 		String json = new ObjectMapper().writeValueAsString(input);
 		mockMvc.perform(post(base).contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isOk()).andReturn();
 	}
 	
 	@Test
-	public void createGenderUnauthenticated() throws Exception{
+	public void createSchoolUnauthenticated() throws Exception{
 		Map<String, String> input = new HashMap<String, String>();
-		input.put("gender",	"test gender");
+		input.put("school",	"test school");
 		String json = new ObjectMapper().writeValueAsString(input);
 		mockMvc.perform(post(base).contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().is(403)).andReturn();
 	}
 	
 	@Test
 	@WithMockUser(username="admin",roles={"USER","ADMIN"})
-	public void createInvalidGender() throws Exception{
+	public void createInvalidSchool() throws Exception{
 		Map<String, String> input = new HashMap<String, String>();
 		input.put("key", "value");
 		String json = new ObjectMapper().writeValueAsString(input);
-		mockMvc.perform(post(base).contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isBadRequest()).andReturn();
+		MvcResult result = mockMvc.perform(post(base).contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isBadRequest()).andReturn();
+		assertEquals("school field not provided", result.getResponse().getContentAsString());
 	}
+	
 	
 	@Test
 	@WithMockUser(username="admin",roles={"USER","ADMIN"})
-	public void updateGender() throws Exception{
+	public void updateSchool() throws Exception{
 		Map<String, String> input = new HashMap<String, String>();
-		input.put("gender", "my new gender");
+		input.put("school", "my new school");
 		
 		String json = new ObjectMapper().writeValueAsString(input);
 		mockMvc.perform(put(base + "1").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isOk());
-		
-		assertEquals("my new gender", genderDao.findById(1).getGender());
+	
+		assertEquals("my new school", schoolDao.findBySid(1).getSchool());
 	}
 	
 	@Test
-	public void updateGenderUnAuthenticated() throws Exception{
+	public void updateSchoolUnAuthenticated() throws Exception{
 		Map<String, String> input = new HashMap<String, String>();
-		input.put("gender", "my new gender");
+		input.put("school", "my new school");
 		
 		String json = new ObjectMapper().writeValueAsString(input);
 		mockMvc.perform(put(base + "1").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().is(403));
@@ -115,48 +121,49 @@ public class GenderControllerTests {
 	
 	@Test
 	@WithMockUser(username="admin",roles={"USER","ADMIN"})
-	public void updateNonExistantGender() throws Exception{
+	public void updateNonExistantSchool() throws Exception{
 		Map<String, String> input = new HashMap<String, String>();
-		input.put("gender", "my new gender");
+		input.put("school", "my new school");
 		
 		String json = new ObjectMapper().writeValueAsString(input);
 		MvcResult result = mockMvc.perform(put(base + "-100").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isBadRequest()).andReturn();
 		
-		assertEquals("Unable to update - gender with id: -100 not found", result.getResponse().getContentAsString());
+		assertEquals("Unable to update - school with sid: -100 not found", result.getResponse().getContentAsString());
 	}
 	
 	@Test
 	@WithMockUser(username="admin",roles={"USER","ADMIN"})
-	public void updateGenderBadRequest() throws Exception{
+	public void updateSchoolBadRequest() throws Exception{
 		Map<String, String> input = new HashMap<String, String>();
 		input.put("key", "value");
 		
 		String json = new ObjectMapper().writeValueAsString(input);
 		MvcResult result = mockMvc.perform(put(base + "1").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isBadRequest()).andReturn();
 		
-		assertEquals("Unable to update - gender. Incorrect request field", result.getResponse().getContentAsString());
+		assertEquals("Unable to update - school. Incorrect request field", result.getResponse().getContentAsString());
 	}
 	
 	
 	@Test
 	@WithMockUser(username="admin",roles={"USER","ADMIN"})
-	public void deleteGender() throws Exception{
-		mockMvc.perform(delete(base + "3").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+	public void deleteSchool() throws Exception{
+		mockMvc.perform(delete(base + "1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 			
 	}
 	
 	@Test
-	public void deleteGenderUnauthenticated() throws Exception{
+	public void deleteSchoolUnauthenticated() throws Exception{
 		mockMvc.perform(delete(base + "3").contentType(MediaType.APPLICATION_JSON)).andExpect(status().is(403));
 	}
 	
 	@Test
 	@WithMockUser(username="admin",roles={"USER","ADMIN"})
-	public void deleteNonExistantGender() throws Exception{
+	public void deleteNonExistantSchool() throws Exception{
 		MvcResult result = mockMvc.perform(delete(base + "-1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
-		assertEquals("Unable to delete - gender with id: -1 not found", result.getResponse().getContentAsString());
+		assertEquals("Unable to delete - school with sid: -1 not found", result.getResponse().getContentAsString());
 		
 	}
+	
 	
 	
 	

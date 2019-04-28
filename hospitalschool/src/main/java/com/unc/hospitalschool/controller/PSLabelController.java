@@ -44,12 +44,15 @@ public class PSLabelController {
 			jsons.add(psLabel.toJson());
 		}
 		map.put("PSLabels", jsons);
-		return new ResponseEntity<>(HttpStatus.OK);	
+		return new ResponseEntity<>(map, HttpStatus.OK);	
 	}
 
 	@PostMapping
 	public ResponseEntity<Object> newPSLabel(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!(body.containsKey("label") && body.containsKey("code"))) {
+			return ResponseEntity.badRequest().body("label/code field not provided");
+		}
 		psLabelDao.save(new PSLabel(body.get("label"), body.get("code")));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -62,16 +65,13 @@ public class PSLabelController {
 			logger.error("Unable to update - psLabel with lid: " + lid + " not found");
 			return ResponseEntity.badRequest().body("Unable to update - psLabel with lid: " + lid + " not found");
 		}
-		if (!body.containsKey("label") && !body.containsKey("code")) {
+		if (!(body.containsKey("label") && body.containsKey("code"))) {
 			logger.error("Unable to update - psLabel; incorrect request data");
 			return ResponseEntity.badRequest().body("Unable to update - psLabel. Incorrect request field");
 		}
-		if (body.containsKey("label")) {
-			psLabel.setLabel(body.get("label"));
-		}
-		if (body.containsKey("code")) {
-			psLabel.setCode(body.get("code"));
-		}
+		psLabel.setLabel(body.get("label"));
+		psLabel.setCode(body.get("code"));
+
 		psLabelDao.save(psLabel);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

@@ -50,6 +50,9 @@ public class TeacherController {
 	@PostMapping
 	public ResponseEntity<Object> newTeacher(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!(body.containsKey("lName") && body.containsKey("fName"))) {
+			return ResponseEntity.badRequest().body("fName/lName field not provided");
+		}
 		teacherDao.save(new Teacher(body.get("lName"), body.get("fName")));
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
@@ -62,16 +65,16 @@ public class TeacherController {
 			logger.error("Unable to update - teacher with tid: " + tid + " not found");
 			return ResponseEntity.badRequest().body("Unable to update - teacher with tid: " + tid + " not found");
 		}
-		if (!body.containsKey("firstName") && !body.containsKey("lastName")) {
+		if (!(body.containsKey("fName") && body.containsKey("lName"))) {
 			logger.error("Unable to update - county; incorrect request data");
 			return ResponseEntity.badRequest().body("Unable to update - teacher. Incorrect request field");
 		}
-		if (body.containsKey("firstName")) {
-			teacher.setFirstName(body.get("firstName"));
-		}
-		if (body.containsKey("lastName")) {
-			teacher.setLastName(body.get("lastName"));
-		}
+		
+		teacher.setFirstName(body.get("fName"));
+		
+		teacher.setLastName(body.get("lName"));
+		
+		
 		teacherDao.save(teacher);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

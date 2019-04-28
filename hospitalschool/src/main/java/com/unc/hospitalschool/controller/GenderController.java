@@ -63,7 +63,7 @@ public class GenderController {
 		logger.info("Updating gender " + id);
 		if (gender == null) {
 			logger.error("Unable to update - gender with id: " + id + " not found");
-			return ResponseEntity.badRequest().body("Unable to udpate - gender with id: " + id + " not found");
+			return ResponseEntity.badRequest().body("Unable to update - gender with id: " + id + " not found");
 		}
 		if (body.containsKey("gender")) {
 			gender.setGender(body.get("gender"));

@@ -51,6 +51,9 @@ public class EnrollController {
 	@PostMapping
 	public ResponseEntity<Object> newEnroll(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!body.containsKey("enroll")) {
+			return ResponseEntity.badRequest().body("enroll field not provided");
+		}
 		enrollDao.save(new Enroll(body.get("enroll")));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -60,8 +63,8 @@ public class EnrollController {
 		Enroll enroll = enrollDao.findByEid(eid);
 		logger.info("Updating enroll " + eid);
 		if (enroll == null) {
-			logger.error("Unable to update - district with did: " + eid);
-			return ResponseEntity.badRequest().body("Unable to update - district with eid: " + eid + " not found");
+			logger.error("Unable to update - enroll with eid: " + eid);
+			return ResponseEntity.badRequest().body("Unable to update - enroll with eid: " + eid + " not found");
 		}
 		
 		if (body.containsKey("enroll")) {
@@ -70,7 +73,7 @@ public class EnrollController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			logger.error("Unable to update - enroll: incorrect request data");
-			return ResponseEntity.badRequest().body("Unable to udpate - enroll. Incorrect request field");
+			return ResponseEntity.badRequest().body("Unable to update - enroll. Incorrect request field");
 		}		
 	}
 	
