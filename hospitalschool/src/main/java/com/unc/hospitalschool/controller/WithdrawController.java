@@ -50,6 +50,9 @@ public class WithdrawController {
 	@PostMapping
 	public ResponseEntity<Object> newWithdraw(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!body.containsKey("withdraw")) {
+			return ResponseEntity.badRequest().body("withdraw field not provided");
+		}
 		withdrawDao.save(new Withdraw(body.get("withdraw")));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -60,7 +63,7 @@ public class WithdrawController {
 		logger.info("Updating county " + wid);
 		if (withdraw == null) {
 			logger.error("Unable to update - withdraw with wid: " + wid + " not found");
-			return ResponseEntity.badRequest().body("No withdraw with wid: " + wid + " found");
+			return ResponseEntity.badRequest().body("Unable to update - withdraw with wid: " + wid + " not found");
 		}
 		if (body.containsKey("withdraw")) {
 			withdraw.setWithdraw(body.get("withdraw"));
@@ -68,7 +71,7 @@ public class WithdrawController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			logger.error("Unable to update - withdraw; incorrect request data");
-			return ResponseEntity.badRequest().body("Unable to update - withdraw; Incorrect request field");
+			return ResponseEntity.badRequest().body("Unable to update - withdraw. Incorrect request field");
 		}
 	}
 	
@@ -77,7 +80,7 @@ public class WithdrawController {
 		Withdraw withdraw = withdrawDao.findByWid(wid);
 		if (withdraw == null) {
 			logger.error("Unable to delete - withdraw with wid: " + wid + " not found");
-			return ResponseEntity.badRequest().body("Unable to update - withdraw with wid: " + wid + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - withdraw with wid: " + wid + " not found");
 		} else {
 			withdrawDao.delete(withdraw);
 			return new ResponseEntity<>(HttpStatus.OK);

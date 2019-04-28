@@ -50,6 +50,9 @@ public class CountyController {
 	@PostMapping
 	public ResponseEntity<Object> newCounty(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!body.containsKey("county")) {
+			return ResponseEntity.badRequest().body("county field not provided");
+		}
 		countyDao.save(new County(body.get("county")));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -60,7 +63,8 @@ public class CountyController {
 		logger.info("Updating county " + cid);
 		if (county == null) {
 			logger.error("Unable to update - county with cid: " + cid + " not found");
-			return new ResponseEntity<>(HttpStatus.OK);
+			return ResponseEntity.badRequest().body("Unable to update - county with cid: " + cid + " not found");
+			//return new ResponseEntity<>(HttpStatus.OK);
 		}
 		if (body.containsKey("county")) {
 			county.setCounty(body.get("county"));
@@ -77,7 +81,7 @@ public class CountyController {
 		County county = countyDao.findByCid(cid);
 		if (county == null) {
 			logger.error("Unable to delete - county with cid: " + cid + " not found");
-			return ResponseEntity.badRequest().body("Unable to update - county with cid: " + cid + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - county with cid: " + cid + " not found");
 		} else {
 			countyDao.delete(county);
 			return new ResponseEntity<>(HttpStatus.OK);

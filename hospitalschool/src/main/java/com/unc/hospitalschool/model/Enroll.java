@@ -40,4 +40,8 @@ public class Enroll {
 		this.enroll = enroll;
 	}
 	
+	public String getEnroll() {
+		return this.enroll;
+	}
+	
 }

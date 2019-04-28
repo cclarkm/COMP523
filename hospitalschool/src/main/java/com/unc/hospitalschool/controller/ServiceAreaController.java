@@ -50,6 +50,9 @@ public class ServiceAreaController {
 	@PostMapping
 	public ResponseEntity<Object> newServiceArea(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!body.containsKey("field1")) {
+			return ResponseEntity.badRequest().body("field1 field not provided");
+		}
 		serviceAreaDao.save(new ServiceArea(body.get("field1")));
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
@@ -60,7 +63,7 @@ public class ServiceAreaController {
 		logger.info("Updating county " + sid);
 		if (serviceArea == null) {
 			logger.error("Unable to update - serviceArea with sid: " + sid + " not found");
-			return ResponseEntity.badRequest().body("Unable to update - service with sid: " + sid + " not found");
+			return ResponseEntity.badRequest().body("Unable to update - serviceArea with sid: " + sid + " not found");
 		}
 		if (body.containsKey("field1")) {
 			serviceArea.setField1(body.get("field1"));
@@ -68,7 +71,7 @@ public class ServiceAreaController {
 			return new ResponseEntity<>(HttpStatus.OK);	
 		} else {
 			logger.error("Unable to update - serviceArea; incorrect request data");
-			return ResponseEntity.badRequest().body("Unable to update - service. Incorrect request field");
+			return ResponseEntity.badRequest().body("Unable to update - serviceArea. Incorrect request field");
 		}
 	}
 	
@@ -77,7 +80,7 @@ public class ServiceAreaController {
 		ServiceArea serviceArea = serviceAreaDao.findBySid(sid);
 		if (serviceArea == null) {
 			logger.error("Unable to delete - serviceArea with sid: " + sid + " not found");
-			return ResponseEntity.badRequest().body("Unable to delete - service with sid: " + sid + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - serviceArea with sid: " + sid + " not found");
 		} else {
 			serviceAreaDao.delete(serviceArea);
 			return new ResponseEntity<>(HttpStatus.OK);

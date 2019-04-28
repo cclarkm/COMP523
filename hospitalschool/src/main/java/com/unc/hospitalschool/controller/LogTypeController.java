@@ -50,6 +50,10 @@ public class LogTypeController {
 	@PostMapping
 	public ResponseEntity<Object> newLogType(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		
+		if (!body.containsKey("logType")) {
+			return ResponseEntity.badRequest().body("logType field not provided");
+		}
 		logTypeDao.save(new LogType(body.get("logType")));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -60,7 +64,7 @@ public class LogTypeController {
 		logger.info("Updating logType " + lid);
 		if (logType == null) {
 			logger.error("Unable to update - logType with lid: " + lid + " not found");
-			return ResponseEntity.badRequest().body("Unable to oupdate - logType with lid: " + lid + " not found");
+			return ResponseEntity.badRequest().body("Unable to update - logType with lid: " + lid + " not found");
 		}
 		if (body.containsKey("logType")) {
 			logType.setLogType(body.get("logType"));

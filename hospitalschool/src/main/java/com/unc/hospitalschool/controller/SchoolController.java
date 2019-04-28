@@ -50,6 +50,9 @@ public class SchoolController {
 	@PostMapping
 	public ResponseEntity<Object> newSchool(@RequestBody Map<String, String> body) {
 		logger.info(body.toString());
+		if (!body.containsKey("school")) {
+			return ResponseEntity.badRequest().body("school field not provided");
+		}
 		schoolDao.save(new School(body.get("school")));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -60,7 +63,7 @@ public class SchoolController {
 		logger.info("Updating school " + sid);
 		if (school == null) {
 			logger.error("Unable to update - school with sid: " + sid + " not found");
-			return ResponseEntity.badRequest().body("Unable to update - school with " + sid + " not found");
+			return ResponseEntity.badRequest().body("Unable to update - school with sid: " + sid + " not found");
 		}
 		if (body.containsKey("school")) {
 			school.setSchool(body.get("school"));
@@ -77,7 +80,7 @@ public class SchoolController {
 		School school = schoolDao.findBySid(sid);
 		if (school == null) {
 			logger.error("Unable to delete - school with sid: " + sid + " not found");
-			return ResponseEntity.badRequest().body("Unable to delete - school with " + sid + " not found");
+			return ResponseEntity.badRequest().body("Unable to delete - school with sid: " + sid + " not found");
 		} else {
 			schoolDao.delete(school);
 			return new ResponseEntity<>(HttpStatus.OK);
