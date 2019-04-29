@@ -16,38 +16,35 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
 import com.unc.hospitalschool.dao.SchoolDao;
 import com.unc.hospitalschool.dao.StudentDao;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.TimeZone;
 
 @SpringBootApplication
-@ComponentScan(basePackages= {"com.unc.hospitalschool"})
-@EntityScan(basePackages= {"com.unc.hospitalschool.model"})
-@EnableJpaRepositories(basePackages= {"com.unc.hospitalschool.dao"})
-public class HospitalschoolApplication{
+@ComponentScan(basePackages = {"com.unc.hospitalschool"})
+@EntityScan(basePackages = {"com.unc.hospitalschool.model"})
+@EnableJpaRepositories(basePackages = {"com.unc.hospitalschool.dao"})
+public class HospitalschoolApplication {
 
-	private static Logger logger = LoggerFactory.getLogger("LOGGER");
+  private static Logger logger = LoggerFactory.getLogger("LOGGER");
 
-	//not sure if this is the right place for this but idk:
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	public static void main(String[] args) {
-		ApplicationContext applicationContext = SpringApplication.run(HospitalschoolApplication.class,  args);
-//		SpringApplication.run(SpringBootAuthUpdatedApplication.class, args);
+  // not sure if this is the right place for this but idk:
+  @Bean
+  public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-	}
-	
+  public static void main(String[] args) {
+    ApplicationContext applicationContext =
+        SpringApplication.run(HospitalschoolApplication.class, args);
+    // SpringApplication.run(SpringBootAuthUpdatedApplication.class, args);
+
+  }
+
 
 
 }
