@@ -1,6 +1,12 @@
 package com.unc.hospitalschool.controller;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +28,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.JWT;
 import com.unc.hospitalschool.dao.ApplicationUserRepository;
+import com.unc.hospitalschool.dao.BlackListTokenDao;
 import com.unc.hospitalschool.dao.RoleDao;
 import com.unc.hospitalschool.model.ApplicationUser;
+import com.unc.hospitalschool.model.BlackListToken;
 
 @RestController
 @RequestMapping("/users")
 public class ApplicationUserController {
+	
+	@Autowired
+	private BlackListTokenDao blackListTokenDao;
+	
+	public static List<String> blackListOfTokens = new ArrayList<String>();
+	
 	private static Logger logger = LoggerFactory.getLogger("LOGGER");
 
 	/*
@@ -68,12 +85,14 @@ public class ApplicationUserController {
 	}
 
 	// maybe this should also be in authentication
-    @PostMapping("/logout")
-    public void login(@RequestBody ApplicationUser user) {
+    @GetMapping("/logout")
+    public void login(HttpServletRequest request) {
+    	String tokenBoi = request.getHeader("Authorization");
+    	BlackListToken token = new BlackListToken(tokenBoi);
+    	blackListTokenDao.save(token);    	
     	//maybe somehow add the JWT to a list of those no longer valid; should remove
     		//itself from list after it expires? maybe
     	//when checking login credentials, need to make sure that if the token appears in the list, it is not valid
-    
     }
     
     public void setUserFields(Map<String, String> body, ApplicationUser user) throws Exception {

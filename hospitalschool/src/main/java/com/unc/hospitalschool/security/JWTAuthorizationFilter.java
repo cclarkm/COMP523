@@ -2,7 +2,9 @@ package com.unc.hospitalschool.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.unc.hospitalschool.controller.ApplicationUserController;
 import com.unc.hospitalschool.dao.ApplicationUserRepository;
+import com.unc.hospitalschool.dao.BlackListTokenDao;
 import com.unc.hospitalschool.model.ApplicationUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +37,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	
     private ApplicationUserRepository userDao;
+    
+	private BlackListTokenDao blackListTokenDao;
 	
     public JWTAuthorizationFilter(AuthenticationManager authManager) {
         super(authManager);
@@ -48,14 +53,24 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     		ServletContext servletContext = req.getServletContext();
             WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             userDao = webApplicationContext.getBean(ApplicationUserRepository.class);
+    	}    	
+    	if (blackListTokenDao == null) {
+    		ServletContext servletContext = req.getServletContext();
+            WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+            blackListTokenDao = webApplicationContext.getBean(BlackListTokenDao.class);
     	}
-    	
+
         String header = req.getHeader(HEADER_STRING);
 
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
             chain.doFilter(req, res);
             return;
         }
+    	
+        if (this.blackListTokenDao.findByToken(header) != null) {
+        	chain.doFilter(req, res);
+        	return;
+        } 
 
         UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
         SecurityContextHolder.getContext().setAuthentication(authentication);
