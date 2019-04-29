@@ -54,42 +54,6 @@ public class TeacherController {
     teacherDao.save(new Teacher(body.get("lName"), body.get("fName")));
     return new ResponseEntity<>(HttpStatus.OK);
   }
-
-  @PutMapping(value = "/{tid}")
-  public ResponseEntity<Object> updateTeacher(@RequestBody Map<String, String> body,
-      @PathVariable int tid) {
-    Teacher teacher = teacherDao.findByTid(tid);
-    logger.info("Updating teacher " + tid);
-    if (teacher == null) {
-      logger.error("Unable to update - teacher with tid: " + tid + " not found");
-      return ResponseEntity.badRequest()
-          .body("Unable to update - teacher with tid: " + tid + " not found");
-    }
-    if (!(body.containsKey("fName") && body.containsKey("lName"))) {
-      logger.error("Unable to update - county; incorrect request data");
-      return ResponseEntity.badRequest()
-          .body("Unable to update - teacher. Incorrect request field");
-    }
-
-    teacher.setFirstName(body.get("fName"));
-
-    teacher.setLastName(body.get("lName"));
-
-
-    teacherDao.save(teacher);
-    return new ResponseEntity<>(HttpStatus.OK);
-  }
-
-<<<<<<< HEAD
-	@PostMapping
-	public ResponseEntity<Object> newTeacher(@RequestBody Map<String, String> body) {
-		logger.info(body.toString());
-		if (!(body.containsKey("lName") && body.containsKey("fName"))) {
-			return ResponseEntity.badRequest().body("fName/lName field not provided");
-		}
-		teacherDao.save(new Teacher(body.get("lName"), body.get("fName")));
-		return new ResponseEntity<>(HttpStatus.OK);	
-	}
 	
 	@PutMapping(value="/{tid}")
 	public ResponseEntity<Object> updateTeacher(@RequestBody Map<String, String> body, @PathVariable int tid) {
@@ -111,19 +75,7 @@ public class TeacherController {
 		teacherDao.save(teacher);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	@DeleteMapping(value="/{tid}")
-	public ResponseEntity<Object> deleteByTid(@PathVariable int tid) {
-		Teacher teacher = teacherDao.findByTid(tid);
-		if (teacher == null) {
-			logger.error("Unable to delete - teacher with tid: " + tid + " not found");
-			return ResponseEntity.badRequest().body("Unable to delete - teacher with tid: " + tid + " not found");
-		} else {
-			teacherDao.delete(teacher);
-			return new ResponseEntity<>(HttpStatus.OK);	
-		}
-	}
-=======
+
   @DeleteMapping(value = "/{tid}")
   public ResponseEntity<Object> deleteByTid(@PathVariable int tid) {
     Teacher teacher = teacherDao.findByTid(tid);
@@ -136,5 +88,4 @@ public class TeacherController {
       return new ResponseEntity<>(HttpStatus.OK);
     }
   }
->>>>>>> fe10883db8f8d81d357d1c2272527f8b44dfc1d1
 }
