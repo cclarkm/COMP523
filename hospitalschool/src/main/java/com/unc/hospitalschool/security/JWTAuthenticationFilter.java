@@ -25,7 +25,9 @@ import static com.unc.hospitalschool.security.SecurityConstants.HEADER_STRING;
 import static com.unc.hospitalschool.security.SecurityConstants.SECRET;
 import static com.unc.hospitalschool.security.SecurityConstants.TOKEN_PREFIX;
 
-
+/*
+ * Disclaimer: we did not write this code - it came from Auth0
+ */
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   private AuthenticationManager authenticationManager;
 
@@ -43,7 +45,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
           creds.getUsername(), creds.getPassword(), new ArrayList<>()));
     } catch (IOException e) {
-      System.out.println("ERROR: " + e.getMessage());
       throw new RuntimeException(e);
     }
   }

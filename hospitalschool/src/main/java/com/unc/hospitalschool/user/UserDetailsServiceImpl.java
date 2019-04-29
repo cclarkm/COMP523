@@ -31,6 +31,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     this.applicationUserRepository = applicationUserRepository;
   }
 
+  /*
+   * Creates new user instance based on an existing ApplicationUser
+   * Adds roles so that users can only access end points of their role's access level
+   */
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     ApplicationUser applicationUser = applicationUserRepository.findByUsername(username);
@@ -38,15 +42,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
       throw new UsernameNotFoundException(username);
     }
 
-    // added
+    //Creates authorities for users
     Set<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
     String grantedAuthorities = applicationUser.getRole().getRole(); // returns string of role
-    logger.info("YO " + grantedAuthorities);
-
     roles.add(new SimpleGrantedAuthority("ROLE_" + grantedAuthorities));
-    logger.info("ROLES " + roles);
 
-    // added
+    //Creates new user based on username, password, and set of roles
     User user = new User(applicationUser.getUsername(), applicationUser.getPassword(), roles);
     return user;
 

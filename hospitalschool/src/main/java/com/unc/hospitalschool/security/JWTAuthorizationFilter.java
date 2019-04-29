@@ -30,6 +30,10 @@ import static com.unc.hospitalschool.security.SecurityConstants.HEADER_STRING;
 import static com.unc.hospitalschool.security.SecurityConstants.SECRET;
 import static com.unc.hospitalschool.security.SecurityConstants.TOKEN_PREFIX;
 
+/*
+ * Disclaimer: we did not write this code - it came from Auth0
+ * However, we did make significant changes to it, which have been commented
+ */
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 
@@ -45,12 +49,14 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
       FilterChain chain) throws IOException, ServletException {
 
+    //Check if the userDao is set up
     if (userDao == null) {
       ServletContext servletContext = req.getServletContext();
       WebApplicationContext webApplicationContext =
           WebApplicationContextUtils.getWebApplicationContext(servletContext);
       userDao = webApplicationContext.getBean(ApplicationUserRepository.class);
     }
+    //Check is the blackListTokenDao is set up
     if (blackListTokenDao == null) {
       ServletContext servletContext = req.getServletContext();
       WebApplicationContext webApplicationContext =
@@ -65,6 +71,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
       return;
     }
 
+    //Check the database for the token; if it is blacklisted, it is invalid
     if (this.blackListTokenDao.findByToken(header) != null) {
       chain.doFilter(req, res);
       return;
@@ -84,6 +91,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
       ApplicationUser appUser = userDao.findByUsername(user);
 
+      //Get the roles of the user
       if (user != null) {
         Set<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
         roles.add(new SimpleGrantedAuthority(appUser.getRole().getRole()));

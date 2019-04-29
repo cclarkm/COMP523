@@ -39,8 +39,6 @@ public class ApplicationUserController {
   @Autowired
   private BlackListTokenDao blackListTokenDao;
 
-  public static List<String> blackListOfTokens = new ArrayList<String>();
-
   private static Logger logger = LoggerFactory.getLogger("LOGGER");
 
   /*
@@ -61,11 +59,14 @@ public class ApplicationUserController {
     this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   }
 
-
+  /*
+   * This method allows new users to be created - it must be accessed by someone with a valid access token with admin permissions
+   * Checks to make sure the username is unique
+   * Tries to create user given the body
+   */
   @PostMapping("/sign-up")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<ApplicationUser> signUp(@RequestBody Map<String, String> body) {
-    // need to also know the user making the request to make sure they are an admin
     ApplicationUser user = new ApplicationUser();
     if (userDao.findByUsername(body.get("username")) != null) {
       logger.error("User with that username already exists");
@@ -83,6 +84,10 @@ public class ApplicationUserController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  /*
+   * This method 'logs out' the user by adding their access token to a database
+   * Tokens in the database are no longer valid
+   */
   @GetMapping("/logout")
   public void login(HttpServletRequest request) {
     String tokenBoi = request.getHeader("Authorization");
@@ -96,6 +101,9 @@ public class ApplicationUserController {
     logger.info("Logged out. Token " + token.getTid());
   }
 
+  /*
+   * Helper method for sign-up end point for creating a new user
+   */
   public void setUserFields(Map<String, String> body, ApplicationUser user) throws Exception {
     for (String x : body.keySet()) {
       switch (x) {

@@ -16,6 +16,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import static com.unc.hospitalschool.security.SecurityConstants.SIGN_UP_URL;
 
+/*
+ * Disclaimer: we did not write this code - it came from Auth0
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -29,19 +32,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   }
 
-  // commented the .antMatchers line because that would allow anyone to create an account
-  // we only want to be able to create an account through an admin, which needs to be logged in
-  // thus, the only way to create an account is to visit the sign-up url with a valid token as part
-  // of the header
-
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().and().csrf().disable().authorizeRequests()
-        // .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
-        // .antMatchers(HttpMethod.POST, SIGN_UP_URL).hasRole("ADMIN")
-        // .antMatchers(HttpMethod.POST, SIGN_UP_URL).access("hasRole('ADMIN')")
         .anyRequest().authenticated()
-
         .and().addFilter(new JWTAuthenticationFilter(authenticationManager()))
         .addFilter(new JWTAuthorizationFilter(authenticationManager()))
         // this disables session creation on Spring Security
@@ -52,10 +46,4 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   public void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
   }
-
-  /*
-   * @Bean CorsConfigurationSource corsConfigurationSource() { final UrlBasedCorsConfigurationSource
-   * source = new UrlBasedCorsConfigurationSource(); source.registerCorsConfiguration("/**", new
-   * CorsConfiguration().applyPermitDefaultValues()); return source; }
-   */
 }
