@@ -1,7 +1,5 @@
 package com.unc.hospitalschool.user;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,8 +15,6 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
   private ApplicationUserRepository applicationUserRepository;
-
-  private static Logger logger = LoggerFactory.getLogger("LOGGER");
 
 
   public UserDetailsServiceImpl(ApplicationUserRepository applicationUserRepository) {
