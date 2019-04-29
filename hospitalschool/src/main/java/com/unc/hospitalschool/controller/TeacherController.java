@@ -74,7 +74,6 @@ public class TeacherController {
 		
 		teacher.setLastName(body.get("lName"));
 		
-		
 		teacherDao.save(teacher);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
