@@ -99,6 +99,14 @@ public class VisitInformation {
 		this.clinic = clinic;
 	}
 	
+	public int getId() {
+		return id;
+	}
+	
+	public String getNotes() {
+		return notes;
+	}
+	
 	public static boolean validateFields(Map<String, String> body) {
 		boolean student = body.containsKey("sid");
 		boolean dov = body.containsKey("dov");

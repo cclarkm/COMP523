@@ -56,6 +56,10 @@ public class Teacher {
 		return lastName;
 	}
 	
+	public int getId() {
+		return tid;
+	}
+	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}

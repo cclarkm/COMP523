@@ -311,7 +311,11 @@ public class VisitInformationController {
 		for (String x : body.keySet()) {
 			switch (x) {
 			case "sid":
-				visitInformation.setStudent(studentDao.findBySid(FieldValidation.parseInt("sid", (body.get("sid")))));
+				Student student = studentDao.findBySid(FieldValidation.parseInt("sid", (body.get("sid"))));
+				if (student == null) {
+					throw new Exception("Provided student does not exist");
+				}
+				visitInformation.setStudent(student);
 				break;
 			case "dov":
 				visitInformation.setDov(body.get("dov"));
@@ -320,11 +324,18 @@ public class VisitInformationController {
 				visitInformation.setNotes(body.get("notes"));
 				break;
 			case "tid":
-				visitInformation.setTeacher(teacherDao.findByTid(FieldValidation.parseInt("tid", body.get("tid"))));
+				Teacher teacher = teacherDao.findByTid(FieldValidation.parseInt("tid", body.get("tid")));
+				if (teacher == null) {
+					throw new Exception("Provided teacher does not exist");
+				}
+				visitInformation.setTeacher(teacher);
 				break;
 			case "logType":
-				visitInformation
-						.setLogType(logTypeDao.findByLid(FieldValidation.parseInt("logType", body.get("logType"))));
+				LogType type = logTypeDao.findByLid(FieldValidation.parseInt("logType", body.get("logType")));
+				if (type == null) {
+					throw new Exception("Provided log type does not exist");
+				}
+				visitInformation.setLogType(type);
 				break;
 			case "clinic":
 				visitInformation.setClinic(FieldValidation.parseBoolean("clinic", body.get("clinic")));

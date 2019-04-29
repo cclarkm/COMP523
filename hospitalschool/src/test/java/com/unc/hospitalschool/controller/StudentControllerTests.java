@@ -65,7 +65,6 @@ public class StudentControllerTests {
 
 	@Before
 	public void setUpStudents() {
-		logger.info("+++ SETTING UP +++");
 		List<Student> students = studentDao.findAll();
 		Student student1 = copyStudent(students.get(0), 9999998);
 		Student student2 = copyStudent(students.get(1), 9999999);
@@ -76,7 +75,6 @@ public class StudentControllerTests {
 			student2.setLastName("bbbbbb");
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		}
 		
 		studentDao.save(student1);

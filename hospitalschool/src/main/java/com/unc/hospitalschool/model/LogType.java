@@ -46,6 +46,10 @@ public class LogType {
 	public String getLogType() {
 		return this.logType;
 	}
+	
+	public int getId() {
+		return lid;
+	}
 
 	public void setLogType(String logType) {
 		this.logType = logType;
