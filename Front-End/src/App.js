@@ -324,6 +324,22 @@ class App extends Component {
     });
   }
 
+  deleteLog = (id) => {
+    fetch(URL + "visitInformation/" + id, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN
+      }
+    })
+    .then((response) => {
+      console.log(response);
+      this.getLogs(this.state.currentStudent.id);
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
   handleStudentRowClick = (student) => {
     this.setState({
       currentStudent: student,
@@ -402,6 +418,10 @@ class App extends Component {
     });
   }
 
+  handleLogDelete = (id) => {
+    this.deleteLog(id);
+  }
+
   render() {
     return (
       <div className="App">
@@ -429,7 +449,7 @@ class App extends Component {
             logTypes={this.state.logTypes}
             onUpdate={this.handleStudentUpdate} viewLogsHandler={this.viewLogsHandler} viewMoreHandler={this.viewMoreHandler} student={this.state.currentStudent} />
             <NewStudentPopup visibility={this.state.createNewVisibility} viewNewHandler={this.viewNewHandler} />
-            <LogPopup student={this.state.currentStudent} teachers={this.state.teachers} logTypes={this.state.logTypes} visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} logs={this.state.currentStudentLogs} onLogSubmit={this.handleLogSubmit} onLogUpdate={this.handleLogUpdate} />
+            <LogPopup student={this.state.currentStudent} teachers={this.state.teachers} logTypes={this.state.logTypes} visibility={this.state.popupVisibility} viewLogsHandler={this.viewLogsHandler} logs={this.state.currentStudentLogs} onLogSubmit={this.handleLogSubmit} onLogUpdate={this.handleLogUpdate} onLogDelete={this.handleLogDelete} />
             <AdmissionsPopup visibility={this.state.moreVisibility} admissions={this.state.currentStudentAdmissions} viewMoreHandler={this.viewMoreHandler} />
           </div>
         </div>
@@ -732,10 +752,10 @@ class StudentInfoSelect extends Component {
 class LogPopup extends Component {
   getLogs = () => {
     let listOfLogs = [];
-    listOfLogs.push(<Log key={"new-log-for-" + this.props.student.id} log={{"dov": "", "teacher": "", "notes": "", "type": ""}} teachers={this.props.teachers} logTypes={this.props.logTypes} new={true} onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate}/>);
+    listOfLogs.push(<Log key={"new-log-for-" + this.props.student.id} log={{"dov": "", "teacher": "", "notes": "", "type": ""}} teachers={this.props.teachers} logTypes={this.props.logTypes} new={true} onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate} onDelete={this.props.onLogDelete} />);
     for (let i = 0; i < this.props.logs.length; i++) {
       let log = this.props.logs[i];
-      listOfLogs.push(<Log key={"log-" + log.id + "-for-" + this.props.student.id} log={log} teachers={this.props.teachers} logTypes={this.props.logTypes} new={false}  onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate} />);
+      listOfLogs.push(<Log key={"log-" + log.id + "-for-" + this.props.student.id} log={log} teachers={this.props.teachers} logTypes={this.props.logTypes} new={false}  onSubmit={this.props.onLogSubmit} onUpdate={this.props.onLogUpdate} onDelete={this.props.onLogDelete} />);
     }
     return listOfLogs;
   }
@@ -754,7 +774,6 @@ class LogPopup extends Component {
           <table className="PopTable">
             <tbody>
               {this.getLogs()}
-              {console.log("BOOP render")}
             </tbody>
           </table>
         </div>
@@ -843,6 +862,7 @@ class Log extends Component {
           }}>
             {this.props.new ? "New Log" : "Update"}
           </button>
+          {!this.props.new ? <button className="LogDelete" onClick={() => this.props.onDelete(this.props.log.id)}>Delete</button> : ""}
         </div>
       </tr>
     );
