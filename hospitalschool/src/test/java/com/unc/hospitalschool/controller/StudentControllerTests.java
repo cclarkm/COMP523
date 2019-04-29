@@ -1,7 +1,6 @@
 package com.unc.hospitalschool.controller;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,8 +13,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.unc.hospitalschool.dao.CountyDao;
-import com.unc.hospitalschool.dao.GenderDao;
 import com.unc.hospitalschool.dao.StudentDao;
 import com.unc.hospitalschool.init.HospitalschoolApplication;
 import com.unc.hospitalschool.model.Student;
@@ -28,8 +25,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +34,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
@@ -433,7 +427,7 @@ public class StudentControllerTests {
 		
 		String json = new ObjectMapper().writeValueAsString(input);
 		int id = studentDao.findByFirstName("aaaaaa").get(0).getSid();
-		MvcResult result = mockMvc.perform(put(base + id).contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isOk()).andReturn();
+		mockMvc.perform(put(base + id).contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isOk()).andReturn();
 		
 		
 	}
@@ -444,7 +438,7 @@ public class StudentControllerTests {
 		input.put("firstName", "my new FirstName");
 		
 		String json = new ObjectMapper().writeValueAsString(input);
-		MvcResult result = mockMvc.perform(put(base + "9999999").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().is(403)).andReturn();
+		mockMvc.perform(put(base + "9999999").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().is(403)).andReturn();
 		
 		
 	}
