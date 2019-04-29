@@ -33,6 +33,9 @@ import com.unc.hospitalschool.dao.RoleDao;
 import com.unc.hospitalschool.model.ApplicationUser;
 import com.unc.hospitalschool.model.BlackListToken;
 
+import static com.unc.hospitalschool.security.SecurityConstants.EXPIRATION_TIME;
+
+
 @RestController
 @RequestMapping("/users")
 public class ApplicationUserController {
@@ -84,15 +87,17 @@ public class ApplicationUserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	// maybe this should also be in authentication
     @GetMapping("/logout")
     public void login(HttpServletRequest request) {
     	String tokenBoi = request.getHeader("Authorization");
-    	BlackListToken token = new BlackListToken(tokenBoi);
-    	blackListTokenDao.save(token);    	
-    	//maybe somehow add the JWT to a list of those no longer valid; should remove
-    		//itself from list after it expires? maybe
-    	//when checking login credentials, need to make sure that if the token appears in the list, it is not valid
+    	
+    	Calendar expires = Calendar.getInstance();
+    	expires.add(Calendar.MILLISECOND, (int) EXPIRATION_TIME);
+    	Date expirationTime = expires.getTime();
+    	
+    	BlackListToken token = new BlackListToken(tokenBoi, expirationTime);
+    	blackListTokenDao.save(token);
+    	logger.info("Logged out. Token " + token.getTid());
     }
     
     public void setUserFields(Map<String, String> body, ApplicationUser user) throws Exception {

@@ -25,17 +25,25 @@ public class BlackListToken {
 	@Column(name = "token", nullable = false)
 	private String token;
 	
-//	@Column(name = "expiration", nullable = false)
-//	private Date expr;
+	@Column(name = "expiration", nullable = false)
+	private Date expr;
 	
 	protected BlackListToken() {}
 	
-	public BlackListToken(String token) {
+	public BlackListToken(String token, Date date) {
 		this.token = token;
-//		this.expr = date;
+		this.expr = date;
 	}
 	
 	public String getToken() {
 		return this.token;
 	}	
+	
+	public Date getDate() {
+		return this.expr;
+	}
+	
+	public int getTid() {
+		return this.tid;
+	}
 }
