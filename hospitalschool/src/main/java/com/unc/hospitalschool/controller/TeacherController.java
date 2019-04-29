@@ -54,31 +54,27 @@ public class TeacherController {
     teacherDao.save(new Teacher(body.get("lName"), body.get("fName")));
     return new ResponseEntity<>(HttpStatus.OK);
   }
-
-  @PutMapping(value = "/{tid}")
-  public ResponseEntity<Object> updateTeacher(@RequestBody Map<String, String> body,
-      @PathVariable int tid) {
-    Teacher teacher = teacherDao.findByTid(tid);
-    logger.info("Updating teacher " + tid);
-    if (teacher == null) {
-      logger.error("Unable to update - teacher with tid: " + tid + " not found");
-      return ResponseEntity.badRequest()
-          .body("Unable to update - teacher with tid: " + tid + " not found");
-    }
-    if (!(body.containsKey("fName") && body.containsKey("lName"))) {
-      logger.error("Unable to update - county; incorrect request data");
-      return ResponseEntity.badRequest()
-          .body("Unable to update - teacher. Incorrect request field");
-    }
-
-    teacher.setFirstName(body.get("fName"));
-
-    teacher.setLastName(body.get("lName"));
-
-
-    teacherDao.save(teacher);
-    return new ResponseEntity<>(HttpStatus.OK);
-  }
+	
+	@PutMapping(value="/{tid}")
+	public ResponseEntity<Object> updateTeacher(@RequestBody Map<String, String> body, @PathVariable int tid) {
+		Teacher teacher = teacherDao.findByTid(tid);
+		logger.info("Updating teacher " + tid);
+		if (teacher == null) {
+			logger.error("Unable to update - teacher with tid: " + tid + " not found");
+			return ResponseEntity.badRequest().body("Unable to update - teacher with tid: " + tid + " not found");
+		}
+		if (!(body.containsKey("fName") && body.containsKey("lName"))) {
+			logger.error("Unable to update - county; incorrect request data");
+			return ResponseEntity.badRequest().body("Unable to update - teacher. Incorrect request field");
+		}
+		
+		teacher.setFirstName(body.get("fName"));
+		
+		teacher.setLastName(body.get("lName"));
+		
+		teacherDao.save(teacher);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
   @DeleteMapping(value = "/{tid}")
   public ResponseEntity<Object> deleteByTid(@PathVariable int tid) {
