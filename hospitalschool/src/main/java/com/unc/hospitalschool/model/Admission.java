@@ -39,8 +39,8 @@ public class Admission {
 	
 	public Admission() {}
 	
-	public Admission(int aid, Student student, String adminDate, String disDate) {
-		this.aid = aid;
+	public Admission(/*int aid, */Student student, String adminDate, String disDate) {
+		//this.aid = aid;
 		this.student = student;
 		this.admissionDate = adminDate;
 		this.dischargeDate = disDate;
@@ -73,6 +73,10 @@ public class Admission {
 	
 	public String getAdmissionDate() {
 		return this.admissionDate;
+	}
+	
+	public int getId() {
+		return aid;
 	}
 	
 	@Override
