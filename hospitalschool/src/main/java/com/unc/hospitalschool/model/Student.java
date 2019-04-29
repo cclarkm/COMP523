@@ -352,6 +352,52 @@ public class Student {
 	public String getFullName() {
 		return this.getFirstName() + " " + this.getLastName();
 	}
+	
+	public String getDob() {
+		return this.dob;
+	}
+	
+	public Gender getGender() {
+		return this.gender;
+	}
+	
+	public RaceEth getRaceEth() {
+		return this.raceEth;
+	}
+	
+	public ServiceArea getServiceArea() {
+		return this.serviceArea;
+	}
+	
+	public District getDistrict() {
+		return this.district;
+	}
+	
+	public County getCounty() {
+		return this.county;
+	}
+	
+	public Grade getGrade() {
+		return this.grade;
+	}
+	
+	public boolean getHispanic() {
+		return this.hispanic;
+	}
+	
+	public School getSchool() {
+		return this.school;
+	}
+	
+	
+	
+	public void setId(int id) {
+		this.sid = id;
+	}
+	
+	public int getSid() {
+		return this.sid;
+	}
 
 	@Override
 	public String toString() {
