@@ -1,7 +1,5 @@
 package com.unc.hospitalschool.controller;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.unc.hospitalschool.dao.CountyDao;
-import com.unc.hospitalschool.dao.GenderDao;
 import com.unc.hospitalschool.dao.PSLabelDao;
 import com.unc.hospitalschool.init.HospitalschoolApplication;
 
@@ -58,9 +54,6 @@ public class PSLabelControllerTests {
 	public void getAllPSLabels() throws Exception{
 		MvcResult result = mockMvc.perform(get(base)).andExpect(status().isOk()).andReturn();
 		String text = result.getResponse().getContentAsString();
-		System.out.println("==================================================");
-		System.out.println(text);
-		System.out.println("==================================================");
 		assertTrue(text.contains("PSLabels"));
 	}
 	

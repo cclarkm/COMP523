@@ -1,7 +1,5 @@
 package com.unc.hospitalschool.controller;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unc.hospitalschool.dao.CountyDao;
-import com.unc.hospitalschool.dao.GenderDao;
 import com.unc.hospitalschool.init.HospitalschoolApplication;
 
 import static org.junit.Assert.assertTrue;

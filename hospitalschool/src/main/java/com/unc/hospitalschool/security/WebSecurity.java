@@ -1,6 +1,5 @@
 package com.unc.hospitalschool.security;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,12 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import com.unc.hospitalschool.user.UserDetailsServiceImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import static com.unc.hospitalschool.security.SecurityConstants.SIGN_UP_URL;
 
 /*
  * Disclaimer: we did not write this code - it came from Auth0
@@ -34,8 +28,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+<<<<<<< HEAD
     http.cors().and().csrf().disable().authorizeRequests()
         .anyRequest().authenticated()
+=======
+    http.cors().and().csrf().disable().authorizeRequests().anyRequest().authenticated()
+
+>>>>>>> b4585639e019f142d8fe164d39be5ef691e4fedf
         .and().addFilter(new JWTAuthenticationFilter(authenticationManager()))
         .addFilter(new JWTAuthorizationFilter(authenticationManager()))
         // this disables session creation on Spring Security
@@ -46,4 +45,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   public void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
   }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> b4585639e019f142d8fe164d39be5ef691e4fedf
 }

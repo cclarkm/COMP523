@@ -1,17 +1,12 @@
 package com.unc.hospitalschool.model;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import javax.persistence.Id;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +15,6 @@ import javax.persistence.Column;
 @Entity
 @Table(name = "visitInformation")
 public class VisitInformation {
-  private static Logger logger = LoggerFactory.getLogger("LOGGER");
 
   @Id
   @Column(nullable = false, name = "id")

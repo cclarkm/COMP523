@@ -138,7 +138,7 @@ public class StudentController {
       return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
     }
 
-    for (Student student : studentDao.findByPrimaryTid(tid)) {
+    for (Student student : studentDao.findByCurrTeacher(teacher)) {
       jsons.add(student.toJson());
     }
     map.put("students", jsons);
@@ -155,7 +155,7 @@ public class StudentController {
       return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
     }
 
-    for (Student student : studentDao.findByPrimaryTid(tid)) {
+    for (Student student : studentDao.findBySecondTeacher(teacher)) {
       jsons.add(student.toJson());
     }
     map.put("students", jsons);

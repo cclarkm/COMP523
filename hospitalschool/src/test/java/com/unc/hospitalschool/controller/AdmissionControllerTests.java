@@ -1,7 +1,6 @@
 package com.unc.hospitalschool.controller;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +12,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unc.hospitalschool.dao.AdmissionDao;
-import com.unc.hospitalschool.dao.CountyDao;
-import com.unc.hospitalschool.dao.GenderDao;
 import com.unc.hospitalschool.dao.StudentDao;
 import com.unc.hospitalschool.init.HospitalschoolApplication;
 import com.unc.hospitalschool.model.Admission;
-import com.unc.hospitalschool.model.LogType;
 import com.unc.hospitalschool.model.Student;
-import com.unc.hospitalschool.model.Teacher;
-import com.unc.hospitalschool.model.VisitInformation;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -290,7 +284,7 @@ public class AdmissionControllerTests {
 	@Test
 	@WithMockUser(username="admin",roles={"USER","ADMIN"})
 	public void deleteNonExistantAdmission() throws Exception{
-		MvcResult result = mockMvc.perform(delete(base + "-1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound()).andReturn();
+		mockMvc.perform(delete(base + "-1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound()).andReturn();
 		
 	}
 	

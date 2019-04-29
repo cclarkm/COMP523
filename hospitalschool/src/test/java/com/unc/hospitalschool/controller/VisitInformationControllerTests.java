@@ -1,7 +1,6 @@
 package com.unc.hospitalschool.controller;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,8 +13,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.unc.hospitalschool.dao.CountyDao;
-import com.unc.hospitalschool.dao.GenderDao;
 import com.unc.hospitalschool.dao.LogTypeDao;
 import com.unc.hospitalschool.dao.StudentDao;
 import com.unc.hospitalschool.dao.TeacherDao;
@@ -88,7 +85,6 @@ public class VisitInformationControllerTests {
 	private static LogType type2;
 	
 	private static int logsForStudent1 = 3;
-	private static int logsForStudent2 = 1;
 	
 	private static int logsForStudent1Teacher1 = 2;
 	private static int logsForStudent1Teacher2 = 1;
@@ -113,7 +109,6 @@ public class VisitInformationControllerTests {
 	
 	@Before
 	public void setUpVisits() {
-		logger.info("+++ SETTING UP +++");
 		List<Student> students = studentDao.findAll();
 		student1 = copyStudent(students.get(0), 9999998);
 		student2 = copyStudent(students.get(0), 9999999);
@@ -527,13 +522,13 @@ public class VisitInformationControllerTests {
 	@Test
 	@WithMockUser(username="admin",roles={"USER","ADMIN"})
 	public void deleteVisitInformation() throws Exception{
-		MvcResult result = mockMvc.perform(delete(base + visit1.getId()).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
+		mockMvc.perform(delete(base + visit1.getId()).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
 		
 	}
 	
 	@Test
 	public void deleteNonExistantVisitInformationUnauthenticated() throws Exception{
-		MvcResult result = mockMvc.perform(delete(base + visit1.getId()).contentType(MediaType.APPLICATION_JSON)).andExpect(status().is(403)).andReturn();
+		mockMvc.perform(delete(base + visit1.getId()).contentType(MediaType.APPLICATION_JSON)).andExpect(status().is(403)).andReturn();
 		
 	}
 	
