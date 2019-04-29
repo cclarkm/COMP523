@@ -32,6 +32,7 @@ import com.unc.hospitalschool.dao.ServiceAreaDao;
 import com.unc.hospitalschool.dao.StudentDao;
 import com.unc.hospitalschool.dao.TeacherDao;
 import com.unc.hospitalschool.model.Student;
+import com.unc.hospitalschool.model.Teacher;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -128,7 +129,50 @@ public class StudentController {
 		map.put("students", jsons);
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
-
+	
+	@GetMapping(value = "/primaryTid={tid}")
+	public ResponseEntity<Map<String, Object>> getStudentByPrimaryTeacher(@PathVariable int tid) {
+		Teacher teacher = teacherDao.findByTid(tid);
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		if (teacher == null) {
+			logger.error("Unable to load students for teacher with tid: " + tid + " not found");
+			return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+		}
+		
+		for (Student student: studentDao.findByPrimaryTid(tid)) {
+			jsons.add(student.toJson());
+		}
+		map.put("students", jsons);
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/secondaryTid={tid}")
+	public ResponseEntity<Map<String, Object>> getStudentBySecondaryTeacher(@PathVariable int tid) {
+		Teacher teacher = teacherDao.findByTid(tid);
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String, String>> jsons = new ArrayList<Map<String, String>>();
+		if (teacher == null) {
+			logger.error("Unable to load students for teacher with tid: " + tid + " not found");
+			return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+		}
+		
+		for (Student student: studentDao.findByPrimaryTid(tid)) {
+			jsons.add(student.toJson());
+		}
+		map.put("students", jsons);
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+	
+	//need to filter by first/last/sid in conjunction with primary and secondary teachers
+		//could make more methods in studentDao
+		//could manually do it so they can be chained methods (each returns a list of students)
+		//maybe call upon student filtering methods and then manually check for teacher id?
+	
+	
+	
+	
+	
 	/*
 	 * Works as intended
 	 */
