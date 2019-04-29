@@ -1,11 +1,11 @@
 package com.unc.hospitalschool.controller;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.unc.hospitalschool.dao.*;
 import com.unc.hospitalschool.model.*;
 
@@ -28,25 +27,25 @@ import com.unc.hospitalschool.model.*;
 @RequestMapping("/token")
 public class BlackListTokenController {
 
-private static Logger logger = LoggerFactory.getLogger("LOGGER");
-	
-	@Autowired
-	private BlackListTokenDao blackListTokenDao;
-	
-	@DeleteMapping
-	public ResponseEntity<Object> deleteByExpDate() {
-		List<BlackListToken> tokens = blackListTokenDao.findAll();
-		for (BlackListToken x: tokens) {
-			Date expiration = x.getDate();
-			Calendar now = Calendar.getInstance();
-			Date currentTime = now.getTime();
-			
-			//It has expired, so it does not need to be blacklisted anymore
-			if (expiration.before(currentTime) || expiration.equals(currentTime)) {
-				blackListTokenDao.delete(x);
-				logger.info("Deleted token with tid of " + x.getTid());
-			}
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+  private static Logger logger = LoggerFactory.getLogger("LOGGER");
+
+  @Autowired
+  private BlackListTokenDao blackListTokenDao;
+
+  @DeleteMapping
+  public ResponseEntity<Object> deleteByExpDate() {
+    List<BlackListToken> tokens = blackListTokenDao.findAll();
+    for (BlackListToken x : tokens) {
+      Date expiration = x.getDate();
+      Calendar now = Calendar.getInstance();
+      Date currentTime = now.getTime();
+
+      // It has expired, so it does not need to be blacklisted anymore
+      if (expiration.before(currentTime) || expiration.equals(currentTime)) {
+        blackListTokenDao.delete(x);
+        logger.info("Deleted token with tid of " + x.getTid());
+      }
+    }
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

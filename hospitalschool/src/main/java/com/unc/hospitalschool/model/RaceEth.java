@@ -2,7 +2,6 @@ package com.unc.hospitalschool.model;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -19,52 +17,52 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name = "raceEth")
 public class RaceEth {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "rid", nullable = false)
-	private int rid;
-	
-	@Column(name = "raceEth", nullable = false)
-	private String raceEth;
-	
-	@Column(name = "code", nullable = false)
-	@JsonProperty(value = "code")
-	private String code;
-	
-	protected RaceEth() {}
-	
-	public RaceEth(String raceEth, String code) {
-		this.raceEth = raceEth;
-		this.code = code;
-	}
-	
-	public Map<String, String> toJson(){
-		HashMap<String, String> map = new HashMap<>();
-		map.put("rid", Integer.toString(rid));
-		map.put("raceEth", raceEth);
-		map.put("code", code);
-		
-		return map;
-	}
-	
-	@Override
-	public String toString() {
-		return "Code: " + code + ", race/ethnicity: " + raceEth;
-	}
-	
-	public String getRaceEth() {
-		return raceEth;
-	}
-	
-	public String getCode() {
-		return code;
-	}
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "rid", nullable = false)
+  private int rid;
 
-	public void setRaceEth(String raceEth) {
-		this.raceEth = raceEth;
-	}
+  @Column(name = "raceEth", nullable = false)
+  private String raceEth;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+  @Column(name = "code", nullable = false)
+  @JsonProperty(value = "code")
+  private String code;
+
+  protected RaceEth() {}
+
+  public RaceEth(String raceEth, String code) {
+    this.raceEth = raceEth;
+    this.code = code;
+  }
+
+  public Map<String, String> toJson() {
+    HashMap<String, String> map = new HashMap<>();
+    map.put("rid", Integer.toString(rid));
+    map.put("raceEth", raceEth);
+    map.put("code", code);
+
+    return map;
+  }
+
+  @Override
+  public String toString() {
+    return "Code: " + code + ", race/ethnicity: " + raceEth;
+  }
+
+  public String getRaceEth() {
+    return raceEth;
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  public void setRaceEth(String raceEth) {
+    this.raceEth = raceEth;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
 }
