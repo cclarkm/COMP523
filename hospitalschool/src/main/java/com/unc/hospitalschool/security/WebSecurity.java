@@ -30,8 +30,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.cors().and().csrf().disable().authorizeRequests()
-        .anyRequest().authenticated()
+    http.cors().and().csrf().disable().authorizeRequests().anyRequest().authenticated()
 
         .and().addFilter(new JWTAuthenticationFilter(authenticationManager()))
         .addFilter(new JWTAuthorizationFilter(authenticationManager()))
@@ -44,5 +43,5 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
   }
 
- 
+
 }

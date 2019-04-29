@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Table(name = "role")
 public class Role implements GrantedAuthority {
 
- 
+
   private static final long serialVersionUID = 1L;
 
   @Id
