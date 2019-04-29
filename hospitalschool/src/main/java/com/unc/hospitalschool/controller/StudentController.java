@@ -137,7 +137,7 @@ public class StudentController {
 		Student studentOptional = studentDao.findBySid(sid);
 		if (studentOptional == null) {
 			logger.error("Unable to delete - student with sid: " + sid + " not found");
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.badRequest().body("Unable to delete - student with sid: " + sid + " not found");
 		} else {
 			studentDao.deleteById(sid);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -174,7 +174,7 @@ public class StudentController {
 		Student student = studentDao.findBySid(sid);
 		if (student == null) {
 			logger.error("Unable to update - student with sid: " + sid + " not found");
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.badRequest().body("Unable to update - student with sid: " + sid + " not found");
 		}
 
 		try {
