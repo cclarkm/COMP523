@@ -10,7 +10,7 @@ We are following React.js guidelines on making a clean and easily manipulatable 
 # Tech/Framework used
 **Built with**
 
-1. React.js
+1. React.js, a framework for developing UIs in JavaScript
 2. HTML5 and CSS3
 
 # Features
