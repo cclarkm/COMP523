@@ -45,6 +45,11 @@ For issues encountered during installation, please the FAQ page at http://unchos
 		- Open folder
 		- There should be an "application.properties" file
 			- Copy and paste the text in the Sensitive Information section under "application.properties"
+* Right click on hospitalschool > src > main > java > com.unc.hospitalschool.security
+	- New -> class
+		- Name it "SecurityConstants.java"
+		- Open the new file
+		- Copy and paste the text in the Sensitive Information section under "SecurityConstants.java"
 * Run the project via the command line by executing "mvn spring-boot:run", or "mvn appengine:run" to test for deployment readiness
 			
 # API Reference
