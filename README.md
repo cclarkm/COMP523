@@ -23,7 +23,7 @@ We are using GoogleStyle for our code formatting
 2. Security via JSON Web Tokens
 
 # Installation
-For issues encountered during installation, please the FAQ page at http://unchospitalschool.web.unc.edu/
+For issues encountered during installation, please the FAQ page at http://unchospitalschool.web.unc.edu/faq/
 * Pull the repo from github at https://github.com/cclarkm/COMP523
 * Install Apache Maven
 	- https://maven.apache.org/install.html
@@ -48,7 +48,7 @@ For issues encountered during installation, please the FAQ page at http://unchos
 * Run the project via the command line by executing "mvn spring-boot:run", or "mvn appengine:run" to test for deployment readiness
 			
 # API Reference
-http://unchospitalschool.web.unc.edu/
+https://documenter.getpostman.com/view/6906426/S17qSpLc
 
 # Tests
 * Tests are located at hospitalschool/src/test/java/com/unc/hospitalschool/controller
