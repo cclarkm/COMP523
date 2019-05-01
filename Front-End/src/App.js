@@ -7,19 +7,10 @@ var TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZWFjaGVydGV
 class App extends Component {
   constructor(props) {
     super(props);
-    this.getStudents();
-    this.getGenders();
-    this.getRaces();
-    this.getGrades();
-    this.getServiceAreas();
-    this.getCounties();
-    this.getDistricts();
-    this.getSchools();
-    this.getTeachers();
-    this.getLogTypes();
 
     //Assign state's default values
     this.state = {
+      loggingIn: true,
       students: [],
       createNewVisibility: "hidden",
       popupVisibility: "hidden",
@@ -67,6 +58,20 @@ class App extends Component {
     }, (error) => {
       console.error(error);
     });
+  }
+
+  getEverything = () => {
+    this.getStudents();
+    this.getGenders();
+    this.getRaces();
+    this.getGrades();
+    this.getServiceAreas();
+    this.getCounties();
+    this.getDistricts();
+    this.getSchools();
+    this.getTeachers();
+    this.getLogTypes();
+    this.setState({loggingIn: false});
   }
 
   getLogs = (id) => {
@@ -475,6 +480,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+      { this.state.loggingIn ? <Login onSuccess={this.getEverything} /> :
+      <React.Fragment>
       <div className="Nav">
         <div className="Title">
           UNC Hospital School
@@ -504,6 +511,8 @@ class App extends Component {
             <AdmissionsPopup visibility={this.state.moreVisibility} admissions={this.state.currentStudentAdmissions} viewMoreHandler={this.viewMoreHandler} />
           </div>
         </div>
+        </React.Fragment>
+      }
       </div>
     );
   }
@@ -541,6 +550,59 @@ class FilterStudent extends Component {
         </div> */}
       </div>
     )
+  }
+}
+
+class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      "username": "admin",
+      "password": "password"
+    };
+  }
+
+  handleSubmit = () => {
+    fetch(URL + "login", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Authorization': TOKEN
+      },
+      body: JSON.stringify(this.state)
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        TOKEN = response.headers.get("authorization");
+        this.props.onSuccess();
+      } else {
+        console.error(response);
+
+      }
+    }, (error) => {
+      console.error(error);
+    });
+  }
+
+  render() {
+    return (
+      <div className="Login">
+        <div className="LoginBox">
+          <div className="LoginTitle">
+            Login
+          </div>
+          <div className="LoginField">
+            <div className="LoginLabel">Username</div>
+            <input type="text" className="LoginInput" value={this.state.username} onChange={(e) => this.setState({"username": e.target.value})} />
+          </div>
+          <div className="LoginField">
+            <div className="LoginLabel">Password</div>
+            <input type="password" className="LoginInput" value={this.state.password} onChange={(e) => this.setState({"password": e.target.value})}/>
+          </div>
+          <button className="LoginSubmit" onClick={this.handleSubmit}> Submit</button>
+        </div>
+      </div>
+    );
   }
 }
 
