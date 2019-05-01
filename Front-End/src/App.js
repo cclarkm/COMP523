@@ -558,7 +558,8 @@ class Login extends Component {
     super(props);
     this.state = {
       "username": "admin",
-      "password": "password"
+      "password": "password",
+      "error": false
     };
   }
 
@@ -569,7 +570,7 @@ class Login extends Component {
         'Content-Type': 'application/json'
         // 'Authorization': TOKEN
       },
-      body: JSON.stringify(this.state)
+      body: JSON.stringify({"username": this.state.username, "password": this.state.password})
     })
     .then((response) => {
       if (response.status === 200) {
@@ -577,7 +578,7 @@ class Login extends Component {
         this.props.onSuccess();
       } else {
         console.error(response);
-
+        this.setState({"error": true});
       }
     }, (error) => {
       console.error(error);
@@ -599,6 +600,7 @@ class Login extends Component {
             <div className="LoginLabel">Password</div>
             <input type="password" className="LoginInput" value={this.state.password} onChange={(e) => this.setState({"password": e.target.value})}/>
           </div>
+          {this.state.error ? <div className="LoginError">Username or password is incorrect</div> : ""}
           <button className="LoginSubmit" onClick={this.handleSubmit}> Submit</button>
         </div>
       </div>

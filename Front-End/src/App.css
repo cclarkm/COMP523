@@ -69,6 +69,13 @@
   font-size: 16px;
 }
 
+.LoginError {
+  flex-grow: 1;
+  font-size: 16px;
+  text-align: center;
+  color: red;
+}
+
 .LoginSubmit {
   font-size: 20px;
   padding: 5px;
