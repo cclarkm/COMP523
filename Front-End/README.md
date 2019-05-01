@@ -5,7 +5,7 @@ This code contains a React.js application representing a front end for the UNC H
 The UNC Hospital School required a way to easily access student data in a secure fashion.
 
 # Code Style
-We are following React.js guidelines on making 
+We are following React.js guidelines on making a clean and easily manipulatable front-end codebase.
 
 # Tech/Framework used
 **Built with**
