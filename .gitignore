@@ -2,3 +2,6 @@ credentials.json
 credentials2.json
 .DS_Store
 **/application.properties
+UNCCredentials.json
+.DS_Store
+hospitalschool/.DS_Store
